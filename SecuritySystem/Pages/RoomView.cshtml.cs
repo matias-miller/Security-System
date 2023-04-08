@@ -1,27 +1,19 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SecuritySystem.Pages;
 
-[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-[IgnoreAntiforgeryToken]
-public class ErrorModel : PageModel
+public class RoomViewModel : PageModel
 {
-    public string? RequestId { get; set; }
+    private readonly ILogger<RoomViewModel> _logger;
 
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-    private readonly ILogger<ErrorModel> _logger;
-
-    public ErrorModel(ILogger<ErrorModel> logger)
+    public RoomViewModel(ILogger<RoomViewModel> logger)
     {
         _logger = logger;
     }
 
     public void OnGet()
     {
-        RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
     }
 }
 
