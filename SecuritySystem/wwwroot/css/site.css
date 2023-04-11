@@ -16,17 +16,3 @@ html {
 body {
     margin-bottom: 60px;
 }
-
-main .home {
-    margin: 10px;
-    min-height: 80vh;
-    padding: 2em;
-}
-
-footer {
-    min-height: 10vh;
-}
-
-header {
-    min-height: 10vh;
-}
