@@ -1,61 +1,78 @@
 ﻿@page
-@model CameraViewModel
+@using buildingSystem
+@model CameraView2Controler
 @{
     ViewData["Title"] = "Camera View Page";
     // This is how Im doing the image mapping
     // https://imagemap.org/
     // image source 
     // https://www.edrawsoft.com/templates/pdf/mall-floor-plan.pdf
-}
 
+    // Onclick handler 
+    //    https://www.youtube.com/watch?v=QeRszt0OKUw
+    // Model controlers
+    
+    // when buildingControl changes Call a seperate function
+
+
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
     <p>This is the  Camera View Page.</p>
+    
+    
+
+        <button onclick="callBuilding()">Button1</button>
+        <button onclick="callBuilding2()">Button2</button>
+    
+    
+</div>
     <div id="containerForRoom" class="containerForRoom">
-        <img src='~/img/mall-floor-plan.jpg' usemap="#image_map">
+        <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="width:100%: height: 100%;">
     </div>
     
     <map name="image_map">
-        <area onclick="activateSensor(this)" coords="255,71,0" shape="circle">
-        <area  onclick="activateSensor(this)" coords="534,255,13" shape="circle">
-        <area  onclick="activateSensor(this)" coords="728,242,13" shape="circle">
-        <area  onclick="activateSensor(this)" coords="935,236,14" shape="circle">
-        <area  onclick="activateSensor(this)" coords="257,73,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="126,202,18" shape="circle">
-        <area onclick="activateSensor(this)" coords="135,333,18" shape="circle">
-        <area onclick="activateSensor(this)"coords="127,511,12" shape="circle">
-        <area onclick="activateSensor(this)" coords="438,583,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="732,572,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="850,519,14" shape="circle">
-        <area onclick="activateSensor(this)" coords="1063,539,11" shape="circle">
-        <area onclick="activateSensor(this)" coords="1056,662,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="846,690,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="678,635,16" shape="circle">
-        <area onclick="activateSensor(this)"  coords="431,760,18" shape="circle">
-        <area onclick="activateSensor(this)" coords="139,709,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="135,881,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="1061,814,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="1064,942,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="811,969,14" shape="circle">
-        <area onclick="activateSensor(this)" coords="675,953,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="446,986,13" shape="circle">
-        <area onclick="activateSensor(this)" coords="344,986,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="351,1091,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="455,1094,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="1063,1079,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="866,1143,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="1055,1216,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="1063,1355,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="769,1145,16" shape="circle">
-        <area onclick="activateSensor(this)" coords="653,1142,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="452,1191,16" shape="circle">
-        <area onclick="activateSensor(this)" coords="454,1280,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="345,1277,13" shape="circle">
-        <area onclick="activateSensor(this)" coords="345,1187,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="142,1224,15" shape="circle">
-        <area onclick="activateSensor(this)" coords="141,1060,17" shape="circle">
-        <area onclick="activateSensor(this)" coords="255,1517,18" shape="circle">
-        <area onclick="activateSensor(this)" coords="472,1487,19" shape="circle">
+    <area id="sensor-1"  onclick="activateSensor(this)" coords="255,71,0" shape="circle">
+    <area id="sensor-2"  onclick="activateSensor(this)" coords="534,255,13" shape="circle">
+    <area id="sensor-3"  onclick="activateSensor(this)" coords="728,242,13" shape="circle">
+    <area id="sensor-4"  onclick="activateSensor(this)" coords="935,236,14" shape="circle">
+    <area id="sensor-5"  onclick="activateSensor(this)" coords="257,73,15" shape="circle">
+    <area id="sensor-6"  onclick="activateSensor(this)" coords="126,202,18" shape="circle">
+    <area id="sensor-7"  onclick="activateSensor(this)" coords="135,333,18" shape="circle">
+    <area id="sensor-8"  onclick="activateSensor(this)" coords="127,511,12" shape="circle">
+    <area id="sensor-9"  onclick="activateSensor(this)" coords="438,583,17" shape="circle">
+    <area id="sensor-10" onclick="activateSensor(this)" coords="732,572,15" shape="circle">
+    <area id="sensor-11" onclick="activateSensor(this)" coords="850,519,14" shape="circle">
+    <area id="sensor-12" onclick="activateSensor(this)" coords="1063,539,11" shape="circle">
+    <area id="sensor-13" onclick="activateSensor(this)" coords="1056,662,15" shape="circle">
+    <area id="sensor-14" onclick="activateSensor(this)" coords="846,690,15" shape="circle">
+    <area id="sensor-15" onclick="activateSensor(this)" coords="678,635,16" shape="circle">
+    <area id="sensor-16" onclick="activateSensor(this)" coords="431,760,18" shape="circle">
+    <area id="sensor-17" onclick="activateSensor(this)" coords="139,709,15" shape="circle">
+    <area id="sensor-18" onclick="activateSensor(this)" coords="135,881,15" shape="circle">
+    <area id="sensor-19" onclick="activateSensor(this)" coords="1061,814,15" shape="circle">
+    <area id="sensor-20" onclick="activateSensor(this)" coords="1064,942,15" shape="circle">
+    <area id="sensor-21" onclick="activateSensor(this)" coords="811,969,14" shape="circle">
+    <area id="sensor-22" onclick="activateSensor(this)" coords="675,953,17" shape="circle">
+    <area id="sensor-23" onclick="activateSensor(this)" coords="446,986,13" shape="circle">
+    <area id="sensor-24" onclick="activateSensor(this)" coords="344,986,17" shape="circle">
+    <area id="sensor-25" onclick="activateSensor(this)" coords="351,1091,15" shape="circle">
+    <area id="sensor-26" onclick="activateSensor(this)" coords="455,1094,17" shape="circle">
+    <area id="sensor-27" onclick="activateSensor(this)" coords="1063,1079,17" shape="circle">
+    <area id="sensor-28" onclick="activateSensor(this)" coords="866,1143,15" shape="circle">
+    <area id="sensor-29" onclick="activateSensor(this)" coords="1055,1216,15" shape="circle">
+    <area id="sensor-30" onclick="activateSensor(this)" coords="1063,1355,15" shape="circle">
+    <area id="sensor-31" onclick="activateSensor(this)" coords="769,1145,16" shape="circle">
+    <area id="sensor-32" onclick="activateSensor(this)" coords="653,1142,17" shape="circle">
+    <area id="sensor-33" onclick="activateSensor(this)" coords="452,1191,16" shape="circle">
+    <area id="sensor-34" onclick="activateSensor(this)" coords="454,1280,15" shape="circle">
+    <area id="sensor-35" onclick="activateSensor(this)" coords="345,1277,13" shape="circle">
+    <area id="sensor-36" onclick="activateSensor(this)" coords="345,1187,15" shape="circle">
+    <area id="sensor-37" onclick="activateSensor(this)" coords="142,1224,15" shape="circle">
+    <area id="sensor-38" onclick="activateSensor(this)" coords="141,1060,17" shape="circle">
+    <area id="sensor-39" onclick="activateSensor(this)" coords="255,1517,18" shape="circle">
+    <area id="sensor-40" onclick="activateSensor(this)" coords="472,1487,19" shape="circle">
 
 
         <area alt="alarm" href="#" title="" href="" coords="201,50,236,92" shape="rect">
@@ -227,9 +244,45 @@
   <area alt="" title="" href="" coords="244,986,255,1035" shape="rect">
     </map>
  
-</div>
+
 
 <script>
+    function callBuilding() {
+        console.log("uasdf");
+        var URL = '/CameraView2Controler/OnGetSpecificRoomState';
+        console.log(URL);
+        console.log("Current page URL:", window.location.href);
+
+        $.ajax({
+            url: URL,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error:', textStatus, errorThrown);
+            }
+        });
+    }
+
+        function callBuilding2() {
+        var URL = '@Url.Page("OnGetSpecificRoomState", "CameraView2")';
+
+        $.ajax({
+            url: URL,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data)
+                //location.reload();
+            }
+        })
+    }
+
+    function test2(){
+
+        alert("hi")
+    }
     function activateSensor(area) {
         const coords = area.coords.split(',').map(Number);
         const [x, y, r] = coords;
@@ -266,3 +319,4 @@
             position: relative;
         }
 </style>
+

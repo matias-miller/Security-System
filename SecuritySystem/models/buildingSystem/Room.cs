@@ -1,13 +1,33 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using static System.Collections.Specialized.BitVector32;
 
 namespace buildingSystem{
     public class Room {
 
-        public Room() {
+        public Room(int numberOfDoors, string zone, int roomName) {
+            this.zone = zone;
+            this.roomName = roomName;
+
+            // set up the number of doors each room has
+            this.doorArray = new roomComponents.Door[numberOfDoors];
+            for (int i = 0; i < numberOfDoors; i++) { 
+                this.doorArray[i] = new roomComponents.Door();
+            }
+
+            this.isElectricityActive = true;
+
+            this.directionIndecator = new roomComponents.DirectionIndicators();
+            this.sprinkler = new roomComponents.Sprinklers();
+            this.sensor = new roomComponents.Sensor();
+            this.alarm = new roomComponents.Alarm();
+            // camera is kinda pointless
+            this.camera = new cameraSystem.Camera();
         }
 
         private bool isElectricityActive;
@@ -17,19 +37,28 @@ namespace buildingSystem{
         /// </summary>
         private string zone;
 
-        private string roomName;
+        private int roomName;
 
-        private roomComponents.DirectionIndicators directionIndecatorArray;
+        private roomComponents.DirectionIndicators directionIndecator;
 
-        private roomComponents.Door doorArray;
+        private roomComponents.Door[] doorArray;
 
-        private roomComponents.Sprinklers sprinklerArray;
+        private roomComponents.Sprinklers sprinkler;
 
-        private roomComponents.Sensor sensorArray;
+        private roomComponents.Sensor sensor;
 
-        private roomComponents.Alarm alarmArray;
+        private roomComponents.Alarm alarm;
 
-        private cameraSystem.Camera cameraArray;
+        private cameraSystem.Camera camera;
+
+        //private static int test;
+
+        //public void setTest() {
+        //    test = 4;
+        //}
+        //public void getTest() {
+        //    Debug.WriteLine(test);
+        //}
 
         /// <summary>
         /// This holds the room attributes in a object to be sent to building
@@ -93,8 +122,16 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestTurnOnOffSensor() {
-            // TODO implement here
+        private bool requestTurnOnOffSensor(bool action) {
+            // Requests the sensors are turned on or off
+            if (action == true)
+            {
+                this.sensor.activateSensor();
+            }
+            else 
+            {
+                this.sensor.deactivateSensor();
+            }
             return false;
         }
 
@@ -112,9 +149,51 @@ namespace buildingSystem{
         /// @param actionType 
         /// @return
         /// </summary>
-        public bool performAction(string actionType) {
-            // TODO implement here
+        public bool performAction(string actionType, bool action) {
+            // action type is the name of the method to be called
+            if (actionType == "requestTurnOnOffAlarm") 
+            {
+            
+            } 
+            else if(actionType == "turnOffElectricalEquipment")
+            {
+
+            }
+            else if (actionType == "requestTurnOnOffDirectionIndecators")
+            {
+
+            }
+            else if (actionType == "requestLockUnlockDoor")
+            {
+
+            }
+            else if (actionType == "sendRoomStateOnChange")
+            {
+
+            }
+            else if (actionType == "requestDoorLockUnlock")
+            {
+
+            }
+            else if (actionType == "requestTurnOnOffSprinklers")
+            {
+
+            }
+            else if (actionType == "requestTurnOnOffSensor")
+            {
+                requestTurnOnOffSensor(action);
+            }
+            else if (actionType == "updateRoomState")
+            {
+
+            }
             return false;
+        }
+
+        public bool requestSpecificSensorState()
+        {
+            // test function, can be removed
+            return sensor.sendState();
         }
 
     }

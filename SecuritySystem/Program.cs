@@ -23,7 +23,7 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-
+        app.MapControllers();
         app.UseAuthorization();
 
         app.MapRazorPages();

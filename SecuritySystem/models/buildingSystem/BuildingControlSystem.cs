@@ -3,11 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace buildingSystem{
     public class BuildingControlSystem {
-
+        //Debug.WriteLine("in");
         public BuildingControlSystem() {
+            //Start by creating a building object, this will funnel into the building object
+            building = new Building();
+            
         }
 
         /// <summary>
@@ -15,10 +20,11 @@ namespace buildingSystem{
         /// </summary>
         private object buildingState;
 
+
         /// <summary>
         /// Creates a building object to be used in below functions
         /// </summary>
-        private Building building;
+        private static Building building;
 
         /// <summary>
         /// Holds a camera system object of CameraSystem to be used in below functions
@@ -33,6 +39,23 @@ namespace buildingSystem{
         public object sendBuildingStateToControlCenter() {
             // TODO implement here
             return null;
+        }
+        
+  
+
+        public bool setSpecificRoomState(int room,bool value) {
+            // just a test function
+            building.requestToModifyRoomState("requestTurnOnOffSensor", room, value);
+            return true;
+        }
+
+        public bool getSpecificRoomState(int room)
+        {
+            Debug.WriteLine("in");
+            // just a test function
+            
+            Debug.WriteLine(building.requestSpecificSensorState(room));
+            return true;
         }
 
         /// <summary>

@@ -23,6 +23,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool activateSensor() {
             // TODO implement here
+            this.isActive = true;
             return false;
         }
 
@@ -31,6 +32,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool deactivateSensor() {
             // TODO implement here
+            this.isActive = false;
             return false;
         }
 
@@ -40,7 +42,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool sendState() {
             // TODO implement here
-            return false;
+            return this.isActive;
         }
 
     }
