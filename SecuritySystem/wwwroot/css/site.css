@@ -18,9 +18,9 @@ body {
 }
 
 main .home {
-    margin: 10px;
     min-height: 80vh;
-    padding: 2em;
+    padding: 0 0 2em 0;
+    align-items: center;
 }
 
 footer {
@@ -29,4 +29,9 @@ footer {
 
 header {
     min-height: 10vh;
+}
+
+.custom-btn {
+    padding: .8em; /* Adjust this value to your preference */
+    margin-bottom: 1em; /* Adjust this value to your preference */
 }
