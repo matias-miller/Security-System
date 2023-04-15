@@ -10,13 +10,13 @@ namespace buildingSystem.roomComponents{
         public Sensor() {
         }
 
-        private bool isActive;
+        public bool isActive;
 
-        private bool isGasSensor;
+        public bool isGasSensor;
 
-        private bool isSmokeSensor;
+        public bool isSmokeSensor;
 
-        private int sensorID;
+        public int sensorID;
 
         /// <summary>
         /// @return

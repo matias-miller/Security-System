@@ -10,9 +10,9 @@ namespace buildingSystem.roomComponents{
         public Sprinklers() {
         }
 
-        private bool isActive;
+        public bool isActive;
 
-        private int sprinklerID;
+        public int sprinklerID;
 
         /// <summary>
         /// @return

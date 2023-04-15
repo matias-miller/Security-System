@@ -10,9 +10,9 @@ namespace buildingSystem.roomComponents{
         public Door() {
         }
 
-        private bool isLocked;
+        public bool isLocked;
 
-        private int doorID;
+        public int doorID;
 
         /// <summary>
         /// @return

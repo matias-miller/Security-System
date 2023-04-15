@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model Index
 @{
     ViewData["Title"] = "Home page";
 }
@@ -7,4 +7,32 @@
 <div class="text-center">
     <h1 class="display-1">HomePage</h1>
     <p>This is the home page.</p>
+    <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
 </div>
+<script>
+    ///////////////////////////////
+    /*
+    Ajax Functions
+
+    */
+    ///////////////////////////////
+
+
+    function ExampleFunctionForAJAX() {
+        // Get the current sensor number
+        
+
+        $.ajax({
+            url: '/Index/OnGetSpecificRoomState2',
+   
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+
+</script>

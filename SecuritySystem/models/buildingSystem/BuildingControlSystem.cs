@@ -6,12 +6,14 @@ using System.Text;
 using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Collections.Specialized.BitVector32;
+using Newtonsoft.Json;
 
 namespace buildingSystem{
     public class BuildingControlSystem {
         //Debug.WriteLine("in");
         public BuildingControlSystem() {
             //Start by creating a building object, this will funnel into the building object
+
             building = new Building();
             
         }
@@ -19,18 +21,19 @@ namespace buildingSystem{
         /// <summary>
         /// holds a object, likely json holding the building state
         /// </summary>
-        private object buildingState;
+        public object buildingState;
 
 
         /// <summary>
         /// Creates a building object to be used in below functions
         /// </summary>
-        private static Building building;
+        [JsonProperty]
+        public static Building building;
 
         /// <summary>
         /// Holds a camera system object of CameraSystem to be used in below functions
         /// </summary>
-        private cameraSystem.CameraSystem cameraSystem;
+        public cameraSystem.CameraSystem cameraSystem;
 
         /// <summary>
         /// When the buildingControlCenter object in control center wants the buildingState it will be returned via this.
@@ -79,7 +82,7 @@ namespace buildingSystem{
         /// will call Building.setndBuildingState.
         /// @return
         /// </summary>
-        private bool updateBuildingState() {
+        public bool updateBuildingState() {
             // TODO implement here
             return false;
         }

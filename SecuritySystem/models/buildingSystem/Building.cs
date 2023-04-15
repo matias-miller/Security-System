@@ -20,7 +20,7 @@ namespace buildingSystem{
         /// <summary>
         /// holds a array of the Room objects
         /// </summary>
-        private Room[] roomList;
+        public Room[] roomList;
 
         /// <summary>
         /// Sends the building control system the building state when its been changed. Sending the buildingState determined in roomlist to the BuildingControlSystem function updateBuildingStateOnChange, that will update the buildingState variable. Likely will be in the form of a button
@@ -31,7 +31,7 @@ namespace buildingSystem{
             return false;
         }
 
-        private void createRooms() {
+        public void createRooms() {
             this.roomList[0] = new Room(1, "one", 1);
             this.roomList[1] = new Room(1, "one", 2);
             this.roomList[2] = new Room(1, "one", 3);

@@ -30,28 +30,28 @@ namespace buildingSystem{
             this.camera = new cameraSystem.Camera();
         }
 
-        private bool isElectricityActive;
+        public bool isElectricityActive;
 
         /// <summary>
         /// This is the zone the room is located in
         /// </summary>
-        private string zone;
+        public string zone;
 
-        private int roomName;
+        public int roomName;
 
-        private roomComponents.DirectionIndicators directionIndecator;
+        public roomComponents.DirectionIndicators directionIndecator;
 
-        private roomComponents.Door[] doorArray;
+        public roomComponents.Door[] doorArray;
 
-        private roomComponents.Sprinklers sprinkler;
+        public roomComponents.Sprinklers sprinkler;
 
-        private roomComponents.Sensor sensor;
+        public roomComponents.Sensor sensor;
 
-        private roomComponents.Alarm alarm;
+        public roomComponents.Alarm alarm;
 
-        private cameraSystem.Camera camera;
+        public cameraSystem.Camera camera;
 
-        //private static int test;
+        //public static int test;
 
         //public void setTest() {
         //    test = 4;
@@ -63,9 +63,9 @@ namespace buildingSystem{
         /// <summary>
         /// This holds the room attributes in a object to be sent to building
         /// </summary>
-        private object roomState;
+        public object roomState;
 
-        private void requestTurnOnOffAlarm() {
+        public void requestTurnOnOffAlarm() {
             // TODO implement here
         }
 
@@ -73,7 +73,7 @@ namespace buildingSystem{
         /// changes the variable isElectricityActive
         /// @return
         /// </summary>
-        private bool turnOffElectricalEquipment() {
+        public bool turnOffElectricalEquipment() {
             // TODO implement here
             return false;
         }
@@ -81,7 +81,7 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestTurnOnOffDirectionIndecators() {
+        public bool requestTurnOnOffDirectionIndecators() {
             // TODO implement here
             return false;
         }
@@ -89,7 +89,7 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestLockUnlockDoor() {
+        public bool requestLockUnlockDoor() {
             // TODO implement here
             return false;
         }
@@ -98,7 +98,7 @@ namespace buildingSystem{
         /// This returns the roomStateObject to calling function
         /// @return
         /// </summary>
-        private object sendRoomStateOnChange() {
+        public object sendRoomStateOnChange() {
             // TODO implement here
             return null;
         }
@@ -106,7 +106,7 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestDoorLockUnlock() {
+        public bool requestDoorLockUnlock() {
             // TODO implement here
             return false;
         }
@@ -114,7 +114,7 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestTurnOnOffSprinklers() {
+        public bool requestTurnOnOffSprinklers() {
             // TODO implement here
             return false;
         }
@@ -122,7 +122,7 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestTurnOnOffSensor(bool action)
+        public bool requestTurnOnOffSensor(bool action)
         {
             // Requests the sensors are turned on or off
             var data = false;
@@ -141,7 +141,7 @@ namespace buildingSystem{
         /// Sets all of the information about the room like name, and the arrays contained by the room, such as doorArray based on there current states. Then packs that all into the variable roomState
         /// @return
         /// </summary>
-        private bool updateRoomState() {
+        public bool updateRoomState() {
             // TODO implement here
             return false;
         }
