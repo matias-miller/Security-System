@@ -4,7 +4,15 @@
     ViewData["Title"] = "Promote User Page";
 }
 
-<div class="text-center">
-    <h1 class="display-3">PromoteUser</h1>
-    <p>This is the Promote User View Page.</p>
+<div class="border p-4">
+    <form class="form-signin">
+        <label for="cars">Choose a user:</label>
+        <select class="form-select" name="cars" id="cars">
+            <option value="user1">User 1</option>
+            <option value="user4">User 2</option>
+            <option value="user3">User 3</option>
+            <option value="user4">User 4</option>
+        </select>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Promote User</button>
+    </form>
 </div>
