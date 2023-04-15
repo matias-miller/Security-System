@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
+using controlSystem;
 
 namespace SecuritySystem.Pages;
 
@@ -16,6 +17,7 @@ public class CameraViewControler : Controller
     private readonly ILogger<CameraViewControler> _logger;
     // Set up the building control system regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
+    public static ControlCenter _controlCenter = new ControlCenter();
 
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
@@ -24,21 +26,38 @@ public class CameraViewControler : Controller
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        // Happens on initial page load to get the most current building control object
-        if (TempData.ContainsKey("BuildingControl"))
+        // Fetch or get the building state on load depending if it is already set
+        if (!TempData.ContainsKey("BuildingControl"))
+        {
+            updateBuildingState();
+        }
+        else
         {
             getBuildingState();
         }
-        else {
-            updateBuildingState();
+        if (!TempData.ContainsKey("ControlCenter"))
+        {
+            updateControlCenterState();
         }
-            
+        else
+        {
+            getControlCenterState();
+        }
+
         base.OnActionExecuting(context);
     }
 
-    private void updateBuildingState() {
+
+    private void updateControlCenterState()
+    {
         /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+        TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+    }
+
+    private void getControlCenterState()
+    {
+        // This returnes the current shared building object
+        _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(TempData["ControlCenter"] as string);
     }
 
     private void getBuildingState()
@@ -46,7 +65,11 @@ public class CameraViewControler : Controller
         // This returnes the current shared building object
         _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(TempData["BuildingControl"] as string);
     }
-
+    private void updateBuildingState()
+    {
+        // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
+        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+    }
     public void OnGet()
     {
        // This happens when a get ajax call is performed

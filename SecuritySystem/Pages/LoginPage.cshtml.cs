@@ -62,7 +62,7 @@ public class Login : Controller
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
-
+    }
         public void OnGet()
     {
     }

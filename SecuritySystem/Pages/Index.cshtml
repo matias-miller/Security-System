@@ -7,7 +7,9 @@
 <div class="text-center">
     <h1 class="display-1">HomePage</h1>
     <p>This is the home page.</p>
-    <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
+    <button onclick="ExampleFunctionForAJAX()">Set example input</button>
+    <button onclick="ExampleFunctionForAJAX()">Get example input</button>
+    <input type="text" id="exampleInput">Example input</input>
 </div>
 <script>
     ///////////////////////////////
@@ -18,12 +20,27 @@
     ///////////////////////////////
 
 
-    function ExampleFunctionForAJAX() {
-        // Get the current sensor number
+    //function setExampleInputAJAX() {
+    //    // Get the current sensor number
         
+    //    $.ajax({
+    //        url: '/Index/OnGetSpecificRoomState2',
+    //        data: { exampleinput: document.getElementById("exampleInput").value },
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            console.log(data);
+    //        },
+    //        error: function (errorThrown) {
+    //            console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+    //        }
+    //    });
+    //}
+
+    function ExampleFunctionForAJAX()() {
+        // Get the current sensor number
+
         $.ajax({
             url: '/Index/OnGetSpecificRoomState2',
-   
             dataType: 'json',
             success: function (data) {
                 console.log(data);
