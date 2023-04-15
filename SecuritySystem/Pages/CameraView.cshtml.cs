@@ -14,17 +14,17 @@ namespace SecuritySystem.Pages;
 public class CameraViewControler : Controller
 {
     private readonly ILogger<CameraViewControler> _logger;
+    // Set up the building control system regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
 
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
-        _logger = logger;
-        
+        _logger = logger; 
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        // happens on page load
+        // Happens on initial page load to get the most current building control object
         if (TempData.ContainsKey("BuildingControl"))
         {
             getBuildingState();
@@ -37,25 +37,26 @@ public class CameraViewControler : Controller
     }
 
     private void updateBuildingState() {
-        //Function for getting the current state of the building
+        /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
     }
 
     private void getBuildingState()
     {
-        // need to update the current version of building control
+        // This returnes the current shared building object
         _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(TempData["BuildingControl"] as string);
     }
 
     public void OnGet()
     {
-        getBuildingState();
+       // This happens when a get ajax call is performed
     }
 
     // You need to route the functon name  
     [HttpGet("OnGetSpecificRoomState")]
     public IActionResult OnGetSpecificRoomState()
     {
+        // This is more of an example function
         var data = _buldingControl.getSpecificRoomState(1);
         return Json(data);
     }

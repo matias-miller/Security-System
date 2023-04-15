@@ -19,29 +19,29 @@ namespace controlSystem.Employee{
         /// <summary>
         /// How much the employee gets paid
         /// </summary>
-        private int salary = 0;
+        public int salary = 0;
 
-        private string firstName = "";
+        public string firstName = "";
 
-        private string lastName = "";
+        public string lastName = "";
 
-        private string address = "";
+        public string address = "";
 
-        private string userName = "";
+        public string userName = "";
 
-        private string password = "";
+        public string password = "";
 
         /// <summary>
         /// This shows if the employee is on call or not
         /// </summary>
-        private bool isOnCall = false;
+        public bool isOnCall = false;
 
         /// <summary>
         /// will be set in login
         /// </summary>
-        private bool isSupervisor = false;
+        public bool isSupervisor = false;
 
-        private int employeeID;
+        public int employeeID;
 
         /// <summary>
         /// Logs the user in

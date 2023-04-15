@@ -13,9 +13,9 @@ namespace controlSystem{
         /// <summary>
         /// The number of the phone system
         /// </summary>
-        private string callingFromNumber;
+        public string callingFromNumber;
 
-        private object listOfNumbers;
+        public object listOfNumbers;
 
         /// <summary>
         /// @return

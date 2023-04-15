@@ -10,22 +10,22 @@ namespace controlSystem{
         public ControlCenter() {
         }
 
-        private bool alarmReported;
+        public bool alarmReported;
 
-        private Employee.Employee employeeOnCall;
+        public Employee.Employee employeeOnCall;
 
-        private bool isManned;
+        public bool isManned;
 
-        private Employee.Employee mannedBy;
+        public Employee.Employee mannedBy;
 
         /// <summary>
         /// This holds all employee ids for validation
         /// </summary>
-        private object employeeIDArray;
+        public object employeeIDArray;
 
-        private buildingSystem.BuildingControlSystem buldingControlCenter;
+        public buildingSystem.BuildingControlSystem buldingControlCenter;
 
-        private PhoneSystem phoneSystem;
+        public PhoneSystem phoneSystem;
 
         /// <summary>
         /// This will load an employee object then request that the employee function becomeOnCall is used
@@ -79,7 +79,7 @@ namespace controlSystem{
         /// used in alarmReportedProcedure, I assume this will just be a yes no toggle that will check say the employee manually checked the alarm
         /// @return
         /// </summary>
-        private bool confirmAlarmManually() {
+        public bool confirmAlarmManually() {
             // TODO implement here
             return false;
         }
