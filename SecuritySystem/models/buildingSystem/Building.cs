@@ -81,11 +81,11 @@ namespace buildingSystem{
         /// @param room 
         /// @return
         /// </summary>
-        public bool requestToModifyRoomState(string requestType, int roomName, bool action) {
+        public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
             // TODO implement here
-            this.roomList[roomName].performAction(requestType, action);
+            var data = this.roomList[roomNumber].performAction(requestType, action);
 
-            return false;
+            return data;
         }
 
         public bool requestSpecificSensorState(int roomName) {

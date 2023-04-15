@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Collections.Specialized.BitVector32;
 
 namespace buildingSystem{
     public class BuildingControlSystem {
@@ -51,11 +52,8 @@ namespace buildingSystem{
 
         public bool getSpecificRoomState(int room)
         {
-            Debug.WriteLine("in");
-            // just a test function
-            
-            Debug.WriteLine(building.requestSpecificSensorState(room));
-            return true;
+            //function used to get the specific state of a room
+            return building.requestSpecificSensorState(room);
         }
 
         /// <summary>
@@ -90,12 +88,14 @@ namespace buildingSystem{
         /// Used by buildingControl center to request that actions are performed on the room such as the room function requestTurnOnOffDirectionIndecators. It will sequentially call the building function requestToModifyRoomState.
         /// NEEDS TO STAY THE SAME
         /// @param requestType 
-        /// @param location This should be an object that describes the room and what sensor needs to be changed
+        /// This is the name of the function to be called in room
+        /// @param roomNumber
+        /// this is the room
         /// @return
         /// </summary>
-        public bool requestToModifyBuildingState(string requestType, string location) {
-            // TODO implement here
-            return false;
+        public bool requestToModifyBuildingState(string requestType, int roomNumber, bool action) {
+            var data = building.requestToModifyRoomState(requestType, roomNumber, action);
+            return data;
         }
 
     }

@@ -122,17 +122,19 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        private bool requestTurnOnOffSensor(bool action) {
+        private bool requestTurnOnOffSensor(bool action)
+        {
             // Requests the sensors are turned on or off
+            var data = false;
             if (action == true)
             {
-                this.sensor.activateSensor();
+                data = this.sensor.activateSensor();
             }
-            else 
+            else
             {
-                this.sensor.deactivateSensor();
+                data = this.sensor.deactivateSensor();
             }
-            return false;
+            return data;
         }
 
         /// <summary>
@@ -150,6 +152,7 @@ namespace buildingSystem{
         /// @return
         /// </summary>
         public bool performAction(string actionType, bool action) {
+            var data = false;
             // action type is the name of the method to be called
             if (actionType == "requestTurnOnOffAlarm") 
             {
@@ -181,18 +184,18 @@ namespace buildingSystem{
             }
             else if (actionType == "requestTurnOnOffSensor")
             {
-                requestTurnOnOffSensor(action);
+                data = requestTurnOnOffSensor(action);
             }
             else if (actionType == "updateRoomState")
             {
 
             }
-            return false;
+            return data;
         }
 
         public bool requestSpecificSensorState()
         {
-            // test function, can be removed
+            // This function gets the current state of a specific sensor
             return sensor.sendState();
         }
 
