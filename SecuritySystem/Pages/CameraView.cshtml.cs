@@ -50,21 +50,51 @@ public class CameraViewControler : Controller
 
     private void updateControlCenterState()
     {
-        /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+        if (_controlCenter != null)
+        {
+            /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
+            TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+        }
+
     }
 
     private void getControlCenterState()
     {
         // This returnes the current shared building object
-        _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(TempData["ControlCenter"] as string);
+        var temp = TempData["ControlCenter"] as string;
+        // We need to check if the value is null and also put it in a try catch just in case
+        if (temp != null)
+        {
+            try
+            {
+                _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(temp);
+            }
+            catch (JsonException exeption)
+            {
+
+            }
+        }
+
     }
 
     private void getBuildingState()
     {
         // This returnes the current shared building object
-        _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(TempData["BuildingControl"] as string);
+        var temp = TempData["BuildingControl"] as string;
+        // We need to check if the value is null and also put it in a try catch just in case
+        if (temp != null)
+        {
+            try
+            {
+                _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(temp);
+            }
+            catch (JsonException exeption)
+            {
+
+            }
+        }
     }
+
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used

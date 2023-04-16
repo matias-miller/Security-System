@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace SecuritySystem.Pages;
-
+[Route("[controller]")]
 public class PromoteUser : Controller
 {
     private readonly ILogger<PromoteUser> _logger;
@@ -43,21 +44,48 @@ public class PromoteUser : Controller
 
     private void updateControlCenterState()
     {
-        /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+        if (_controlCenter != null) {
+            /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
+            TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+        }
+
     }
 
     private void getControlCenterState()
     {
         // This returnes the current shared building object
-        _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(TempData["ControlCenter"] as string);
+        var temp = TempData["ControlCenter"] as string;
+        // We need to check if the value is null and also put it in a try catch just in case
+        if (temp != null) {
+            try
+            {
+                _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(temp);
+            }
+            catch(JsonException exeption) { 
+            
+            }
+        }
+        
     }
 
     private void getBuildingState()
     {
         // This returnes the current shared building object
-        _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(TempData["BuildingControl"] as string);
+        var temp = TempData["BuildingControl"] as string;
+        // We need to check if the value is null and also put it in a try catch just in case
+        if (temp != null)
+        {
+            try
+            {
+                _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(temp);
+            }
+            catch (JsonException exeption)
+            {
+
+            }
+        }
     }
+
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
@@ -65,8 +93,21 @@ public class PromoteUser : Controller
     }
 
 
-    public void OnGet()
+ 
+
+    [HttpGet("OnAttemptPromoteUserAJAX")]
+    public IActionResult OnAttemptPromoteUserAJAX([FromQuery] string user)
     {
+        // Success needs to be true or false
+        var success = _controlCenter.attemptToPromoteUser(user);
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptAddUsersToDropdownAJAX")]
+    public IActionResult OnAttemptAddUsersToDropdownAJAX()
+    {
+        // Success needs to be true or false
+        return Json(_controlCenter.returnAllNonAdmins());
     }
 }
 

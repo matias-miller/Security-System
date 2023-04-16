@@ -137,5 +137,13 @@ namespace controlSystem.Employee{
             return false;
         }
 
+        public bool promoteUser() {
+            return true;
+        }
+        public bool addUser(string first, string last, string email, string password) {
+            //TBD how you do this
+            return true;
+        }
+
     }
 }

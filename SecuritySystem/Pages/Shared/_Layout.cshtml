@@ -59,8 +59,7 @@
                         console.log(data);
                         // if data is true return change page to index else remain on current page
                         if (data == true) {
-                            // navigate to the home page on success
-                            //console.log(document.getElementById("link2").getAttribute('href'));
+                            // Navigate to the logout page
 
                             window.location.href = "/";
                         } else {
@@ -68,7 +67,7 @@
                         }
                     },
                     error: function (errorThrown) {
-                        console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+                        console.log("An Error occured in the ajax request for AttemptLogoutAJAX:", errorThrown);
                     }
                 });
             }

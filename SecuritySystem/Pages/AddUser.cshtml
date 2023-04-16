@@ -13,6 +13,38 @@
         <input type="text" id="inputLastName" class="form-control" placeholder="Enter last name" required>
         <label for="inpuEmail" class="sr-only">Enter Email</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Enter email" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Add User</button>
+        <label for="inputPassword" class="sr-only">Enter password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Enter password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="AttemptAddUserAJAX()">Add User</button>
     </form>
 </div>
+
+<script>
+    function AttemptAddUserAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/AddUser/OnAttemptAddUserAJAX',
+            dataType: 'json',
+            data: {
+                first: document.getElementById("inputFirstName").value,
+                last: document.getElementById("inputLastName").value,
+                email: document.getElementById("inputEmail").value,
+                password: document.getElementById("inputPassword").value,
+            },
+            success: function (data) {
+                console.log(data);
+               
+                if (data == true) {
+                    
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for AttemptAddUserAJAX:", errorThrown);
+            }
+        });
+    }
+
+
+</script>

@@ -6,13 +6,63 @@
 
 <div class="border p-4">
     <form class="form-signin">
-        <label for="cars">Choose a user:</label>
-        <select class="form-select" name="cars" id="cars">
-            <option value="user1">User 1</option>
-            <option value="user4">User 2</option>
-            <option value="user3">User 3</option>
-            <option value="user4">User 4</option>
+        <label for="user">Choose a user:</label>
+        <select class="form-select" name="user" id="users">
         </select>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Promote User</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="AttemptPromoteUserAJAX()">Promote User</button>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        AttemptAddUsersToDropdownAJAX()
+    })
+    function AttemptPromoteUserAJAX() {
+        // This is the function that should happen on page submit
+        // I wonder if this should allow a user to be demoted
+        $.ajax({
+            url: '/PromoteUser/OnAttemptPromoteUserAJAX',
+            dataType: 'json',
+            data: {
+                user: document.getElementById("users").value,
+            },
+            success: function (data) {
+                console.log(data);
+                
+                if (data == true) {
+               
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for AttemptPromoteUserAJAX:", errorThrown);
+            }
+        });
+    }
+    function AttemptAddUsersToDropdownAJAX(){
+        
+        $.ajax({
+            url: '/PromoteUser/OnAttemptAddUsersToDropdownAJAX',
+            dataType: 'json',
+            success: function (data) {
+                var userSelector = document.getElementById("users");
+                //Push the users to the selector
+                data.value.forEach(function(USER){
+                    var user = document.createElement("option")
+                    user.value = USER;
+                    user.text = USER;
+                    userSelector.appendChild(user);
+                })
+                if (data == true) {
+
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for AttemptAddUsersToDropdownAJAX:", errorThrown);
+            }
+        });
+    }
+
+</script>
