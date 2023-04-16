@@ -20,41 +20,31 @@ public class Index : Controller
     public Index(ILogger<Index> logger)
     {
         _logger = logger;
-        Debug.WriteLine("zero");
-        getBuildingState();
-        getBuildingState();
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
+
     {
-        Debug.WriteLine("zero");
+
         // Fetch or get the building state on load depending if it is already set
-        if (!TempData.ContainsKey("BuildingControl"))
+        if (!HttpContext.Session.Keys.Contains("BuildingControl"))
         {
-            Debug.WriteLine("one");
             updateBuildingState();
         }
-        else {
-            Debug.WriteLine("two");
+        else
+        {
             getBuildingState();
         }
-        if (!TempData.ContainsKey("ControlCenter"))
+        if (!HttpContext.Session.Keys.Contains("ControlCenter"))
         {
-            Debug.WriteLine("three");
             updateControlCenterState();
         }
         else
         {
-            Debug.WriteLine("four");
             getControlCenterState();
         }
 
         base.OnActionExecuting(context);
-    }
-
-    public static void hello() {
-        Debug.WriteLine("zero");
-        //getBuildingState();
     }
 
 
@@ -70,8 +60,7 @@ public class Index : Controller
                 //        NullValueHandling = NullValueHandling.Ignore
                 //    }
                 //    );
-                TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
-                Debug.WriteLine(TempData["ControlCenter"]);
+                HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption)
             {
@@ -82,10 +71,10 @@ public class Index : Controller
 
     }
 
-    private void getControlCenterState()
+    private IActionResult getControlCenterState()
     {
         // This returnes the current shared building object
-        var temp = TempData["ControlCenter"] as string;
+        var temp = HttpContext.Session.GetString("ControlCenter");
         Debug.WriteLine(temp);
         if (temp != null)
         {
@@ -98,13 +87,14 @@ public class Index : Controller
                 Debug.WriteLine(exeption);
             }
         }
+        return Json(true);
 
     }
 
-    private void getBuildingState()
+    private IActionResult getBuildingState()
     {
         // This returnes the current shared building object
-        var temp = TempData["BuildingControl"] as string;
+        var temp = HttpContext.Session.GetString("BuildingControl");
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -117,14 +107,14 @@ public class Index : Controller
                 Debug.WriteLine(exeption);
             }
         }
+        return Json(true);
     }
 
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+        HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
-
 
 
     [HttpGet("OnGetSpecificRoomState2")]
@@ -132,6 +122,14 @@ public class Index : Controller
         // This is just a example function to show how to use a specific method from the building control
         //updateBuildingState();
         return Json(_buldingControl.getSpecificRoomState(3));
+    }
+
+    [HttpGet("OnAttemptGetPassword")]
+    public IActionResult OnAttemptGetPassword()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.testGetEmployeePassword();
+        return Json(success);
     }
 }
 

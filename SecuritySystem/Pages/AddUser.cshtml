@@ -6,6 +6,8 @@
 
 <div class="border p-4">
     <form class="form-signin">
+        <p>This is a test to check if control center varables stay alive, being user password::</p>
+        <p id="test1"></p>
         <h1 class="h3 mb-3 font-weight-normal text-center">Add New User</h1>
         <label for="inputFirstName" class="sr-only">Enter First Name</label>
         <input type="text" id="inputFirstName" class="form-control" placeholder="Enter first name" required autofocus>
@@ -45,6 +47,31 @@
             }
         });
     }
+
+    function AttemptGetPasswordAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/AddUser/OnAttemptGetPassword',
+            dataType: 'json',
+
+            success: function (data) {
+                console.log(data);
+                // if data is true return change page to index else remain on current page
+                document.getElementById("test1").innerHTML = data;
+                if (data == true) {
+                    // navigate to the home page on success
+                    //console.log(document.getElementById("link").getAttribute('href'));
+                    //window.location.href = document.getElementById("link").getAttribute('href');
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetPasswordAJAX);
 
 
 </script>

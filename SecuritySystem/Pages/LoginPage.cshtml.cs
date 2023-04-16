@@ -22,9 +22,9 @@ public class Login : Controller
     public override void OnActionExecuting(ActionExecutingContext context)
 
     {
-        
+
         // Fetch or get the building state on load depending if it is already set
-        if (!TempData.ContainsKey("BuildingControl"))
+        if (!HttpContext.Session.Keys.Contains("BuildingControl"))
         {
             updateBuildingState();
         }
@@ -32,7 +32,7 @@ public class Login : Controller
         {
             getBuildingState();
         }
-        if (!TempData.ContainsKey("ControlCenter"))
+        if (!HttpContext.Session.Keys.Contains("ControlCenter"))
         {
             updateControlCenterState();
         }
@@ -57,7 +57,7 @@ public class Login : Controller
                 //        NullValueHandling = NullValueHandling.Ignore
                 //    }
                 //    );
-                TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+                HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption) {
                 Debug.WriteLine(exeption);
@@ -70,7 +70,7 @@ public class Login : Controller
     private void getControlCenterState()
     {
         // This returnes the current shared building object
-        var temp = TempData["ControlCenter"] as string;
+        var temp = HttpContext.Session.GetString("ControlCenter");
         Debug.WriteLine(temp);
         if (temp != null)
         {
@@ -89,7 +89,8 @@ public class Login : Controller
     private void getBuildingState()
     {
         // This returnes the current shared building object
-        var temp = TempData["BuildingControl"] as string;
+        var temp = HttpContext.Session.GetString("BuildingControl");
+        Debug.WriteLine(temp);
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -107,7 +108,7 @@ public class Login : Controller
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+        HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
     public void OnGet()
     {

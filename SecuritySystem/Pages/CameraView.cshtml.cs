@@ -24,30 +24,28 @@ public class CameraViewControler : Controller
     {
         _logger = logger;
         Debug.WriteLine("zero");
+        
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
+
     {
+
         // Fetch or get the building state on load depending if it is already set
-        Debug.WriteLine("one");
-        if (!TempData.ContainsKey("BuildingControl"))
+        if (!HttpContext.Session.Keys.Contains("BuildingControl"))
         {
-            Debug.WriteLine("one");
             updateBuildingState();
         }
         else
         {
-            Debug.WriteLine("two");
             getBuildingState();
         }
-        if (!TempData.ContainsKey("ControlCenter"))
+        if (!HttpContext.Session.Keys.Contains("ControlCenter"))
         {
-            Debug.WriteLine("three");
             updateControlCenterState();
         }
         else
         {
-            Debug.WriteLine("four");
             getControlCenterState();
         }
 
@@ -67,8 +65,7 @@ public class CameraViewControler : Controller
                 //        NullValueHandling = NullValueHandling.Ignore
                 //    }
                 //    );
-                TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
-                Debug.WriteLine(TempData["ControlCenter"]);
+                HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption)
             {
@@ -79,10 +76,10 @@ public class CameraViewControler : Controller
 
     }
 
-    private void getControlCenterState()
+    private IActionResult getControlCenterState()
     {
         // This returnes the current shared building object
-        var temp = TempData["ControlCenter"] as string;
+        var temp = HttpContext.Session.GetString("ControlCenter");
         Debug.WriteLine(temp);
         if (temp != null)
         {
@@ -95,13 +92,14 @@ public class CameraViewControler : Controller
                 Debug.WriteLine(exeption);
             }
         }
+        return Json(true);
 
     }
 
-    private void getBuildingState()
+    private IActionResult getBuildingState()
     {
         // This returnes the current shared building object
-        var temp = TempData["BuildingControl"] as string;
+        var temp = HttpContext.Session.GetString("BuildingControl");
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -114,12 +112,13 @@ public class CameraViewControler : Controller
                 Debug.WriteLine(exeption);
             }
         }
+        return Json(true);
     }
 
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+        HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
     public void OnGet()
     {

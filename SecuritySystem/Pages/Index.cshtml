@@ -4,7 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 
-<p>This is a test to check if control center varables stay alive, being user password:: @CameraViewControler._controlCenter.testGetEmployeePassword()</p>
+<p>This is a test to check if control center varables stay alive, being user password::</p>
+<p id="test1"></p>
 <div class="w-100">
     <div class="d-flex flex-column justify-content-between align-items-stretch h-100 home">
         <div class="row flex-grow-1">
@@ -110,5 +111,31 @@
             }
         });
     }
+
+    function AttemptGetPasswordAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/Index/OnAttemptGetPassword',
+            dataType: 'json',
+
+            success: function (data) {
+                console.log(data);
+                // if data is true return change page to index else remain on current page
+                document.getElementById("test1").innerHTML = data;
+                if (data == true) {
+                    // navigate to the home page on success
+                    //console.log(document.getElementById("link").getAttribute('href'));
+                    //window.location.href = document.getElementById("link").getAttribute('href');
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetPasswordAJAX);
+
 
 </script>

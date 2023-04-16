@@ -19,9 +19,11 @@ public class PromoteUser : Controller
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
+
     {
+
         // Fetch or get the building state on load depending if it is already set
-        if (!TempData.ContainsKey("BuildingControl"))
+        if (!HttpContext.Session.Keys.Contains("BuildingControl"))
         {
             updateBuildingState();
         }
@@ -29,7 +31,7 @@ public class PromoteUser : Controller
         {
             getBuildingState();
         }
-        if (!TempData.ContainsKey("ControlCenter"))
+        if (!HttpContext.Session.Keys.Contains("ControlCenter"))
         {
             updateControlCenterState();
         }
@@ -44,34 +46,51 @@ public class PromoteUser : Controller
 
     private void updateControlCenterState()
     {
-        if (_controlCenter != null) {
+        if (_controlCenter != null)
+        {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-            TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+            try
+            {
+                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
+                //    new JsonSerializerSettings() { 
+                //        NullValueHandling = NullValueHandling.Ignore
+                //    }
+                //    );
+                HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
+            }
+            catch (JsonException exeption)
+            {
+                Debug.WriteLine(exeption);
+            }
+
         }
 
     }
 
-    private void getControlCenterState()
+    private IActionResult getControlCenterState()
     {
         // This returnes the current shared building object
-        var temp = TempData["ControlCenter"] as string;
-        // We need to check if the value is null and also put it in a try catch just in case
-        if (temp != null) {
+        var temp = HttpContext.Session.GetString("ControlCenter");
+        Debug.WriteLine(temp);
+        if (temp != null)
+        {
             try
             {
                 _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(temp);
             }
-            catch(JsonException exeption) { 
-            
+            catch (JsonException exeption)
+            {
+                Debug.WriteLine(exeption);
             }
         }
-        
+        return Json(true);
+
     }
 
-    private void getBuildingState()
+    private IActionResult getBuildingState()
     {
         // This returnes the current shared building object
-        var temp = TempData["BuildingControl"] as string;
+        var temp = HttpContext.Session.GetString("BuildingControl");
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -81,19 +100,18 @@ public class PromoteUser : Controller
             }
             catch (JsonException exeption)
             {
-
+                Debug.WriteLine(exeption);
             }
         }
+        return Json(true);
     }
 
     private void updateBuildingState()
     {
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        TempData["BuildingControl"] = JsonConvert.SerializeObject(_buldingControl);
+        HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
 
-
- 
 
     [HttpGet("OnAttemptPromoteUserAJAX")]
     public IActionResult OnAttemptPromoteUserAJAX([FromQuery] string user)
@@ -108,6 +126,14 @@ public class PromoteUser : Controller
     {
         // Success needs to be true or false
         return Json(_controlCenter.returnAllNonAdmins());
+    }
+
+    [HttpGet("OnAttemptGetPassword")]
+    public IActionResult OnAttemptGetPassword()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.testGetEmployeePassword();
+        return Json(success);
     }
 }
 
