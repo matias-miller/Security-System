@@ -18,6 +18,8 @@ namespace controlSystem{
 
         public Employee.Employee mannedBy;
 
+        public Employee.Employee employee = new Employee.Employee();
+
         /// <summary>
         /// This holds all employee ids for validation
         /// </summary>
@@ -108,6 +110,15 @@ namespace controlSystem{
         public bool requestThenDisplayBuildingView() {
             // TODO implement here
             return false;
+        }
+
+        public bool validateEmployeeLogin(string email, string password) {
+            var success = employee.login(email, password);
+            return success;
+        }
+        public bool attemptEmployeeLogout() {
+            var success = employee.logout();
+            return success;
         }
 
     }

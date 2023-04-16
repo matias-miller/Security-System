@@ -51,7 +51,8 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool login(string userName, string password) {
             // TODO implement here
-            return false;
+            this.password = password; 
+            return true;
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool logout() {
             // TODO implement here
-            return false;
+            return true;
         }
 
         /// <summary>

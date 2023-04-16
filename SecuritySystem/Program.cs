@@ -18,10 +18,12 @@ public class Program
             options.IdleTimeout = TimeSpan.FromMinutes(10);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
+
         });
         builder.Services.Configure<CookieTempDataProviderOptions>(options =>
         {
             options.Cookie.IsEssential = true;
+
         });
         builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
         var app = builder.Build();

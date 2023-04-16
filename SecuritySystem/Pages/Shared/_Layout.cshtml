@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    //public bool showNav { get; set; } = true;
+    var showNav = ViewData["showNav"] as bool? ?? true;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,11 +12,16 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SecuritySystem.styles.css" asp-append-version="true" />
 </head>
+
 <body>
+    
+    <a id="link2" asp-page="/asdf"></a>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+         @if(showNav) {
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">SecuritySystem</a>
+                    
+                    <a class="navbar-brand" asp-area="" asp-page="/">SecuritySystem</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -32,13 +41,40 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/CameraView">Camera View</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/LoginPage">Login Page</a>
+                                <button onclick="AttemptLogoutAJAX()" type="button">logout</button>
                         </li>
-              
+
                     </ul>
                 </div>
             </div>
+            }
         </nav>
+        <script>
+            function AttemptLogoutAJAX() {
+                // This is the function that should happen on page submit
+                $.ajax({
+                    url: '/_Layout/OnLogoutAJAX',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        // if data is true return change page to index else remain on current page
+                        if (data == true) {
+                            // navigate to the home page on success
+                            //console.log(document.getElementById("link2").getAttribute('href'));
+
+                            window.location.href = "/";
+                        } else {
+
+                        }
+                    },
+                    error: function (errorThrown) {
+                        console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+                    }
+                });
+            }
+
+
+        </script>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -58,4 +94,7 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+
 </html>
+

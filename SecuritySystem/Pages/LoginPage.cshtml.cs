@@ -66,6 +66,14 @@ public class Login : Controller
         public void OnGet()
     {
     }
+
+    [HttpGet("OnAttemptLoginAJAX")]
+    public IActionResult OnAttemptLoginAJAX([FromQuery] string email, string password)
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.validateEmployeeLogin(email, password);
+        return Json(success);
+    }
 }
 
 
