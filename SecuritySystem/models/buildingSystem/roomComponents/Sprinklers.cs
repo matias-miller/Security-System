@@ -10,9 +10,9 @@ namespace buildingSystem.roomComponents{
         public Sprinklers() {
         }
 
-        public bool isActive;
+        public bool isActive = false;
 
-        public int sprinklerID;
+        public int sprinklerID = 0;
 
         /// <summary>
         /// @return
@@ -34,9 +34,9 @@ namespace buildingSystem.roomComponents{
         /// Returns the sprinkler attribute variables
         /// @return
         /// </summary>
-        public object sendState() {
+        public bool sendState() {
             // TODO implement here
-            return null;
+            return false;
         }
 
     }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System;
+using System.Diagnostics;
 
 namespace SecuritySystem.Pages;
 [Route("[controller]")]
@@ -18,7 +20,9 @@ public class Login : Controller
         _logger = logger;
     }
     public override void OnActionExecuting(ActionExecutingContext context)
+
     {
+        
         // Fetch or get the building state on load depending if it is already set
         if (!TempData.ContainsKey("BuildingControl"))
         {
@@ -46,7 +50,19 @@ public class Login : Controller
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-            TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+            try
+            {
+                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
+                //    new JsonSerializerSettings() { 
+                //        NullValueHandling = NullValueHandling.Ignore
+                //    }
+                //    );
+                TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+            }
+            catch (JsonException exeption) {
+                Debug.WriteLine(exeption);
+            }
+            
         }
 
     }
@@ -55,7 +71,7 @@ public class Login : Controller
     {
         // This returnes the current shared building object
         var temp = TempData["ControlCenter"] as string;
-        // We need to check if the value is null and also put it in a try catch just in case
+        Debug.WriteLine(temp);
         if (temp != null)
         {
             try
@@ -64,7 +80,7 @@ public class Login : Controller
             }
             catch (JsonException exeption)
             {
-
+                Debug.WriteLine(exeption);
             }
         }
 
@@ -83,7 +99,7 @@ public class Login : Controller
             }
             catch (JsonException exeption)
             {
-
+                Debug.WriteLine(exeption);
             }
         }
     }
@@ -102,6 +118,17 @@ public class Login : Controller
     {
         // Success needs to be true or false
         var success = _controlCenter.validateEmployeeLogin(email, password);
+        updateBuildingState();
+        updateControlCenterState();
+        return Json(success);
+    }
+ 
+
+    [HttpGet("OnAttemptGetPassword")]
+    public IActionResult OnAttemptGetPassword()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.testGetEmployeePassword();
         return Json(success);
     }
 }

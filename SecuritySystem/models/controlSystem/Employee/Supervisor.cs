@@ -13,7 +13,7 @@ namespace controlSystem.Employee{
         /// <summary>
         /// Holds a list of there subordanants
         /// </summary>
-        public object arrayOfSubordanantsIds;
+        public bool arrayOfSubordanantsIds = false;
 
         public void addSupervisorOrGeneralOperator() {
             // TODO implement here
@@ -35,9 +35,9 @@ namespace controlSystem.Employee{
         /// <summary>
         /// @return
         /// </summary>
-        public object returnSubordanantsIds() {
+        public bool returnSubordanantsIds() {
             // TODO implement here
-            return null;
+            return false;
         }
 
     }

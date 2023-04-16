@@ -10,7 +10,7 @@ namespace controlSystem.Employee{
         public GeneralOperator() {
         }
 
-        public int supervisorID;
+        public int supervisorID = 0;
 
         /// <summary>
         /// @return

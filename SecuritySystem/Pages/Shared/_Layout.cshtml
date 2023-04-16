@@ -1,6 +1,8 @@
-﻿@{
+﻿@model _Layout
+@{
     //public bool showNav { get; set; } = true;
     var showNav = ViewData["showNav"] as bool? ?? true;
+    var isAdmin = _Layout._controlCenter.attemptCheckIfAdmin();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -31,12 +33,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/AddUser">Add User</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/PromoteUser">Promote User</a>
-                        </li>
+                            @if (isAdmin) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/AddUser">Add User</a>
+                                </li>
+                            }
+                            @if (isAdmin) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/PromoteUser">Promote User</a>
+                                </li>
+                            }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/CameraView">Camera View</a>
                         </li>

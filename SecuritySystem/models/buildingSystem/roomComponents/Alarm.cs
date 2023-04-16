@@ -16,13 +16,13 @@ namespace buildingSystem.roomComponents{
         public Alarm() {
         }
 
-        public bool isSmokeAlarm;
+        public bool isSmokeAlarm = false;
 
-        public bool isGasAlarm;
+        public bool isGasAlarm = false;
 
-        public int alarmID;
+        public int alarmID = 0;
 
-        public bool isActive;
+        public bool isActive = false;
 
         /// <summary>
         /// testsets

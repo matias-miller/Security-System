@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
 using controlSystem;
+using System;
 
 namespace SecuritySystem.Pages;
 
@@ -21,26 +22,32 @@ public class CameraViewControler : Controller
 
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
-        _logger = logger; 
+        _logger = logger;
+        Debug.WriteLine("zero");
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         // Fetch or get the building state on load depending if it is already set
+        Debug.WriteLine("one");
         if (!TempData.ContainsKey("BuildingControl"))
         {
+            Debug.WriteLine("one");
             updateBuildingState();
         }
         else
         {
+            Debug.WriteLine("two");
             getBuildingState();
         }
         if (!TempData.ContainsKey("ControlCenter"))
         {
+            Debug.WriteLine("three");
             updateControlCenterState();
         }
         else
         {
+            Debug.WriteLine("four");
             getControlCenterState();
         }
 
@@ -53,7 +60,21 @@ public class CameraViewControler : Controller
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-            TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+            try
+            {
+                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
+                //    new JsonSerializerSettings() { 
+                //        NullValueHandling = NullValueHandling.Ignore
+                //    }
+                //    );
+                TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter);
+                Debug.WriteLine(TempData["ControlCenter"]);
+            }
+            catch (JsonException exeption)
+            {
+                Debug.WriteLine(exeption);
+            }
+
         }
 
     }
@@ -62,7 +83,7 @@ public class CameraViewControler : Controller
     {
         // This returnes the current shared building object
         var temp = TempData["ControlCenter"] as string;
-        // We need to check if the value is null and also put it in a try catch just in case
+        Debug.WriteLine(temp);
         if (temp != null)
         {
             try
@@ -71,7 +92,7 @@ public class CameraViewControler : Controller
             }
             catch (JsonException exeption)
             {
-
+                Debug.WriteLine(exeption);
             }
         }
 
@@ -90,7 +111,7 @@ public class CameraViewControler : Controller
             }
             catch (JsonException exeption)
             {
-
+                Debug.WriteLine(exeption);
             }
         }
     }
@@ -121,6 +142,14 @@ public class CameraViewControler : Controller
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, !sensorOn);
         updateBuildingState();
         return Json(data);
+    }
+
+    [HttpGet("OnAttemptGetPassword")]
+    public IActionResult OnAttemptGetPassword()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.testGetEmployeePassword();
+        return Json(success);
     }
 
 }

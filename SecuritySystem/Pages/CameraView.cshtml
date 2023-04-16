@@ -19,8 +19,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
+    <p>This is a test to check if control center varables stay alive, being user password::</p>
+    <p id="test1"></p>
     <p>This is the  Camera View Page.</p>
-
+        <p>This is a test to check if control center varables stay alive, being user password:: @CameraViewControler._controlCenter.testGetEmployeePassword()</p>
         
         <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
 
@@ -306,7 +308,30 @@
     function addOrRemoveDirectionIndicatorAJAX() {
         //
     }
+    function AttemptGetPasswordAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/CameraViewControler/OnAttemptGetPassword',
+            dataType: 'json',
 
+            success: function (data) {
+                console.log(data);
+                // if data is true return change page to index else remain on current page
+                document.getElementById("test1").innerHTML = data;
+                if (data == true) {
+                    // navigate to the home page on success
+                    //console.log(document.getElementById("link").getAttribute('href'));
+                    //window.location.href = document.getElementById("link").getAttribute('href');
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
 
 
     ///////////////////////////////

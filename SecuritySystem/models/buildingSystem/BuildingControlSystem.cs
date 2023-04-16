@@ -21,28 +21,28 @@ namespace buildingSystem{
         /// <summary>
         /// holds a object, likely json holding the building state
         /// </summary>
-        public object buildingState;
+        public bool buildingState = false;
 
 
         /// <summary>
         /// Creates a building object to be used in below functions
         /// </summary>
         [JsonProperty]
-        public static Building building;
+        public static Building building = new Building();
 
         /// <summary>
         /// Holds a camera system object of CameraSystem to be used in below functions
         /// </summary>
-        public cameraSystem.CameraSystem cameraSystem;
+        public cameraSystem.CameraSystem cameraSystem = new cameraSystem.CameraSystem();
 
         /// <summary>
         /// When the buildingControlCenter object in control center wants the buildingState it will be returned via this.
         /// NEEDS TO STAY THE SAME
         /// @return
         /// </summary>
-        public object sendBuildingStateToControlCenter() {
+        public bool sendBuildingStateToControlCenter() {
             // TODO implement here
-            return null;
+            return false;
         }
         
   
@@ -62,9 +62,9 @@ namespace buildingSystem{
         /// <summary>
         /// @return
         /// </summary>
-        public object reportAlarmToControlCenter() {
+        public bool reportAlarmToControlCenter() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -72,9 +72,9 @@ namespace buildingSystem{
         /// NEEDS TO STAY THE SAME
         /// @return
         /// </summary>
-        public object displayBuilding() {
+        public bool displayBuilding() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 
+using buildingSystem.roomComponents;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,26 +31,26 @@ namespace buildingSystem{
             this.camera = new cameraSystem.Camera();
         }
 
-        public bool isElectricityActive;
+        public bool isElectricityActive = false;
 
         /// <summary>
         /// This is the zone the room is located in
         /// </summary>
-        public string zone;
+        public string zone = "";
 
-        public int roomName;
+        public int roomName = 0;
 
-        public roomComponents.DirectionIndicators directionIndecator;
+        public roomComponents.DirectionIndicators directionIndecator = new DirectionIndicators();
 
-        public roomComponents.Door[] doorArray;
+        public roomComponents.Door[] doorArray = new roomComponents.Door[0];
 
-        public roomComponents.Sprinklers sprinkler;
+        public roomComponents.Sprinklers sprinkler = new roomComponents.Sprinklers();
 
-        public roomComponents.Sensor sensor;
+        public roomComponents.Sensor sensor = new roomComponents.Sensor();
 
-        public roomComponents.Alarm alarm;
+        public roomComponents.Alarm alarm = new roomComponents.Alarm();
 
-        public cameraSystem.Camera camera;
+        public cameraSystem.Camera camera = new cameraSystem.Camera();
 
         //public static int test;
 
@@ -63,7 +64,7 @@ namespace buildingSystem{
         /// <summary>
         /// This holds the room attributes in a object to be sent to building
         /// </summary>
-        public object roomState;
+        public bool roomState = false;
 
         public void requestTurnOnOffAlarm() {
             // TODO implement here
@@ -98,9 +99,9 @@ namespace buildingSystem{
         /// This returns the roomStateObject to calling function
         /// @return
         /// </summary>
-        public object sendRoomStateOnChange() {
+        public bool sendRoomStateOnChange() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>

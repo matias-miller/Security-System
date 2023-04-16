@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -39,9 +40,9 @@ namespace controlSystem.Employee{
         /// <summary>
         /// will be set in login
         /// </summary>
-        public bool isSupervisor = false;
+        public bool isSupervisor = true;
 
-        public int employeeID;
+        public int employeeID = 0;
 
         /// <summary>
         /// Logs the user in
@@ -51,7 +52,7 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool login(string userName, string password) {
             // TODO implement here
-            this.password = password; 
+            this.password = password;
             return true;
         }
 
@@ -88,6 +89,12 @@ namespace controlSystem.Employee{
             return "";
         }
 
+        public bool checkIfAdmin() {
+            // Setting isSupervisor will fix this
+            return isSupervisor;
+        
+        }
+
         /// <summary>
         /// @return
         /// </summary>
@@ -99,9 +106,12 @@ namespace controlSystem.Employee{
         /// <summary>
         /// @return
         /// </summary>
-        public bool getSalary() {
+        public int getSalary() {
             // TODO implement here
-            return false;
+            return this.salary;
+        }
+        public string getPassword() {
+            return this.password;
         }
 
         /// <summary>
@@ -124,9 +134,9 @@ namespace controlSystem.Employee{
         /// This will call all the getter methods
         /// @return
         /// </summary>
-        public object getEmployeeData() {
+        public bool getEmployeeData() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>

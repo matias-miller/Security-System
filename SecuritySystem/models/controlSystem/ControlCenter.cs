@@ -3,37 +3,39 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace controlSystem
 {
-    public class ControlCenter: Controller
+    public class ControlCenter
     {
 
         public ControlCenter()
         {
         }
+        //These need default values to work
+        public bool alarmReported = false;
 
-        public bool alarmReported;
+        public Employee.Employee employeeOnCall = new Employee.Employee();
 
-        public Employee.Employee employeeOnCall;
+        public bool isManned = false;
 
-        public bool isManned;
-
-        public Employee.Employee mannedBy;
+        public Employee.Employee mannedBy = new Employee.Employee();
 
         public Employee.Employee employee = new Employee.Employee();
-
+        
         /// <summary>
         /// This holds all employee ids for validation
         /// </summary>
-        public object employeeIDArray;
+        public Employee.Employee[] employeeIDArray = new Employee.Employee[0];
 
-        public buildingSystem.BuildingControlSystem buldingControlCenter;
+        public buildingSystem.BuildingControlSystem buldingControlCenter = new buildingSystem.BuildingControlSystem();
 
-        public PhoneSystem phoneSystem;
+        public PhoneSystem phoneSystem = new PhoneSystem();
 
+        public int test = 0;
         /// <summary>
         /// This will load an employee object then request that the employee function becomeOnCall is used
         /// @param employeeID 
@@ -142,20 +144,29 @@ namespace controlSystem
             var success = employee.promoteUser();
             return true;
         }
-
-        public JsonResult returnAllNonAdmins()
+    
+        public string[] returnAllNonAdmins()
         {
 
             string[] userArray = new string[] { "austin", "mat", "matias" };
-            return Json(userArray);
+            return userArray;
         }
 
         public bool attemptAddUser(string first, string last, string email, string password) {
 
             var success = employee.addUser(first, last, email, password);
             return success;
-            
-    
+
+        }
+
+        public bool attemptCheckIfAdmin() {
+            var success = employee.checkIfAdmin();
+            return success;
+        }
+
+        public string testGetEmployeePassword() {
+            Debug.WriteLine(employee.getPassword());
+           return employee.getPassword();
         }
     }
 }
