@@ -22,13 +22,24 @@
     <p>This is a test to check if control center varables stay alive, being user password::</p>
     <p id="test1"></p>
         <div>
-            <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
-            
-            <input type="number" id="ActivateSensor" min="1" max="41"></input>
-            <button onclick="ActivateSensorAjax()">Activate Sensor</button>
+            <h1>Senarios</h1>
+            <div>
+                <input type="number" id="ActivateSensor" min="1" max="41"></input>
+                <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
+            </div>
 
-            <input type="number" id="ActivateSensor" min="1" max="41"></input>
-            <button onclick="DeactivateSensorAjax()">Deactivate Sensor</button>
+            <div>
+                <input type="number" id="DeactivateSensor" min="1" max="41"></input>
+                <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
+            </div>
+            <div>
+                <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
+            </div>
+            <div>
+                <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
+            </div>
+
+
 
         </div>
         
@@ -275,31 +286,31 @@
         });
     }
 
-    function activateOrDeactivateSensorsAJAX(area) {
-        // Get the current sensor number
-        var RoomNumber = area.id.split("-")[1];
-
-        $.ajax({
-            url: '/CameraViewControler/OnActivateOrDeactivateSensorsAJAX',
-            data: {roomNumber:RoomNumber},
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            error: function(errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:" , errorThrown);
+    function ActivateRandomSensors() {
+        DeactivateAllSensors()
+        // loop through 
+        for(var i = 1; i < 41; i++) {
+            // Loop through all rooms with a 1/3 chance of it becomming active
+            if(Math.floor(Math.random() * 3) == 2) {
+                ActivateSensorAjax(false,i);
             }
-        });
+        }
+    
     }
-    function ActivateSensorAjax() {
+    function ActivateSensorAjax(specific=true,room=0) {
         // called to activate a specific sensor based on the room it is in
+        if(specific == true) {
         var room = document.getElementById("ActivateSensor").value;
+        }
+        else {
+           var room = room
+        }
+        
         $.ajax({
             url: '/CameraViewControler/OnActivateSensorAjax',
             data: { roomNumber: room },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
                 activateSesor(room)
             },
             error: function (errorThrown) {
@@ -308,15 +319,19 @@
         });
     }
 
-     function DeactivateSensorAjax() {
+     function DeactivateSensorAjax(specific=true,room=0) {
         // called to Deactivate a specific sensor based on the room it is in
-        var room = document.getElementById("ActivateSensor").value;
+        if(specific == true) {
+            var room = document.getElementById("DeactivateSensor").value;
+        } else {
+            var room = room
+        }
+        
         $.ajax({
             url: '/CameraViewControler/OnDeactivateSensorAjax',
             data: { roomNumber: room },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
                 deactivateSensor(room);
             },
             error: function (errorThrown) {
@@ -324,6 +339,31 @@
             }
         });
     }
+    function DeactivateAllSensors() {
+        for(var i=1; i<41; i++) {
+            DeactivateSensorAjax(false,i);
+        }
+    }
+    function setBackActiveSensorsOnRefreshAJAX() {
+        // After the page has been reloaded we need to check if the sensors were previously loaded
+        for(var i=1;i<41; i++) {
+             $.ajax({
+                url: '/CameraViewControler/OnGetSpecificSensorStatus',
+                data: { roomNumber: i },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    if(data == true) {
+                        activateSesor(i)
+                    }
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
+                }
+            });
+        }
+    }
+    //document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
     function  activateOrDeactivateAlarmAJAX(area){
     
@@ -369,7 +409,7 @@
             }
         });
     }
-    document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
+   document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
 
 
     ///////////////////////////////
@@ -489,8 +529,8 @@
                 background-color: blue;
         }
         50% {
-                height: 15px;
-                width: 15px;
+                height: 0px;
+                width: 1px;
                 background-color: red;
         }
         75% {

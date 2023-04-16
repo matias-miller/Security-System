@@ -83,14 +83,14 @@ namespace buildingSystem{
         /// </summary>
         public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
             // TODO implement here
-            var data = this.roomList[roomNumber].performAction(requestType, action);
+            var data = roomList[roomNumber].performAction(requestType, action);
 
             return data;
         }
 
         public bool requestSpecificSensorState(int roomName) {
             // test function, can be removed
-            return this.roomList[roomName].requestSpecificSensorState();
+            return roomList[roomName].requestSpecificSensorState();
         }
 
     }

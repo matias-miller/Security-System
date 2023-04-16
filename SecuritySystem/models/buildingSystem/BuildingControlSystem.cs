@@ -59,6 +59,12 @@ namespace buildingSystem{
             return building.requestSpecificSensorState(room);
         }
 
+        public bool getSpecificSensorState(int room)
+        {
+            //function used to get the specific state of a room
+            return building.requestSpecificSensorState(room);
+        }
+
         /// <summary>
         /// @return
         /// </summary>

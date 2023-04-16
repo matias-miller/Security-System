@@ -19,20 +19,10 @@ public class CameraViewControler : Controller
     // Set up the building control system regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
     public static ControlCenter _controlCenter = new ControlCenter();
-
-    public CameraViewControler(ILogger<CameraViewControler> logger)
-    {
-        _logger = logger;
-        Debug.WriteLine("zero");
-        
-    }
-
-    public override void OnActionExecuting(ActionExecutingContext context)
-
-    {
-
+    private static IHttpContextAccessor _httpContextAccessor;
+    static CameraViewControler() {
         // Fetch or get the building state on load depending if it is already set
-        if (!HttpContext.Session.Keys.Contains("BuildingControl"))
+        if (!_httpContextAccessor.HttpContext.Session.Keys.Contains("BuildingControl"))
         {
             updateBuildingState();
         }
@@ -40,7 +30,7 @@ public class CameraViewControler : Controller
         {
             getBuildingState();
         }
-        if (!HttpContext.Session.Keys.Contains("ControlCenter"))
+        if (!_httpContextAccessor.HttpContext.Session.Keys.Contains("ControlCenter"))
         {
             updateControlCenterState();
         }
@@ -49,12 +39,28 @@ public class CameraViewControler : Controller
             getControlCenterState();
         }
 
+
+    }
+
+    public CameraViewControler(ILogger<CameraViewControler> logger)
+    {
+        _logger = logger;
+        Debug.WriteLine("Instantiated");
+        
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+
+    {
+
+
         base.OnActionExecuting(context);
     }
 
 
     private void updateControlCenterState()
     {
+        Debug.WriteLine("updateControl center state");
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
@@ -80,7 +86,7 @@ public class CameraViewControler : Controller
     {
         // This returnes the current shared building object
         var temp = HttpContext.Session.GetString("ControlCenter");
-        Debug.WriteLine(temp);
+        Debug.WriteLine("get control center");
         if (temp != null)
         {
             try
@@ -96,29 +102,53 @@ public class CameraViewControler : Controller
 
     }
 
-    private IActionResult getBuildingState()
+    private static void getBuildingState()
     {
         // This returnes the current shared building object
-        var temp = HttpContext.Session.GetString("BuildingControl");
+        var temp = _httpContextAccessor.HttpContext.Session.GetString("BuildingControl");
+        Debug.WriteLine(temp);
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
             try
             {
                 _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(temp);
+                
             }
             catch (JsonException exeption)
             {
                 Debug.WriteLine(exeption);
             }
         }
-        return Json(true);
+        
     }
 
     private void updateBuildingState()
     {
-        // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
-        HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
+        Debug.WriteLine("updateBuildingState");
+        if (_buldingControl != null)
+        {
+            /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
+            try
+            {
+                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
+                //    new JsonSerializerSettings() { 
+                //        NullValueHandling = NullValueHandling.Ignore
+                //    }
+                //    );
+                HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
+                
+            }
+            catch (JsonException exeption)
+            {
+                Debug.WriteLine(exeption);
+            }
+
+        }
+
+
+
+
     }
     public void OnGet()
     {
@@ -157,6 +187,13 @@ public class CameraViewControler : Controller
         // turns sensor off
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
         updateBuildingState();
+        return Json(data);
+    }
+    [HttpGet("OnGetSpecificSensorStatus")]
+    public IActionResult OnGetSpecificSensorStatus([FromQuery] int roomNumber)
+    {
+        // Just gets a specicic sensors status
+        var data = _buldingControl.getSpecificSensorState(roomNumber);
         return Json(data);
     }
 
