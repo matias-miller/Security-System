@@ -13,7 +13,7 @@ namespace buildingSystem.cameraSystem{
         /// <summary>
         /// holds a array of the different camera states
         /// </summary>
-        private object cameraStateArray;
+        private bool cameraStateArray = false;
 
         /// <summary>
         /// Called in returnCameraState, using the cameraStateArray.
@@ -50,9 +50,9 @@ namespace buildingSystem.cameraSystem{
         /// Used to get state of specific camera. This will be called in the start of monitorSystem to update cameraState array, and will loop through all camera states.
         /// @return
         /// </summary>
-        private object requestCameraFeed() {
+        private bool requestCameraFeed() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace buildingSystem.cameraSystem{
         /// @param cameraID 
         /// @return
         /// </summary>
-        public object returnCameraState(int cameraID) {
+        public bool returnCameraState(int cameraID) {
             // TODO implement here
-            return null;
+            return false;
         }
 
     }

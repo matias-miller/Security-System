@@ -10,9 +10,9 @@ namespace buildingSystem.roomComponents{
         public Door() {
         }
 
-        private bool isLocked;
+        public bool isLocked = false;
 
-        private int doorID;
+        public int doorID = 0;
 
         /// <summary>
         /// @return
@@ -34,9 +34,9 @@ namespace buildingSystem.roomComponents{
         /// returns the door attributes
         /// @return
         /// </summary>
-        public object sendState() {
+        public bool sendState() {
             // TODO implement here
-            return null;
+            return false;
         }
 
     }

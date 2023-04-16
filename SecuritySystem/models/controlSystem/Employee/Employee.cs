@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -19,29 +20,29 @@ namespace controlSystem.Employee{
         /// <summary>
         /// How much the employee gets paid
         /// </summary>
-        private int salary = 0;
+        public int salary = 0;
 
-        private string firstName = "";
+        public string firstName = "";
 
-        private string lastName = "";
+        public string lastName = "";
 
-        private string address = "";
+        public string address = "";
 
-        private string userName = "";
+        public string userName = "";
 
-        private string password = "";
+        public string password = "";
 
         /// <summary>
         /// This shows if the employee is on call or not
         /// </summary>
-        private bool isOnCall = false;
+        public bool isOnCall = false;
 
         /// <summary>
         /// will be set in login
         /// </summary>
-        private bool isSupervisor = false;
+        public bool isSupervisor = true;
 
-        private int employeeID;
+        public int employeeID = 0;
 
         /// <summary>
         /// Logs the user in
@@ -51,7 +52,8 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool login(string userName, string password) {
             // TODO implement here
-            return false;
+            this.password = password;
+            return true;
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool logout() {
             // TODO implement here
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -87,6 +89,12 @@ namespace controlSystem.Employee{
             return "";
         }
 
+        public bool checkIfAdmin() {
+            // Setting isSupervisor will fix this
+            return isSupervisor;
+        
+        }
+
         /// <summary>
         /// @return
         /// </summary>
@@ -98,9 +106,12 @@ namespace controlSystem.Employee{
         /// <summary>
         /// @return
         /// </summary>
-        public bool getSalary() {
+        public int getSalary() {
             // TODO implement here
-            return false;
+            return this.salary;
+        }
+        public string getPassword() {
+            return this.password;
         }
 
         /// <summary>
@@ -123,9 +134,9 @@ namespace controlSystem.Employee{
         /// This will call all the getter methods
         /// @return
         /// </summary>
-        public object getEmployeeData() {
+        public bool getEmployeeData() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -134,6 +145,14 @@ namespace controlSystem.Employee{
         public bool becomeOnCall() {
             // TODO implement here
             return false;
+        }
+
+        public bool promoteUser() {
+            return true;
+        }
+        public bool addUser(string first, string last, string email, string password) {
+            //TBD how you do this
+            return true;
         }
 
     }

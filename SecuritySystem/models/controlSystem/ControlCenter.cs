@@ -1,38 +1,48 @@
 
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace controlSystem{
-    public class ControlCenter {
+namespace controlSystem
+{
+    public class ControlCenter
+    {
 
-        public ControlCenter() {
+        public ControlCenter()
+        {
         }
+        //These need default values to work
+        public bool alarmReported = false;
 
-        private bool alarmReported;
+        public Employee.Employee employeeOnCall = new Employee.Employee();
 
-        private Employee.Employee employeeOnCall;
+        public bool isManned = false;
 
-        private bool isManned;
+        public Employee.Employee mannedBy = new Employee.Employee();
 
-        private Employee.Employee mannedBy;
-
+        public Employee.Employee employee = new Employee.Employee();
+        
         /// <summary>
         /// This holds all employee ids for validation
         /// </summary>
-        private object employeeIDArray;
+        public Employee.Employee[] employeeIDArray = new Employee.Employee[0];
 
-        private buildingSystem.BuildingControlSystem buldingControlCenter;
+        public buildingSystem.BuildingControlSystem buldingControlCenter = new buildingSystem.BuildingControlSystem();
 
-        private PhoneSystem phoneSystem;
+        public PhoneSystem phoneSystem = new PhoneSystem();
 
+        public int test = 0;
         /// <summary>
         /// This will load an employee object then request that the employee function becomeOnCall is used
         /// @param employeeID 
         /// @return
         /// </summary>
-        public bool requestEmployeeToBeOnCall(string employeeID) {
+        public bool requestEmployeeToBeOnCall(string employeeID)
+        {
             // TODO implement here
             return false;
         }
@@ -42,7 +52,8 @@ namespace controlSystem{
         /// @param employeeOnCallID 
         /// @return
         /// </summary>
-        public bool requestToMakeCall(int employeeOnCallID) {
+        public bool requestToMakeCall(int employeeOnCallID)
+        {
             // TODO implement here
             return false;
         }
@@ -52,7 +63,8 @@ namespace controlSystem{
         /// @param employeeID 
         /// @return
         /// </summary>
-        public bool manControlCenter(int employeeID) {
+        public bool manControlCenter(int employeeID)
+        {
             // TODO implement here
             return false;
         }
@@ -61,7 +73,8 @@ namespace controlSystem{
         /// calls determinAlarmSeverity and getBuildingState
         /// @return
         /// </summary>
-        public bool alarmReportedProcedure() {
+        public bool alarmReportedProcedure()
+        {
             // TODO implement here
             return false;
         }
@@ -70,7 +83,8 @@ namespace controlSystem{
         /// This will call requestToModifyBuildingState from the buildingCenterObject
         /// @return
         /// </summary>
-        public bool useBuildingControlSystem() {
+        public bool useBuildingControlSystem()
+        {
             // TODO implement here
             return false;
         }
@@ -79,7 +93,8 @@ namespace controlSystem{
         /// used in alarmReportedProcedure, I assume this will just be a yes no toggle that will check say the employee manually checked the alarm
         /// @return
         /// </summary>
-        private bool confirmAlarmManually() {
+        public bool confirmAlarmManually()
+        {
             // TODO implement here
             return false;
         }
@@ -88,7 +103,8 @@ namespace controlSystem{
         /// This will query sendBuildingStateToControlCenter to determine what state the building is in, will be called in alarmReportedProcedure
         /// @return
         /// </summary>
-        public bool checkIfBuildingControlCenterConfirmedAlarm() {
+        public bool checkIfBuildingControlCenterConfirmedAlarm()
+        {
             // TODO implement here
             return false;
         }
@@ -96,7 +112,8 @@ namespace controlSystem{
         /// <summary>
         /// @return
         /// </summary>
-        public bool buildingStateListener() {
+        public bool buildingStateListener()
+        {
             // TODO implement here
             return false;
         }
@@ -105,10 +122,51 @@ namespace controlSystem{
         /// This will call the buildingControlCenter function displayBuilding
         /// @return
         /// </summary>
-        public bool requestThenDisplayBuildingView() {
+        public bool requestThenDisplayBuildingView()
+        {
             // TODO implement here
             return false;
         }
 
+        public bool validateEmployeeLogin(string email, string password)
+        {
+            var success = employee.login(email, password);
+            return success;
+        }
+        public bool attemptEmployeeLogout()
+        {
+            var success = employee.logout();
+            return success;
+        }
+        public bool attemptToPromoteUser(string user)
+        {
+            // will have to do something with user parameter to find the actual employee
+            var success = employee.promoteUser();
+            return true;
+        }
+    
+        public string[] returnAllNonAdmins()
+        {
+
+            string[] userArray = new string[] { "austin", "mat", "matias" };
+            return userArray;
+        }
+
+        public bool attemptAddUser(string first, string last, string email, string password) {
+
+            var success = employee.addUser(first, last, email, password);
+            return success;
+
+        }
+
+        public bool attemptCheckIfAdmin() {
+            var success = employee.checkIfAdmin();
+            return success;
+        }
+
+        public string testGetEmployeePassword() {
+            Debug.WriteLine(employee.getPassword());
+           return employee.getPassword();
+        }
     }
 }

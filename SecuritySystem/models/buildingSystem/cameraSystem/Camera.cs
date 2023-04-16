@@ -13,35 +13,35 @@ namespace buildingSystem.cameraSystem{
         /// <summary>
         /// index in cameraState
         /// </summary>
-        private int cameraID;
+        private int cameraID = 0;
 
         /// <summary>
         /// index in cameraState
         /// </summary>
-        private bool peoplePresent;
+        private bool peoplePresent = false;
 
         /// <summary>
         /// index in cameraState
         /// </summary>
-        private bool tresspasserPresent;
+        private bool tresspasserPresent = false;
 
         /// <summary>
         /// index in cameraState
         /// </summary>
-        private bool firePresent;
+        private bool firePresent = false;
 
         /// <summary>
         /// This holds cameraID, peoplePresent, tresspasserPresent, firePresent
         /// </summary>
-        private object cameraState;
+        private bool cameraState = false;
 
         /// <summary>
         /// in CameraSystem this is how the camera state will be fetched
         /// @return
         /// </summary>
-        public object sendCameraStateToCameraSystem() {
+        public bool sendCameraStateToCameraSystem() {
             // TODO implement here
-            return null;
+            return false;
         }
 
         /// <summary>

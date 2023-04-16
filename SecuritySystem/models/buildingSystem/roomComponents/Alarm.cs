@@ -16,19 +16,19 @@ namespace buildingSystem.roomComponents{
         public Alarm() {
         }
 
-        private bool isSmokeAlarm;
+        public bool isSmokeAlarm = false;
 
-        private bool isGasAlarm;
+        public bool isGasAlarm = false;
 
-        private int alarmID;
+        public int alarmID = 0;
 
-        private bool isActive;
+        public bool isActive = false;
 
         /// <summary>
         /// testsets
         /// @return
         /// </summary>
-        private bool activateAlarm() {
+        public bool activateAlarm() {
             // TODO implement here
             return false;
         }
@@ -36,7 +36,7 @@ namespace buildingSystem.roomComponents{
         /// <summary>
         /// @return
         /// </summary>
-        private bool deactivateAlarm() {
+        public bool deactivateAlarm() {
             // TODO implement here
             return false;
         }
@@ -45,7 +45,7 @@ namespace buildingSystem.roomComponents{
         /// Returns alarm variables
         /// @return
         /// </summary>
-        private bool sendState() {
+        public bool sendState() {
             // TODO implement here
             return false;
         }

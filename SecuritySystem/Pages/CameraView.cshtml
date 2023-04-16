@@ -1,10 +1,403 @@
 ﻿@page
-@model CameraViewModel
+@using buildingSystem
+@model CameraViewControler
 @{
     ViewData["Title"] = "Camera View Page";
-}
+    // This is how Im doing the image mapping
+    // https://imagemap.org/
+    // image source 
+    // https://www.edrawsoft.com/templates/pdf/mall-floor-plan.pdf
 
+    // Onclick handler 
+    //    https://www.youtube.com/watch?v=QeRszt0OKUw
+    // Model controlers
+    
+    // when buildingControl changes Call a seperate function
+
+
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
-    <p>This is the  Camera View Page.</p>
+    <p>This is a test to check if control center varables stay alive, being user password::</p>
+    <p id="test1"></p>
+        
+        <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
+
 </div>
+    <div id="containerForRoom" class="containerForRoom">
+        <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="width:100%: height: 100%;">
+    </div>
+    
+    <map name="image_map">
+    @*Sensor really referes to the room number. So sensor-3 means room 3. Note that not all rooms have sensors*@
+    <area id="sensor-1"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="257,73,15" shape="circle">
+    <area id="sensor-3"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="534,255,13" shape="circle">
+    <area id="sensor-4"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="728,242,13" shape="circle">
+    <area id="sensor-5"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="935,236,14" shape="circle">
+    <area id="sensor-6"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="126,202,18" shape="circle">
+    <area id="sensor-7"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,333,18" shape="circle">
+    <area id="sensor-8"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="127,511,12" shape="circle">
+    <area id="sensor-9"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="438,583,17" shape="circle">
+    <area id="sensor-10" onclick="activateOrDeactivateSensorsAJAX(this)" coords="732,572,15" shape="circle">
+    <area id="sensor-11" onclick="activateOrDeactivateSensorsAJAX(this)" coords="850,519,14" shape="circle">
+    <area id="sensor-12" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,539,11" shape="circle">
+    <area id="sensor-13" onclick="activateOrDeactivateSensorsAJAX(this)" coords="139,709,15" shape="circle">
+    <area id="sensor-14" onclick="activateOrDeactivateSensorsAJAX(this)" coords="431,760,18" shape="circle">
+    <area id="sensor-15" onclick="activateOrDeactivateSensorsAJAX(this)" coords="678,635,16" shape="circle">
+    <area id="sensor-16" onclick="activateOrDeactivateSensorsAJAX(this)" coords="846,690,15" shape="circle">
+    <area id="sensor-17" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1056,662,15" shape="circle">
+    <area id="sensor-18" onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,881,15" shape="circle">
+    <area id="sensor-19" onclick="activateOrDeactivateSensorsAJAX(this)" coords="344,986,17" shape="circle">
+    <area id="sensor-20" onclick="activateOrDeactivateSensorsAJAX(this)" coords="446,986,13" shape="circle">
+    <area id="sensor-21" onclick="activateOrDeactivateSensorsAJAX(this)" coords="675,953,17" shape="circle">
+    <area id="sensor-22" onclick="activateOrDeactivateSensorsAJAX(this)" coords="811,969,14" shape="circle">
+    <area id="sensor-23" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1061,814,15" shape="circle">
+    <area id="sensor-24" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1064,942,15" shape="circle">
+    <area id="sensor-25" onclick="activateOrDeactivateSensorsAJAX(this)" coords="141,1060,17" shape="circle">
+    <area id="sensor-26" onclick="activateOrDeactivateSensorsAJAX(this)" coords="351,1091,15" shape="circle">
+    <area id="sensor-27" onclick="activateOrDeactivateSensorsAJAX(this)" coords="455,1094,17" shape="circle">
+    <area id="sensor-28" onclick="activateOrDeactivateSensorsAJAX(this)" coords="653,1142,17" shape="circle">
+    <area id="sensor-29" onclick="activateOrDeactivateSensorsAJAX(this)" coords="769,1145,16" shape="circle">
+    <area id="sensor-30" onclick="activateOrDeactivateSensorsAJAX(this)" coords="866,1143,15" shape="circle">
+    <area id="sensor-31" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1079,17" shape="circle">
+    <area id="sensor-32" onclick="activateOrDeactivateSensorsAJAX(this)" coords="142,1224,15" shape="circle">
+    <area id="sensor-33" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1187,15" shape="circle">
+    <area id="sensor-34" onclick="activateOrDeactivateSensorsAJAX(this)" coords="452,1191,16" shape="circle">
+    <area id="sensor-35" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1277,13" shape="circle">
+    <area id="sensor-36" onclick="activateOrDeactivateSensorsAJAX(this)" coords="454,1280,15" shape="circle">
+    <area id="sensor-37" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1055,1216,15" shape="circle">
+    <area id="sensor-39" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1355,15" shape="circle">
+    <area id="sensor-40" onclick="activateOrDeactivateSensorsAJAX(this)" coords="255,1517,18" shape="circle">
+    <area id="sensor-41" onclick="activateOrDeactivateSensorsAJAX(this)" coords="472,1487,19" shape="circle">
+
+
+
+
+        <area alt="alarm" href="#" title="" href="" coords="201,50,236,92" shape="rect">
+        <area alt="" title="" href="" coords="442,146,472,187" shape="rect">
+        <area alt="" title="" href="" coords="593,220,623,258" shape="rect">
+        <area alt="" title="" href="" coords="793,219,825,254" shape="rect">
+        <area alt="" title="" href="" coords="38,184,64,224" shape="rect">
+        <area alt="" title="" href="" coords="51,320,82,360" shape="rect">
+        <area alt="" title="" href="" coords="45,497,73,537" shape="rect">
+        <area alt="" title="" href="" coords="274,478,302,518" shape="rect">
+        <area alt="" title="" href="" coords="599,498,625,537" shape="rect">
+        <area alt="" title="" href="" coords="792,500,820,538" shape="rect">
+        <area alt="" title="" href="" coords="992,513,1021,551" shape="rect">
+        <area alt="" title="" href="" coords="58,686,85,726" shape="rect">
+        <area alt="" title="" href="" coords="271,740,301,782" shape="rect">
+        <area alt="" title="" href="" coords="603,618,630,657" shape="rect">
+        <area alt="" title="" href="" coords="801,638,824,673" shape="rect">
+        <area alt="" title="" href="" coords="995,646,1024,685" shape="rect">
+        <area alt="" title="" href="" coords="988,786,1017,825" shape="rect">
+        <area alt="" title="" href="" coords="51,859,81,902" shape="rect">
+        <area alt="" title="" href="" coords="278,971,302,1010" shape="rect">
+        <area alt="" title="" href="" coords="385,971,411,1008" shape="rect">
+        <area alt="" title="" href="" coords="619,939,647,974" shape="rect">
+        <area alt="" title="" href="" coords="794,906,821,947" shape="rect">
+        <area alt="" title="" href="" coords="991,932,1021,973" shape="rect">
+        <area alt="" title="" href="" coords="1001,1062,1029,1099" shape="rect">
+        <area alt="" title="" href="" coords="805,1130,831,1167" shape="rect">
+        <area alt="" title="" href="" coords="995,1197,1021,1236" shape="rect">
+        <area alt="" title="" href="" coords="991,1340,1021,1374" shape="rect">
+        <area alt="" title="" href="" coords="705,1127,738,1169" shape="rect">
+        <area alt="" title="" href="" coords="589,1122,623,1163" shape="rect">
+        <area alt="" title="" href="" coords="48,1044,81,1084" shape="rect">
+        <area alt="" title="" href="" coords="283,1073,311,1109" shape="rect">
+        <area alt="" title="" href="" coords="377,1080,407,1116" shape="rect">
+        <area alt="" title="" href="" coords="53,1213,82,1254" shape="rect">
+        <area alt="" title="" href="" coords="277,1169,305,1207" shape="rect">
+        <area alt="" title="" href="" coords="379,1171,408,1213" shape="rect">
+        <area alt="" title="" href="" coords="280,1260,302,1296" shape="rect">
+        <area alt="" title="" href="" coords="385,1261,404,1300" shape="rect">
+        <area alt="" title="" href="" coords="186,1503,213,1540" shape="rect">
+        <area alt="" title="" href="" coords="399,1466,426,1500" shape="rect">
+
+
+          <area alt="sprinkler" title="" href="" coords="227,102,272,143" shape="rect">
+  <area alt="" title="" href="" coords="441,237,483,279" shape="rect">
+  <area alt="" title="" href="" coords="580,271,625,310" shape="rect">
+  <area alt="" title="" href="" coords="796,271,834,311" shape="rect">
+  <area alt="" title="" href="" coords="34,250,79,290" shape="rect">
+  <area alt="" title="" href="" coords="34,404,82,444" shape="rect">
+  <area alt="" title="" href="" coords="29,609,76,653" shape="rect">
+  <area alt="" title="" href="" coords="272,540,315,585" shape="rect">
+  <area alt="" title="" href="" coords="592,560,638,603" shape="rect">
+  <area alt="" title="" href="" coords="841,558,880,601" shape="rect">
+  <area alt="" title="" href="" coords="1033,586,1077,628" shape="rect">
+  <area alt="" title="" href="" coords="39,783,81,824" shape="rect">
+  <area alt="" title="" href="" coords="256,833,301,876" shape="rect">
+  <area alt="" title="" href="" coords="611,770,655,810" shape="rect">
+  <area alt="" title="" href="" coords="806,748,854,790" shape="rect">
+  <area alt="" title="" href="" coords="1029,715,1077,758" shape="rect">
+  <area alt="" title="" href="" coords="1035,868,1078,910" shape="rect">
+  <area alt="" title="" href="" coords="1033,1006,1081,1048" shape="rect">
+  <area alt="" title="" href="" coords="799,1071,847,1112" shape="rect">
+  <area alt="" title="" href="" coords="613,1001,660,1040" shape="rect">
+  <area alt="" title="" href="" coords="436,1022,479,1058" shape="rect">
+  <area alt="" title="" href="" coords="41,970,81,1011" shape="rect">
+  <area alt="" title="" href="" coords="323,1023,367,1059" shape="rect">
+  <area alt="" title="" href="" coords="33,1131,79,1169" shape="rect">
+  <area alt="" title="" href="" coords="324,1125,365,1160" shape="rect">
+  <area alt="" title="" href="" coords="436,1122,480,1158" shape="rect">
+  <area alt="" title="" href="" coords="44,1293,87,1334" shape="rect">
+  <area alt="" title="" href="" coords="323,1217,365,1250" shape="rect">
+  <area alt="" title="" href="" coords="432,1219,474,1252" shape="rect">
+  <area alt="" title="" href="" coords="430,1307,471,1337" shape="rect">
+  <area alt="" title="" href="" coords="327,1302,365,1335" shape="rect">
+  <area alt="" title="" href="" coords="633,1181,679,1214" shape="rect">
+  <area alt="" title="" href="" coords="744,1184,788,1221" shape="rect">
+  <area alt="" title="" href="" coords="845,1183,879,1220" shape="rect">
+  <area alt="" title="" href="" coords="1031,1132,1078,1177" shape="rect">
+  <area alt="" title="" href="" coords="1032,1272,1076,1315" shape="rect">
+  <area alt="" title="" href="" coords="1038,1412,1075,1452" shape="rect">
+  <area alt="" title="" href="" coords="129,1490,175,1529" shape="rect">
+  <area alt="" title="" href="" coords="395,1520,436,1565" shape="rect">
+
+        <area alt="direction" title="" href="" coords="159,111,211,136" shape="rect">
+        <area alt="" title="" href="" coords="502,148,558,172" shape="rect">
+        <area alt="" title="" href="" coords="701,271,754,295" shape="rect">
+        <area alt="" title="" href="" coords="910,274,961,294" shape="rect">
+        <area alt="" title="" href="" coords="106,268,158,288" shape="rect">
+        <area alt="" title="" href="" coords="109,424,161,444" shape="rect">
+        <area alt="" title="" href="" coords="407,491,459,510" shape="rect">
+        <area alt="" title="" href="" coords="720,517,769,538" shape="rect">
+        <area alt="" title="" href="" coords="790,578,841,597" shape="rect">
+        <area alt="" title="" href="" coords="971,605,1022,621" shape="rect">
+        <area alt="" title="" href="" coords="109,620,156,641" shape="rect">
+        <area alt="" title="" href="" coords="719,634,768,655" shape="rect">
+        <area alt="" title="" href="" coords="109,795,162,813" shape="rect">
+        <area alt="" title="" href="" coords="393,836,443,855" shape="rect">
+        <area alt="" title="" href="" coords="708,942,756,963" shape="rect">
+        <area alt="" title="" href="" coords="793,1025,847,1044" shape="rect">
+        <area alt="" title="" href="" coords="805,809,857,824" shape="rect">
+        <area alt="" title="" href="" coords="967,737,1018,753" shape="rect">
+        <area alt="" title="" href="" coords="970,876,1024,900" shape="rect">
+        <area alt="" title="" href="" coords="969,1016,1024,1036" shape="rect">
+        <area alt="" title="" href="" coords="972,1152,1026,1167" shape="rect">
+        <area alt="" title="" href="" coords="969,1285,1022,1305" shape="rect">
+        <area alt="" title="" href="" coords="801,1207,845,1230" shape="rect">
+        <area alt="" title="" href="" coords="687,1198,736,1216" shape="rect">
+        <area alt="" title="" href="" coords="571,1194,619,1214" shape="rect">
+        <area alt="" title="" href="" coords="111,989,159,1012" shape="rect">
+        <area alt="" title="" href="" coords="262,1041,313,1059" shape="rect">
+        <area alt="" title="" href="" coords="379,1038,429,1059" shape="rect">
+        <area alt="" title="" href="" coords="268,1136,318,1158" shape="rect">
+        <area alt="" title="" href="" coords="381,1136,431,1157" shape="rect">
+        <area alt="" title="" href="" coords="261,1232,311,1254" shape="rect">
+        <area alt="" title="" href="" coords="375,1226,427,1247" shape="rect">
+        <area alt="" title="" href="" coords="276,1313,327,1335" shape="rect">
+        <area alt="" title="" href="" coords="376,1321,426,1340" shape="rect">
+        <area alt="" title="" href="" coords="103,1154,154,1173" shape="rect">
+        <area alt="" title="" href="" coords="106,1312,162,1332" shape="rect">
+        <area alt="" title="" href="" coords="222,1567,269,1588" shape="rect">
+        <area alt="" title="" href="" coords="446,1535,497,1556" shape="rect">
+        <area alt="" title="" href="" coords="967,1437,1014,1454" shape="rect">
+
+
+  <area alt="door" title="" href="" coords="213,164,272,182" shape="rect">
+  <area alt="" title="" href="" coords="179,217,198,268" shape="rect">
+  <area alt="" title="" href="" coords="331,249,386,266" shape="rect">
+  <area alt="" title="" href="" coords="456,315,509,328" shape="rect">
+  <area alt="" title="" href="" coords="648,314,702,329" shape="rect">
+  <area alt="" title="" href="" coords="850,313,906,333" shape="rect">
+  <area alt="" title="" href="" coords="183,356,196,412" shape="rect">
+  <area alt="" title="" href="" coords="180,553,196,605" shape="rect">
+  <area alt="" title="" href="" coords="325,639,386,657" shape="rect">
+  <area alt="" title="" href="" coords="651,482,708,500" shape="rect">
+  <area alt="" title="" href="" coords="889,518,899,573" shape="rect">
+  <area alt="" title="" href="" coords="953,544,964,591" shape="rect">
+  <area alt="" title="" href="" coords="495,534,507,589" shape="rect">
+  <area alt="" title="" href="" coords="186,730,194,784" shape="rect">
+  <area alt="" title="" href="" coords="494,788,504,840" shape="rect">
+  <area alt="" title="" href="" coords="575,690,584,745" shape="rect">
+  <area alt="" title="" href="" coords="661,832,716,842" shape="rect">
+  <area alt="" title="" href="" coords="889,755,897,810" shape="rect">
+  <area alt="" title="" href="" coords="885,643,898,696" shape="rect">
+  <area alt="" title="" href="" coords="954,669,961,725" shape="rect">
+  <area alt="" title="" href="" coords="955,815,962,867" shape="rect">
+  <area alt="" title="" href="" coords="887,920,895,972" shape="rect">
+  <area alt="" title="" href="" coords="953,952,962,1007" shape="rect">
+  <area alt="" title="" href="" coords="660,887,713,897" shape="rect">
+  <area alt="" title="" href="" coords="573,983,578,1037" shape="rect">
+  <area alt="" title="" href="" coords="187,913,196,967" shape="rect">
+  <area alt="" title="" href="" coords="185,1100,196,1150" shape="rect">
+  <area alt="" title="" href="" coords="184,1248,197,1305" shape="rect">
+  <area alt="" title="" href="" coords="184,1395,197,1452" shape="rect">
+  <area alt="" title="" href="" coords="305,1512,315,1563" shape="rect">
+  <area alt="" title="" href="" coords="322,1606,373,1615" shape="rect">
+  <area alt="" title="" href="" coords="438,1432,492,1442" shape="rect">
+  <area alt="" title="" href="" coords="746,1603,799,1617" shape="rect">
+  <area alt="" title="" href="" coords="953,1360,963,1411" shape="rect">
+  <area alt="" title="" href="" coords="951,1231,963,1281" shape="rect">
+  <area alt="" title="" href="" coords="952,1098,963,1148" shape="rect">
+  <area alt="" title="" href="" coords="886,1032,895,1091" shape="rect">
+  <area alt="" title="" href="" coords="331,901,389,911" shape="rect">
+  <area alt="" title="" href="" coords="494,1272,502,1325" shape="rect">
+  <area alt="" title="" href="" coords="244,1270,255,1324" shape="rect">
+  <area alt="" title="" href="" coords="243,1183,255,1236" shape="rect">
+  <area alt="" title="" href="" coords="494,1183,503,1235" shape="rect">
+  <area alt="" title="" href="" coords="494,1092,505,1147" shape="rect">
+  <area alt="" title="" href="" coords="494,984,504,1038" shape="rect">
+  <area alt="" title="" href="" coords="244,986,255,1035" shape="rect">
+    </map>
+ 
+<script>
+
+    ///////////////////////////////
+    /*
+    Ajax Functions
+    
+    */
+    ///////////////////////////////
+    function ExampleFunctionForAJAX() {
+        // The purpouse of this function is show how to use AJAX to call the Controller for this page
+        var URL = '/CameraViewControler/OnGetSpecificRoomState';
+        $.ajax({
+            url: URL,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error:', textStatus, errorThrown);
+            }
+        });
+    }
+
+    function activateOrDeactivateSensorsAJAX(area) {
+        // Get the current sensor number
+        var RoomNumber = area.id.split("-")[1];
+
+        $.ajax({
+            url: '/CameraViewControler/OnActivateOrDeactivateSensorsAJAX',
+            data: {roomNumber:RoomNumber},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function(errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:" , errorThrown);
+            }
+        });
+    }
+
+    function  activateOrDeactivateAlarmAJAX(area){
+    
+    }
+    function  activateOrDeactivateSprinklerAJAX(area){
+    
+    }
+    function  activateOrDeactivateDirectionIndicatorAJAX(area){
+    
+    }
+
+
+    function addOrRemoveSensorAJAX(){
+        //
+    }
+    function addOrRemoveAlarmAJAX() {
+        //
+    }
+    function addOrRemoveSprinklerAJAX() {
+        //
+    }
+    function addOrRemoveDirectionIndicatorAJAX() {
+        //
+    }
+    function AttemptGetPasswordAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/CameraViewControler/OnAttemptGetPassword',
+            dataType: 'json',
+
+            success: function (data) {
+                console.log(data);
+                // if data is true return change page to index else remain on current page
+                document.getElementById("test1").innerHTML = data;
+                if (data == true) {
+                    // navigate to the home page on success
+                    //console.log(document.getElementById("link").getAttribute('href'));
+                    //window.location.href = document.getElementById("link").getAttribute('href');
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
+
+
+    ///////////////////////////////
+    /*
+    Drawing Functions
+    
+    */
+    ///////////////////////////////
+    function activateOrDeactivateOrDeactivateSensors(area) {
+        // Turns on the on color of a sensor if it is currently detecting a fire or chemical leak
+        const coords = area.coords.split(',').map(Number);
+        const [x, y, r] = coords;
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        overlay.style.width = (r * 2) + 'px';
+        overlay.style.height = (r * 2) + 'px';
+        overlay.style.left = (x - r) + 'px';
+        overlay.style.top = (y - r) + 'px';
+        area.overlay = area.overlay || overlay;
+        area.overlay.classList.toggle('active');
+        if (!area.overlay.parentNode) {
+            document.getElementById('containerForRoom').appendChild(area.overlay);
+        }
+    }
+    function activateOrDeactivateAlarm(area) {
+        // draws alarm state over alarms 
+    }
+
+    
+    function activateOrDeactivateSprinkler(area) {
+        // draws sprinker state
+    }
+
+    function  activateOrDeactivateDirectionIndicators(area) {
+        // draws direction indicators state
+    }
+
+    function addOrRemoveSensor(){
+        //
+    }
+    function addOrRemoveAlarm() {
+        //
+    }
+    function addOrRemoveSprinkler() {
+        //
+    }
+    function addOrRemoveDirectionIndicator() {
+        //
+    }
+
+</script>
+
+<style>
+    .overlay {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+        .overlay.active {
+            opacity: 0.5;
+        }
+        .containerForRoom {
+            position: relative;
+        }
+</style>
+

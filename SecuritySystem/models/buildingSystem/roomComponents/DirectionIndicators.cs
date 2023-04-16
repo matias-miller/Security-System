@@ -10,9 +10,9 @@ namespace buildingSystem.roomComponents{
         public DirectionIndicators() {
         }
 
-        private bool isActive;
+        public bool isActive = false;
 
-        private int directionIndicatorID;
+        public int directionIndicatorID = 0;
 
         /// <summary>
         /// @return
@@ -34,9 +34,9 @@ namespace buildingSystem.roomComponents{
         /// returns DirectionIndicators attributes
         /// @return
         /// </summary>
-        public object sendState() {
+        public bool sendState() {
             // TODO implement here
-            return null;
+            return false;
         }
 
     }

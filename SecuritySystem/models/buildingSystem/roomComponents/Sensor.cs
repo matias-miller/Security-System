@@ -10,20 +10,21 @@ namespace buildingSystem.roomComponents{
         public Sensor() {
         }
 
-        private bool isActive;
+        public bool isActive = false;
 
-        private bool isGasSensor;
+        public bool isGasSensor = false;
 
-        private bool isSmokeSensor;
+        public bool isSmokeSensor = false;
 
-        private int sensorID;
+        public int sensorID = 0;
 
         /// <summary>
         /// @return
         /// </summary>
         public bool activateSensor() {
             // TODO implement here
-            return false;
+            this.isActive = true;
+            return this.isActive;
         }
 
         /// <summary>
@@ -31,7 +32,8 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool deactivateSensor() {
             // TODO implement here
-            return false;
+            this.isActive = false;
+            return this.isActive;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool sendState() {
             // TODO implement here
-            return false;
+            return this.isActive;
         }
 
     }
