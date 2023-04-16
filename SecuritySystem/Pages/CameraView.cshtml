@@ -21,8 +21,17 @@
     <h1 class="display-4">CameraView</h1>
     <p>This is a test to check if control center varables stay alive, being user password::</p>
     <p id="test1"></p>
+        <div>
+            <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
+            
+            <input type="number" id="ActivateSensor" min="1" max="41"></input>
+            <button onclick="ActivateSensorAjax()">Activate Sensor</button>
+
+            <input type="number" id="ActivateSensor" min="1" max="41"></input>
+            <button onclick="DeactivateSensorAjax()">Deactivate Sensor</button>
+
+        </div>
         
-        <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
 
 </div>
     <div id="containerForRoom" class="containerForRoom">
@@ -31,45 +40,45 @@
     
     <map name="image_map">
     @*Sensor really referes to the room number. So sensor-3 means room 3. Note that not all rooms have sensors*@
-    <area id="sensor-1"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="257,73,15" shape="circle">
-    <area id="sensor-3"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="534,255,13" shape="circle">
-    <area id="sensor-4"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="728,242,13" shape="circle">
-    <area id="sensor-5"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="935,236,14" shape="circle">
-    <area id="sensor-6"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="126,202,18" shape="circle">
-    <area id="sensor-7"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,333,18" shape="circle">
-    <area id="sensor-8"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="127,511,12" shape="circle">
-    <area id="sensor-9"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="438,583,17" shape="circle">
-    <area id="sensor-10" onclick="activateOrDeactivateSensorsAJAX(this)" coords="732,572,15" shape="circle">
-    <area id="sensor-11" onclick="activateOrDeactivateSensorsAJAX(this)" coords="850,519,14" shape="circle">
-    <area id="sensor-12" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,539,11" shape="circle">
-    <area id="sensor-13" onclick="activateOrDeactivateSensorsAJAX(this)" coords="139,709,15" shape="circle">
-    <area id="sensor-14" onclick="activateOrDeactivateSensorsAJAX(this)" coords="431,760,18" shape="circle">
-    <area id="sensor-15" onclick="activateOrDeactivateSensorsAJAX(this)" coords="678,635,16" shape="circle">
-    <area id="sensor-16" onclick="activateOrDeactivateSensorsAJAX(this)" coords="846,690,15" shape="circle">
-    <area id="sensor-17" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1056,662,15" shape="circle">
-    <area id="sensor-18" onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,881,15" shape="circle">
-    <area id="sensor-19" onclick="activateOrDeactivateSensorsAJAX(this)" coords="344,986,17" shape="circle">
-    <area id="sensor-20" onclick="activateOrDeactivateSensorsAJAX(this)" coords="446,986,13" shape="circle">
-    <area id="sensor-21" onclick="activateOrDeactivateSensorsAJAX(this)" coords="675,953,17" shape="circle">
-    <area id="sensor-22" onclick="activateOrDeactivateSensorsAJAX(this)" coords="811,969,14" shape="circle">
-    <area id="sensor-23" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1061,814,15" shape="circle">
-    <area id="sensor-24" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1064,942,15" shape="circle">
-    <area id="sensor-25" onclick="activateOrDeactivateSensorsAJAX(this)" coords="141,1060,17" shape="circle">
-    <area id="sensor-26" onclick="activateOrDeactivateSensorsAJAX(this)" coords="351,1091,15" shape="circle">
-    <area id="sensor-27" onclick="activateOrDeactivateSensorsAJAX(this)" coords="455,1094,17" shape="circle">
-    <area id="sensor-28" onclick="activateOrDeactivateSensorsAJAX(this)" coords="653,1142,17" shape="circle">
-    <area id="sensor-29" onclick="activateOrDeactivateSensorsAJAX(this)" coords="769,1145,16" shape="circle">
-    <area id="sensor-30" onclick="activateOrDeactivateSensorsAJAX(this)" coords="866,1143,15" shape="circle">
-    <area id="sensor-31" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1079,17" shape="circle">
-    <area id="sensor-32" onclick="activateOrDeactivateSensorsAJAX(this)" coords="142,1224,15" shape="circle">
-    <area id="sensor-33" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1187,15" shape="circle">
-    <area id="sensor-34" onclick="activateOrDeactivateSensorsAJAX(this)" coords="452,1191,16" shape="circle">
-    <area id="sensor-35" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1277,13" shape="circle">
-    <area id="sensor-36" onclick="activateOrDeactivateSensorsAJAX(this)" coords="454,1280,15" shape="circle">
-    <area id="sensor-37" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1055,1216,15" shape="circle">
-    <area id="sensor-39" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1355,15" shape="circle">
-    <area id="sensor-40" onclick="activateOrDeactivateSensorsAJAX(this)" coords="255,1517,18" shape="circle">
-    <area id="sensor-41" onclick="activateOrDeactivateSensorsAJAX(this)" coords="472,1487,19" shape="circle">
+    <area id="sensor-1"   coords="257,73,15" shape="circle">
+    <area id="sensor-3"   coords="534,255,13" shape="circle">
+    <area id="sensor-4"   coords="728,242,13" shape="circle">
+    <area id="sensor-5"   coords="935,236,14" shape="circle">
+    <area id="sensor-6"   coords="126,202,18" shape="circle">
+    <area id="sensor-7"   coords="135,333,18" shape="circle">
+    <area id="sensor-8"   coords="127,511,12" shape="circle">
+    <area id="sensor-9"   coords="438,583,17" shape="circle">
+    <area id="sensor-10"  coords="732,572,15" shape="circle">
+    <area id="sensor-11"  coords="850,519,14" shape="circle">
+    <area id="sensor-12"  coords="1063,539,11" shape="circle">
+    <area id="sensor-13"  coords="139,709,15" shape="circle">
+    <area id="sensor-14"  coords="431,760,18" shape="circle">
+    <area id="sensor-15"  coords="678,635,16" shape="circle">
+    <area id="sensor-16"  coords="846,690,15" shape="circle">
+    <area id="sensor-17"  coords="1056,662,15" shape="circle">
+    <area id="sensor-18"  coords="135,881,15" shape="circle">
+    <area id="sensor-19"  coords="344,986,17" shape="circle">
+    <area id="sensor-20"  coords="446,986,13" shape="circle">
+    <area id="sensor-21"  coords="675,953,17" shape="circle">
+    <area id="sensor-22"  coords="811,969,14" shape="circle">
+    <area id="sensor-23"  coords="1061,814,15" shape="circle">
+    <area id="sensor-24"  coords="1064,942,15" shape="circle">
+    <area id="sensor-25"  coords="141,1060,17" shape="circle">
+    <area id="sensor-26"  coords="351,1091,15" shape="circle">
+    <area id="sensor-27"  coords="455,1094,17" shape="circle">
+    <area id="sensor-28"  coords="653,1142,17" shape="circle">
+    <area id="sensor-29"  coords="769,1145,16" shape="circle">
+    <area id="sensor-30"  coords="866,1143,15" shape="circle">
+    <area id="sensor-31"  coords="1063,1079,17" shape="circle">
+    <area id="sensor-32"  coords="142,1224,15" shape="circle">
+    <area id="sensor-33"  coords="345,1187,15" shape="circle">
+    <area id="sensor-34"  coords="452,1191,16" shape="circle">
+    <area id="sensor-35"  coords="345,1277,13" shape="circle">
+    <area id="sensor-36"  coords="454,1280,15" shape="circle">
+    <area id="sensor-37"  coords="1055,1216,15" shape="circle">
+    <area id="sensor-39"  coords="1063,1355,15" shape="circle">
+    <area id="sensor-40"  coords="255,1517,18" shape="circle">
+    <area id="sensor-41"  coords="472,1487,19" shape="circle">
 
 
 
@@ -282,6 +291,39 @@
             }
         });
     }
+    function ActivateSensorAjax() {
+        // called to activate a specific sensor based on the room it is in
+        var room = document.getElementById("ActivateSensor").value;
+        $.ajax({
+            url: '/CameraViewControler/OnActivateSensorAjax',
+            data: { roomNumber: room },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                activateSesor(room)
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for ActivateSensorAjax:", errorThrown);
+            }
+        });
+    }
+
+     function DeactivateSensorAjax() {
+        // called to Deactivate a specific sensor based on the room it is in
+        var room = document.getElementById("ActivateSensor").value;
+        $.ajax({
+            url: '/CameraViewControler/OnDeactivateSensorAjax',
+            data: { roomNumber: room },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                deactivateSensor(room);
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for DeactivateSensorAjax:", errorThrown);
+            }
+        });
+    }
 
     function  activateOrDeactivateAlarmAJAX(area){
     
@@ -292,8 +334,6 @@
     function  activateOrDeactivateDirectionIndicatorAJAX(area){
     
     }
-
-
     function addOrRemoveSensorAJAX(){
         //
     }
@@ -338,6 +378,50 @@
     
     */
     ///////////////////////////////
+
+    function activateSesor(room){
+        //This is used to deactivate a single sensor
+        var checkMarker = document.getElementById("sensor-Marker" + room);
+        // there needs to be no marker made for that sensor
+        if(checkMarker === null) {
+                var sensor = document.getElementById("sensor-"+room);
+                if(sensor !== null) {
+                    //Get the sensor location
+                    var sensorLocation = sensor.coords.split(",")
+                    var x = sensorLocation[0];
+                    var y = sensorLocation[1];
+                    var radius = sensorLocation[2];
+            
+                    // create marker for the flashing icon
+                    var marker = document.createElement("div");
+                     marker.id = "sensor-Marker" + room;
+                    marker.className = "sensor active";
+                    // Set the top location of the marker
+                    marker.style.top = (y-radius) + "px";
+                    // Set the left position of the marker
+                    marker.style.left = (x - radius) + "px";
+                    // Set the marker width and height
+                    marker.style.height = (radius * 2) + "px";
+                    marker.style.width = marker.style.height;
+            
+                    // set up class properties
+                    sensor.marker = sensor.marker || marker
+                    if(!sensor.marker.parentNode) {
+                        // push the sensor to the room container
+                        document.getElementById("containerForRoom").appendChild(sensor.marker);
+                    } 
+                }
+        }
+
+    }
+    function deactivateSensor(room) {
+        // Just delete the sensor marker if it exists
+        var sensorMarker = document.getElementById("sensor-Marker" + room);
+        if(sensorMarker !== null) {
+            sensorMarker.remove();
+        }
+    }
+
     function activateOrDeactivateOrDeactivateSensors(area) {
         // Turns on the on color of a sensor if it is currently detecting a fire or chemical leak
         const coords = area.coords.split(',').map(Number);
@@ -357,16 +441,12 @@
     function activateOrDeactivateAlarm(area) {
         // draws alarm state over alarms 
     }
-
-    
     function activateOrDeactivateSprinkler(area) {
         // draws sprinker state
     }
-
     function  activateOrDeactivateDirectionIndicators(area) {
         // draws direction indicators state
     }
-
     function addOrRemoveSensor(){
         //
     }
@@ -383,19 +463,48 @@
 </script>
 
 <style>
-    .overlay {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: red;
-        border-radius: 50%;
+    .sensor {
+        position:absolute;
+        height: 25px;
+        width: 25px;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        border-radius: 60%;
+        background-color: red;
+        animation-name: sensorKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .sensor.active {
+        opacity: 0.5;
+    }
+    @@keyframes sensorKeyFrame {
+        0% {
+                height: 25px;
+                width: 25px;
+                background-color: red;
+        }
+        25% {
+                height: 20px;
+                width: 20px;
+                background-color: blue;
+        }
+        50% {
+                height: 15px;
+                width: 15px;
+                background-color: red;
+        }
+        75% {
+                height: 20px;
+                width: 20px;
+                background-color: green;
+        }
+        100% {
+                height: 25px;
+                width: 25px;
+                background-color: red;
+        }
     }
 
-        .overlay.active {
-            opacity: 0.5;
-        }
         .containerForRoom {
             position: relative;
         }

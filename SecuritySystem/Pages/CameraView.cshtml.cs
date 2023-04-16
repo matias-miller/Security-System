@@ -143,6 +143,23 @@ public class CameraViewControler : Controller
         return Json(data);
     }
 
+    [HttpGet("OnActivateSensorAjax")]
+    public IActionResult OnActivateSensorAjax([FromQuery] int roomNumber)
+    {
+        // Turns specific sensor on
+        var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, true);
+        updateBuildingState();
+        return Json(data);
+    }
+    [HttpGet("OnDeactivateSensorAjax")]
+    public IActionResult OnDeactivateSensorAjax([FromQuery] int roomNumber)
+    {
+        // turns sensor off
+        var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
+        updateBuildingState();
+        return Json(data);
+    }
+
     [HttpGet("OnAttemptGetPassword")]
     public IActionResult OnAttemptGetPassword()
     {

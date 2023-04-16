@@ -49,7 +49,7 @@
             success: function (data) {
                 var userSelector = document.getElementById("users");
                 //Push the users to the selector
-                data.value.forEach(function(USER){
+                data.forEach(function(USER){
                     var user = document.createElement("option")
                     user.value = USER;
                     user.text = USER;
