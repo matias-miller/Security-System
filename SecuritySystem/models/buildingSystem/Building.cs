@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -83,14 +84,20 @@ namespace buildingSystem{
         /// </summary>
         public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
             // TODO implement here
-            var data = roomList[roomNumber].performAction(requestType, action);
+            var data = this.roomList[roomNumber].performAction(requestType, action);
+
+            for (int i = 0; i < this.roomList.Length; i++)
+            {
+                Debug.WriteLine($"Room {i + 1}: {this.roomList[i].sensor.isActive}");
+            }
 
             return data;
         }
 
         public bool requestSpecificSensorState(int roomName) {
             // test function, can be removed
-            return roomList[roomName].requestSpecificSensorState();
+  
+            return this.roomList[roomName].requestSpecificSensorState();
         }
 
     }

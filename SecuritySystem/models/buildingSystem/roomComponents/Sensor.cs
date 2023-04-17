@@ -10,7 +10,7 @@ namespace buildingSystem.roomComponents{
         public Sensor() {
         }
 
-        public bool isActive = false;
+        public bool isActive;
 
         public bool isGasSensor = false;
 

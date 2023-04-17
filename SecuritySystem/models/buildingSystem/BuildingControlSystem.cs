@@ -56,6 +56,7 @@ namespace buildingSystem{
         public bool getSpecificRoomState(int room)
         {
             //function used to get the specific state of a room
+            Debug.WriteLine("Room2: " + room);
             return building.requestSpecificSensorState(room);
         }
 

@@ -149,6 +149,7 @@ public class CameraViewControler : Controller
     [HttpGet("OnActivateSensorAjax")]
     public IActionResult OnActivateSensorAjax([FromQuery] int roomNumber)
     {
+        getBuildingState();
         // Turns specific sensor on
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, true);
         updateBuildingState();
@@ -166,7 +167,9 @@ public class CameraViewControler : Controller
     public IActionResult OnGetSpecificSensorStatus([FromQuery] int roomNumber)
     {
         // Just gets a specicic sensors status
+        getBuildingState();
         Debug.WriteLine("Room: " + roomNumber);
+    
         var data = _buldingControl.getSpecificSensorState(roomNumber);
         return Json(data);
     }
