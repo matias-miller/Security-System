@@ -25,7 +25,7 @@ public class CameraViewControler : Controller
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
         _logger = logger;
-        Debug.WriteLine("Instantiated");
+        //Debug.WriteLine("Instantiated");
         
     }
 
@@ -57,7 +57,7 @@ public class CameraViewControler : Controller
 
     private void updateControlCenterState()
     {
-        Debug.WriteLine("updateControlCenterState");
+        //Debug.WriteLine("updateControlCenterState");
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
@@ -83,7 +83,7 @@ public class CameraViewControler : Controller
     {
         // This returnes the current shared building object
         var temp = HttpContext.Session.GetString("ControlCenter");
-        Debug.WriteLine("getControlCenterState");
+        //Debug.WriteLine("getControlCenterState");
         if (temp != null)
         {
             try
@@ -102,7 +102,7 @@ public class CameraViewControler : Controller
     {
         // This returnes the current shared building object
         var temp = HttpContext.Session.GetString("BuildingControl");
-        Debug.WriteLine(temp);
+        //Debug.WriteLine(temp);
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -119,7 +119,7 @@ public class CameraViewControler : Controller
 
     private void updateBuildingState()
     {
-        Debug.WriteLine(JsonConvert.SerializeObject(_buldingControl));
+        //Debug.WriteLine(JsonConvert.SerializeObject(_buldingControl));
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
@@ -149,15 +149,20 @@ public class CameraViewControler : Controller
     [HttpGet("OnActivateSensorAjax")]
     public IActionResult OnActivateSensorAjax([FromQuery] int roomNumber)
     {
-        getBuildingState();
-        // Turns specific sensor on
-        var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, true);
-        updateBuildingState();
-        return Json(data);
+  
+            getBuildingState();
+            // Turns specific sensor on
+            var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, true);
+            updateBuildingState();
+            return Json(data);
+
+
+        
     }
     [HttpGet("OnDeactivateSensorAjax")]
     public IActionResult OnDeactivateSensorAjax([FromQuery] int roomNumber)
     {
+        getBuildingState();
         // turns sensor off
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
         updateBuildingState();
@@ -169,7 +174,6 @@ public class CameraViewControler : Controller
         // Just gets a specicic sensors status
         getBuildingState();
         Debug.WriteLine("Room: " + roomNumber);
-    
         var data = _buldingControl.getSpecificSensorState(roomNumber);
         return Json(data);
     }

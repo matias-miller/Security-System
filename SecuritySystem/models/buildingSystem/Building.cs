@@ -85,12 +85,6 @@ namespace buildingSystem{
         public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
             // TODO implement here
             var data = this.roomList[roomNumber].performAction(requestType, action);
-
-            for (int i = 0; i < this.roomList.Length; i++)
-            {
-                Debug.WriteLine($"Room {i + 1}: {this.roomList[i].sensor.isActive}");
-            }
-
             return data;
         }
 

@@ -286,18 +286,34 @@
         });
     }
 
+    var cnt2 = 0;
     function ActivateRandomSensors() {
-        DeactivateAllSensors()
-        // loop through 
-        for(var i = 1; i < 41; i++) {
-            // Loop through all rooms with a 1/3 chance of it becomming active
-            if(Math.floor(Math.random() * 3) == 2) {
-                ActivateSensorAjax(false,i);
-            }
+        // Need to perform a callback loop so it will activate them randomly but sequentially random
+        if(cnt2 == 0) {
+            DeactivateAllSensors()
         }
-    
+        
+        if(cnt2 == 40) {
+            cnt2 = 0;
+            return;
+        }
+        // Loop through all rooms with a 1/3 chance of it becomming active
+        if(Math.floor(Math.random() * 3) == 2) {
+            // perform another callback
+            var test = ActivateSensorAjax(false,cnt2+1,function(){
+                    cnt2++;
+                    ActivateRandomSensors();
+            });
+            
+        } else {
+                // perform callback
+                cnt2++;
+                ActivateRandomSensors();
+        }
+
     }
-    function ActivateSensorAjax(specific=true,room=0) {
+
+    function ActivateSensorAjax(specific=true,room=0,returnFunction=false) {
         // called to activate a specific sensor based on the room it is in
         if(specific == true) {
         var room = document.getElementById("ActivateSensor").value;
@@ -311,8 +327,13 @@
             // Room array index starts at 0 so we subract 1
             data: { roomNumber: room - 1 },
             dataType: 'json',
+            async: true,
             success: function (data) {
+           
                 activateSesor(room)
+                if(returnFunction != false) {
+                    returnFunction();
+                }
             },
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for ActivateSensorAjax:", errorThrown);
@@ -361,13 +382,9 @@
                 dataType: 'json',
                 aync: true,
                 success: function (data) {
-                    console.log(data)
                     if(data == true) {
-                        console.log(":in"+cnt)
                         activateSesor(cnt + 1)
                         // performing a call back like this will make this run more sequentially.
-                        
-         
                     }
                 cnt++;
                 setBackActiveSensorsOnRefreshAJAX();
@@ -381,28 +398,6 @@
     document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
 
-    //function setBackActiveSensorsOnRefreshAJAX() {
-    //    // After the page has been reloaded we need to check if the sensors were previously loaded
-    //    for(var i=0;i<41; i++) {
-    //         $.ajax({
-    //            url: '/CameraViewControler/OnGetSpecificSensorStatus',
-    //            data: { roomNumber: i },
-    //            dataType: 'json',
-    //            aync: true,
-    //            success: function (data) {
-    //                console.log(data)
-    //                if(data == true) {
-    //                    console.log(":in")
-    //                    activateSesor(i)
-    //                }
-    //            },
-    //            error: function (errorThrown) {
-    //                console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
-    //            }
-    //        });
-    //    }
-    //}
-    //document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
     function  activateOrDeactivateAlarmAJAX(area){
     
@@ -432,13 +427,9 @@
             dataType: 'json',
 
             success: function (data) {
-                console.log(data);
                 // if data is true return change page to index else remain on current page
                 document.getElementById("test1").innerHTML = data;
                 if (data == true) {
-                    // navigate to the home page on success
-                    //console.log(document.getElementById("link").getAttribute('href'));
-                    //window.location.href = document.getElementById("link").getAttribute('href');
                 } else {
 
                 }
