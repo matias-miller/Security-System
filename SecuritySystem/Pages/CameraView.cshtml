@@ -308,7 +308,8 @@
         
         $.ajax({
             url: '/CameraViewControler/OnActivateSensorAjax',
-            data: { roomNumber: room },
+            // Room array index starts at 0 so we subract 1
+            data: { roomNumber: room - 1 },
             dataType: 'json',
             success: function (data) {
                 activateSesor(room)
@@ -344,25 +345,63 @@
             DeactivateSensorAjax(false,i);
         }
     }
-    function setBackActiveSensorsOnRefreshAJAX() {
+    // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
+    var cnt = 0;
+
+        function setBackActiveSensorsOnRefreshAJAX() {
         // After the page has been reloaded we need to check if the sensors were previously loaded
-        for(var i=1;i<41; i++) {
+   
+            if(cnt == 41) {
+                cnt = 0;
+                return;
+            }
              $.ajax({
                 url: '/CameraViewControler/OnGetSpecificSensorStatus',
-                data: { roomNumber: i },
+                data: { roomNumber: cnt },
                 dataType: 'json',
+                aync: true,
                 success: function (data) {
                     console.log(data)
                     if(data == true) {
-                        activateSesor(i)
+                        console.log(":in")
+                        activateSesor(cnt)
+                        // performing a call back like this will make this run more sequentially.
+                        
+         
                     }
+                cnt++;
+                setBackActiveSensorsOnRefreshAJAX();
                 },
                 error: function (errorThrown) {
                     console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
                 }
             });
-        }
+ 
     }
+    document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
+
+
+    //function setBackActiveSensorsOnRefreshAJAX() {
+    //    // After the page has been reloaded we need to check if the sensors were previously loaded
+    //    for(var i=0;i<41; i++) {
+    //         $.ajax({
+    //            url: '/CameraViewControler/OnGetSpecificSensorStatus',
+    //            data: { roomNumber: i },
+    //            dataType: 'json',
+    //            aync: true,
+    //            success: function (data) {
+    //                console.log(data)
+    //                if(data == true) {
+    //                    console.log(":in")
+    //                    activateSesor(i)
+    //                }
+    //            },
+    //            error: function (errorThrown) {
+    //                console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
+    //            }
+    //        });
+    //    }
+    //}
     //document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
     function  activateOrDeactivateAlarmAJAX(area){
