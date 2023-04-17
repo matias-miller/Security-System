@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace controlSystem.Employee{
     /// <summary>
@@ -50,10 +51,29 @@ namespace controlSystem.Employee{
         /// @param password 
         /// @return
         /// </summary>
-        public bool login(string userName, string password) {
-            // TODO implement here
-            this.password = password;
-            return true;
+        public bool login(string userName, string password)
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for matching employee
+            foreach (Employee employee in employees)
+            {
+                if (employee.userName == userName && employee.password == password)
+                {
+                    // Set isSupervisor based on employee role
+                    isSupervisor = employee.isSupervisor;
+                    return true;
+                }
+            }
+
+            return false; // No matching employee found
         }
 
         /// <summary>

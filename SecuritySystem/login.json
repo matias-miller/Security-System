@@ -1,0 +1,24 @@
+﻿[
+  {
+    "firstName": "Matias",
+    "lastName": "Miller",
+    "address": "123 Main St",
+    "userName": "matiasmiller@gmail.com",
+    "password": "password",
+    "isSupervisor": true,
+    "employeeID": 1,
+    "salary": 50000,
+    "isOnCall": false
+  },
+  {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "address": "456 Oak Ave",
+    "userName": "jane",
+    "password": "secret123",
+    "isSupervisor": false,
+    "employeeID": 2,
+    "salary": 40000,
+    "isOnCall": true
+  }
+]
