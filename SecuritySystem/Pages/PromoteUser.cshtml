@@ -49,7 +49,7 @@
             success: function (data) {
                 var userSelector = document.getElementById("users");
                 //Push the users to the selector
-                data.value.forEach(function(USER){
+                data.forEach(function(USER){
                     var user = document.createElement("option")
                     user.value = USER;
                     user.text = USER;
@@ -88,6 +88,7 @@
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
             }
+
         });
     }
     document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);

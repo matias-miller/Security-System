@@ -18,7 +18,7 @@
     "userName": "jane",
     "password": "secret123",
     "isOnCall": true,
-    "isSupervisor": false,
+    "isSupervisor": true,
     "employeeID": 2
   },
   {

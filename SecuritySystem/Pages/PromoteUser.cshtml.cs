@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http.Json;
 
 namespace SecuritySystem.Pages;
 [Route("[controller]")]

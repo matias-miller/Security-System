@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using EmployeeNamespace = controlSystem.Employee;
 
 namespace controlSystem
 {
@@ -138,18 +139,62 @@ namespace controlSystem
             var success = employee.logout();
             return success;
         }
+
         public bool attemptToPromoteUser(string user)
         {
-            // will have to do something with user parameter to find the actual employee
-            var success = employee.promoteUser();
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<EmployeeNamespace.Employee> employees = JsonConvert.DeserializeObject<List<EmployeeNamespace.Employee>>(jsonContent);
+
+            // Find the employee with the specified username
+            EmployeeNamespace.Employee employeeToPromote = employees.FirstOrDefault(employee => employee.userName == user);
+
+            // If the employee is not found, return false
+            if (employeeToPromote == null)
+            {
+                return false;
+            }
+
+            // Promote the employee
+            employeeToPromote.isSupervisor = true;
+
+            // Serialize the updated list of employees to JSON
+            string updatedJson = JsonConvert.SerializeObject(employees, Formatting.Indented);
+            // Write the updated JSON content back to the file
+            File.WriteAllText(fullPath, updatedJson);
+
             return true;
         }
-    
+
         public string[] returnAllNonAdmins()
         {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<EmployeeNamespace.Employee> employees = JsonConvert.DeserializeObject<List<EmployeeNamespace.Employee>>(jsonContent);
 
-            string[] userArray = new string[] { "austin", "mat", "matias" };
-            return userArray;
+            // Create a list to store the non-admin users
+            List<string> nonAdminUsers = new List<string>();
+
+            // Iterate through the list of employees and add non-admin users to the list
+            foreach (EmployeeNamespace.Employee employee in employees)
+            {
+                if (!employee.isSupervisor)
+                {
+                    nonAdminUsers.Add(employee.userName);
+                }
+            } 
+
+            return nonAdminUsers.ToArray();
         }
 
         public bool attemptAddUser(string first, string last, string email, string password) {
