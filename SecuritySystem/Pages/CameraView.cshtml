@@ -17,34 +17,99 @@
 
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .SenarioContainer {
+        border-radius: 10px;
+        border: 4px solid green;
+    }
+    .SenarioContainer :hover{
+        background-color: lightblue;
+    }
+    .senarioBlock {
+        border: 1px solid green;
+        border-radius: 10px;
+    }
+</style>
+<script>
+    function displaySenarios() {
+        // This just shows or hids the senarios page
+        var senarioBlock = document.getElementById("testSenarios");
+        if(senarioBlock.style.display == "none") {
+            senarioBlock.style.display = "block";
+        }else {
+            senarioBlock.style.display = "none";
+        }
+    }
+
+    function muteOrUnmute() {
+        //This toggles the <p> soundOn to soundOff or visa versa, which will allow adible alarm to play
+        var sound = document.getElementById("soundStatus");
+        if(sound.innerHTML == "SoundOn") {
+            sound.innerHTML = "SoundOff";
+        }
+        else {sound.innerHTML = "SoundOn";}
+    }
+    function playAlarm() {
+        // play sound if system is not muted
+        if(document.getElementById("soundStatus").innerHTML == "SoundOn") {
+            var alarm = new Audio();
+            alarm.src = document.querySelector('source').src;
+            alarm.play();
+        }
+    }
+
+
+</script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
     <p>This is a test to check if control center varables stay alive, being user password::</p>
     <p id="test1"></p>
         <div>
-            <h1>Senarios</h1>
-            <div>
-                <input type="number" id="ActivateSensor" min="1" max="41"></input>
-                <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
+            <div class="SenarioContainer" onclick="displaySenarios()">
+                <h1>Click to Display Senarios(Only On test version)</h1>
             </div>
+            
+            <div style="display: none;" id="testSenarios">
+                <div class="senarioBlock">
+                    <h3>Sensor Related tests</h3>
+                    <div>
+                        <input type="number" id="ActivateSensor" min="1" max="41"></input>
+                        <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
+                    </div>
 
-            <div>
-                <input type="number" id="DeactivateSensor" min="1" max="41"></input>
-                <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
+                    <div>
+                        <input type="number" id="DeactivateSensor" min="1" max="41"></input>
+                        <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
+                    </div>
+                    <div>
+                        <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
+                    </div>
+                    <div>
+                        <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
+                    </div>
+                </div>
+                <div class="senarioBlock">
+                    <h3>Person Related tests</h3>
+                         <input type="number" id="AddPersonToRoom" min="1" max="41"></input>
+                        <button onclick="alert('NotImplemented')">Add person into room #</button>
+                 </div>
+
+                  <div class="senarioBlock">
+                    <h3>Sound related</h3>
+                        <p>Note that muting would not be avalible in actual system</p>
+                         <p id="soundStatus">SoundOn</p>
+                        <button onclick="muteOrUnmute()">Mute and unmute</button>
+                        <button onclick="playAlarm()">Test the audible sound</button>
+                 </div>
+
             </div>
-            <div>
-                <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
-            </div>
-            <div>
-                <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
-            </div>
-
-
-
         </div>
-        
 
 </div>
+@*Hidden audio container*@
+<source src="~/img/Alarm.mp3?v=2" type="audio/mpeg">
+
+<div style="text-align: center;">
     <div id="containerForRoom" class="containerForRoom">
         <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="width:100%: height: 100%;">
     </div>
@@ -262,7 +327,62 @@
   <area alt="" title="" href="" coords="494,984,504,1038" shape="rect">
   <area alt="" title="" href="" coords="244,986,255,1035" shape="rect">
     </map>
- 
+</div>
+
+    <style>
+        .Ledgend{
+            margin: 200px;
+            border-radius: 10px;
+            border: 4px solid green;
+            text-align: center;
+        }
+
+    </style>
+
+    <div class="Ledgend">
+        <h1>Page Ledgend</h1>
+        <h3>This is to help understand the room states</h3>
+        <h3>Not this is usually handeled automatically</h3>
+
+        <div>
+        <button onclick="alert('todo')">Remove Sensor</button>
+        <button onclick="alert('todo')">Add Sensor</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Sensor</button>
+        <button onclick="alert('todo')">Deactivate Sensor</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Alarm</button>
+        <button onclick="alert('todo')">Deactivate Alarm</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Sprinkler</button>
+        <button onclick="alert('todo')">Deactivate Sprinkler</button>
+        </div>
+
+        <div>
+            <button onclick="alert('todo')">Activate Direction Indicator</button>
+            <button onclick="alert('todo')">Deactivate Direction Indicator</button>
+        </div>
+
+        <div>
+            <button onclick="alert('todo')">Open Doors</button>
+            <button onclick="alert('todo')">Close Doors</button>
+        </div>
+
+        <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
+        <map name="image_map">
+            <area  coords="194,119,31" shape="circle">
+            <area  coords="140,211,243,252" shape="rect">
+            <area  coords="45,68,110,145" shape="rect">
+            <area  coords="37,188,125,266" shape="rect">
+            <area  coords="116,-1,228,16" shape="rect">
+        </map>
+    </div>
 <script>
 
     ///////////////////////////////
@@ -407,8 +527,44 @@
     document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
     function alarmReportedProcedureAJAX(){
+        // On UI first
         // Should be called after sensors have been activated
-        console.log("alarmReported");
+
+        /*
+        I could send a fetch to the backend, sends nothing, returns 2d array with things that need to be activated 
+        {
+         "confirmed": true,
+         "sprinklers": [6,20,22],
+         "alarm": [6,20,22],
+         "direction": [6,20,22],
+         "doors": [6,22],
+         "peopleCalled":["FireDepartment","OnCall"]
+        }
+
+        By the time the json is returned all logic should be handled
+
+        // First version will be for unmanned control center
+        // Confirm alarm
+        // if confirmed by multiple confirmed sensors
+        // Call emergency department - call oncall person - display symbol
+        // play audible alarm that can be muted activate direction indicators
+        // if person is not in the room lock doors and display them as locked
+        // activate sprinkler
+
+        */
+  
+         $.ajax({
+            url: '/CameraViewControler/OnActivateSensorAjax',
+     
+            dataType: 'json',
+            async: true,
+            success: function (data) {
+           
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for alarmReportedProcedureAJAX:", errorThrown);
+            }
+        });
     }
 
 

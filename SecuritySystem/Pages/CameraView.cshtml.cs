@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
 using controlSystem;
 using System;
+using buildingSystem.roomComponents;
 
 namespace SecuritySystem.Pages;
 
@@ -184,6 +185,54 @@ public class CameraViewControler : Controller
         // Success needs to be true or false
         var success = _controlCenter.testGetEmployeePassword();
         return Json(success);
+    }
+
+
+    [HttpGet("OnAlarmReportedProcedureAJAX")]
+    public IActionResult OnAlarmReportedProcedureAJAX()
+    {
+        /* Returned from this should be in this form 
+         {
+         "confirmed": true,
+         "sprinklers": [6,20,22],
+         "alarm": [6,20,22],
+         "direction": [6,20,22],
+         "doors": [6,22],
+         "peopleCalled":["FireDepartment","OnCall"]
+        }
+ 
+        */
+        // First version will be for unmanned control center
+        // Confirm alarm
+        // if confirmed by multiple confirmed sensors
+        // Call emergency department - call oncall person - display symbol
+        // play audible alarm that can be muted activate direction indicators
+        // if person is not in the room lock doors and display them as locked
+        // activate sprinkler
+        // Success needs to be true or false
+        // var success = _controlCenter.testGetEmployeePassword();
+        if (_controlCenter.isManned)
+        {
+            // Control center is manned process
+        }
+        else {
+            // Control center is not manned process
+            //var alarmConfirmed = _buldingControl.
+            //
+            /* If the control area is unmanned and an alarm is activated
+            this alarm should not be ignored if it is potentially serious.
+            Emergency services should be automatically called. */
+            // need to call people
+            //new
+            //{
+            //    AlarmProcedureReturnResult = new[] {
+            //    new { confirmed = true}
+            //}
+            //};
+
+
+        }
+        return Json(false);
     }
 
 }
