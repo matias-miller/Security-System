@@ -17,59 +17,144 @@
 
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .SenarioContainer {
+        border-radius: 10px;
+        border: 4px solid green;
+    }
+    .SenarioContainer :hover{
+        background-color: lightblue;
+    }
+    .senarioBlock {
+        border: 1px solid green;
+        border-radius: 10px;
+    }
+</style>
+<script>
+    function displaySenarios() {
+        // This just shows or hids the senarios page
+        var senarioBlock = document.getElementById("testSenarios");
+        if(senarioBlock.style.display == "none") {
+            senarioBlock.style.display = "block";
+        }else {
+            senarioBlock.style.display = "none";
+        }
+    }
+
+    function muteOrUnmute() {
+        //This toggles the <p> soundOn to soundOff or visa versa, which will allow adible alarm to play
+        var sound = document.getElementById("soundStatus");
+        if(sound.innerHTML == "SoundOn") {
+            sound.innerHTML = "SoundOff";
+        }
+        else {sound.innerHTML = "SoundOn";}
+    }
+    function playAlarm() {
+        // play sound if system is not muted
+        if(document.getElementById("soundStatus").innerHTML == "SoundOn") {
+            var alarm = new Audio();
+            alarm.src = document.querySelector('source').src;
+            alarm.play();
+        }
+    }
+
+
+</script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
     <p>This is a test to check if control center varables stay alive, being user password::</p>
     <p id="test1"></p>
-        
-        <button onclick="ExampleFunctionForAJAX()">Example Api button</button>
+        <div>
+            <div class="SenarioContainer" onclick="displaySenarios()">
+                <h1>Click to Display Senarios(Only On test version)</h1>
+            </div>
+            
+            <div style="display: none;" id="testSenarios">
+                <div class="senarioBlock">
+                    <h3>Sensor Related tests</h3>
+                    <div>
+                        <input type="number" id="ActivateSensor" min="1" max="41"></input>
+                        <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
+                    </div>
+
+                    <div>
+                        <input type="number" id="DeactivateSensor" min="1" max="41"></input>
+                        <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
+                    </div>
+                    <div>
+                        <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
+                    </div>
+                    <div>
+                        <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
+                    </div>
+                </div>
+                <div class="senarioBlock">
+                    <h3>Person Related tests</h3>
+                         <input type="number" id="AddPersonToRoom" min="1" max="41"></input>
+                        <button onclick="alert('NotImplemented')">Add person into room #</button>
+                 </div>
+
+                  <div class="senarioBlock">
+                    <h3>Sound related</h3>
+                        <p>Note that muting would not be avalible in actual system</p>
+                         <p id="soundStatus">SoundOn</p>
+                        <button onclick="muteOrUnmute()">Mute and unmute</button>
+                        <button onclick="playAlarm()">Test the audible sound</button>
+                 </div>
+
+            </div>
+        </div>
 
 </div>
+@*Hidden audio container*@
+<source src="~/img/Alarm.mp3?v=2" type="audio/mpeg">
+
+<div style="text-align: center;">
     <div id="containerForRoom" class="containerForRoom">
         <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="width:100%: height: 100%;">
     </div>
     
     <map name="image_map">
     @*Sensor really referes to the room number. So sensor-3 means room 3. Note that not all rooms have sensors*@
-    <area id="sensor-1"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="257,73,15" shape="circle">
-    <area id="sensor-3"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="534,255,13" shape="circle">
-    <area id="sensor-4"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="728,242,13" shape="circle">
-    <area id="sensor-5"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="935,236,14" shape="circle">
-    <area id="sensor-6"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="126,202,18" shape="circle">
-    <area id="sensor-7"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,333,18" shape="circle">
-    <area id="sensor-8"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="127,511,12" shape="circle">
-    <area id="sensor-9"  onclick="activateOrDeactivateSensorsAJAX(this)" coords="438,583,17" shape="circle">
-    <area id="sensor-10" onclick="activateOrDeactivateSensorsAJAX(this)" coords="732,572,15" shape="circle">
-    <area id="sensor-11" onclick="activateOrDeactivateSensorsAJAX(this)" coords="850,519,14" shape="circle">
-    <area id="sensor-12" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,539,11" shape="circle">
-    <area id="sensor-13" onclick="activateOrDeactivateSensorsAJAX(this)" coords="139,709,15" shape="circle">
-    <area id="sensor-14" onclick="activateOrDeactivateSensorsAJAX(this)" coords="431,760,18" shape="circle">
-    <area id="sensor-15" onclick="activateOrDeactivateSensorsAJAX(this)" coords="678,635,16" shape="circle">
-    <area id="sensor-16" onclick="activateOrDeactivateSensorsAJAX(this)" coords="846,690,15" shape="circle">
-    <area id="sensor-17" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1056,662,15" shape="circle">
-    <area id="sensor-18" onclick="activateOrDeactivateSensorsAJAX(this)" coords="135,881,15" shape="circle">
-    <area id="sensor-19" onclick="activateOrDeactivateSensorsAJAX(this)" coords="344,986,17" shape="circle">
-    <area id="sensor-20" onclick="activateOrDeactivateSensorsAJAX(this)" coords="446,986,13" shape="circle">
-    <area id="sensor-21" onclick="activateOrDeactivateSensorsAJAX(this)" coords="675,953,17" shape="circle">
-    <area id="sensor-22" onclick="activateOrDeactivateSensorsAJAX(this)" coords="811,969,14" shape="circle">
-    <area id="sensor-23" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1061,814,15" shape="circle">
-    <area id="sensor-24" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1064,942,15" shape="circle">
-    <area id="sensor-25" onclick="activateOrDeactivateSensorsAJAX(this)" coords="141,1060,17" shape="circle">
-    <area id="sensor-26" onclick="activateOrDeactivateSensorsAJAX(this)" coords="351,1091,15" shape="circle">
-    <area id="sensor-27" onclick="activateOrDeactivateSensorsAJAX(this)" coords="455,1094,17" shape="circle">
-    <area id="sensor-28" onclick="activateOrDeactivateSensorsAJAX(this)" coords="653,1142,17" shape="circle">
-    <area id="sensor-29" onclick="activateOrDeactivateSensorsAJAX(this)" coords="769,1145,16" shape="circle">
-    <area id="sensor-30" onclick="activateOrDeactivateSensorsAJAX(this)" coords="866,1143,15" shape="circle">
-    <area id="sensor-31" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1079,17" shape="circle">
-    <area id="sensor-32" onclick="activateOrDeactivateSensorsAJAX(this)" coords="142,1224,15" shape="circle">
-    <area id="sensor-33" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1187,15" shape="circle">
-    <area id="sensor-34" onclick="activateOrDeactivateSensorsAJAX(this)" coords="452,1191,16" shape="circle">
-    <area id="sensor-35" onclick="activateOrDeactivateSensorsAJAX(this)" coords="345,1277,13" shape="circle">
-    <area id="sensor-36" onclick="activateOrDeactivateSensorsAJAX(this)" coords="454,1280,15" shape="circle">
-    <area id="sensor-37" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1055,1216,15" shape="circle">
-    <area id="sensor-39" onclick="activateOrDeactivateSensorsAJAX(this)" coords="1063,1355,15" shape="circle">
-    <area id="sensor-40" onclick="activateOrDeactivateSensorsAJAX(this)" coords="255,1517,18" shape="circle">
-    <area id="sensor-41" onclick="activateOrDeactivateSensorsAJAX(this)" coords="472,1487,19" shape="circle">
+    <area id="sensor-1"   coords="257,73,15" shape="circle">
+    <area id="sensor-3"   coords="534,255,13" shape="circle">
+    <area id="sensor-4"   coords="728,242,13" shape="circle">
+    <area id="sensor-5"   coords="935,236,14" shape="circle">
+    <area id="sensor-6"   coords="126,202,18" shape="circle">
+    <area id="sensor-7"   coords="135,333,18" shape="circle">
+    <area id="sensor-8"   coords="127,511,12" shape="circle">
+    <area id="sensor-9"   coords="438,583,17" shape="circle">
+    <area id="sensor-10"  coords="732,572,15" shape="circle">
+    <area id="sensor-11"  coords="850,519,14" shape="circle">
+    <area id="sensor-12"  coords="1063,539,11" shape="circle">
+    <area id="sensor-13"  coords="139,709,15" shape="circle">
+    <area id="sensor-14"  coords="431,760,18" shape="circle">
+    <area id="sensor-15"  coords="678,635,16" shape="circle">
+    <area id="sensor-16"  coords="846,690,15" shape="circle">
+    <area id="sensor-17"  coords="1056,662,15" shape="circle">
+    <area id="sensor-18"  coords="135,881,15" shape="circle">
+    <area id="sensor-19"  coords="344,986,17" shape="circle">
+    <area id="sensor-20"  coords="446,986,13" shape="circle">
+    <area id="sensor-21"  coords="675,953,17" shape="circle">
+    <area id="sensor-22"  coords="811,969,14" shape="circle">
+    <area id="sensor-23"  coords="1061,814,15" shape="circle">
+    <area id="sensor-24"  coords="1064,942,15" shape="circle">
+    <area id="sensor-25"  coords="141,1060,17" shape="circle">
+    <area id="sensor-26"  coords="351,1091,15" shape="circle">
+    <area id="sensor-27"  coords="455,1094,17" shape="circle">
+    <area id="sensor-28"  coords="653,1142,17" shape="circle">
+    <area id="sensor-29"  coords="769,1145,16" shape="circle">
+    <area id="sensor-30"  coords="866,1143,15" shape="circle">
+    <area id="sensor-31"  coords="1063,1079,17" shape="circle">
+    <area id="sensor-32"  coords="142,1224,15" shape="circle">
+    <area id="sensor-33"  coords="345,1187,15" shape="circle">
+    <area id="sensor-34"  coords="452,1191,16" shape="circle">
+    <area id="sensor-35"  coords="345,1277,13" shape="circle">
+    <area id="sensor-36"  coords="454,1280,15" shape="circle">
+    <area id="sensor-37"  coords="1055,1216,15" shape="circle">
+    <area id="sensor-39"  coords="1063,1355,15" shape="circle">
+    <area id="sensor-40"  coords="255,1517,18" shape="circle">
+    <area id="sensor-41"  coords="472,1487,19" shape="circle">
 
 
 
@@ -242,7 +327,62 @@
   <area alt="" title="" href="" coords="494,984,504,1038" shape="rect">
   <area alt="" title="" href="" coords="244,986,255,1035" shape="rect">
     </map>
- 
+</div>
+
+    <style>
+        .Ledgend{
+            margin: 200px;
+            border-radius: 10px;
+            border: 4px solid green;
+            text-align: center;
+        }
+
+    </style>
+
+    <div class="Ledgend">
+        <h1>Page Ledgend</h1>
+        <h3>This is to help understand the room states</h3>
+        <h3>Not this is usually handeled automatically</h3>
+
+        <div>
+        <button onclick="alert('todo')">Remove Sensor</button>
+        <button onclick="alert('todo')">Add Sensor</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Sensor</button>
+        <button onclick="alert('todo')">Deactivate Sensor</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Alarm</button>
+        <button onclick="alert('todo')">Deactivate Alarm</button>
+        </div>
+
+        <div>
+        <button onclick="alert('todo')">Activate Sprinkler</button>
+        <button onclick="alert('todo')">Deactivate Sprinkler</button>
+        </div>
+
+        <div>
+            <button onclick="alert('todo')">Activate Direction Indicator</button>
+            <button onclick="alert('todo')">Deactivate Direction Indicator</button>
+        </div>
+
+        <div>
+            <button onclick="alert('todo')">Open Doors</button>
+            <button onclick="alert('todo')">Close Doors</button>
+        </div>
+
+        <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
+        <map name="image_map">
+            <area  coords="194,119,31" shape="circle">
+            <area  coords="140,211,243,252" shape="rect">
+            <area  coords="45,68,110,145" shape="rect">
+            <area  coords="37,188,125,266" shape="rect">
+            <area  coords="116,-1,228,16" shape="rect">
+        </map>
+    </div>
 <script>
 
     ///////////////////////////////
@@ -266,22 +406,168 @@
         });
     }
 
-    function activateOrDeactivateSensorsAJAX(area) {
-        // Get the current sensor number
-        var RoomNumber = area.id.split("-")[1];
+    var cnt2 = 0;
+    function ActivateRandomSensors() {
+        // Need to perform a callback loop so it will activate them randomly but sequentially random
+        if(cnt2 == 0) {
+            DeactivateAllSensors()
+        }
+        
+        if(cnt2 == 40) {
+            cnt2 = 0;
+            alarmReportedProcedureAJAX();
+            return;
+        }
+        // Loop through all rooms with a 1/3 chance of it becomming active
+        if(Math.floor(Math.random() * 3) == 2) {
+            // perform another callback
+            var test = ActivateSensorAjax(false,cnt2+1,function(){
+                    cnt2++;
+                    ActivateRandomSensors();
+            });
+            
+        } else {
+                // perform callback
+                cnt2++;
+                ActivateRandomSensors();
+        }
 
+    }
+
+    function ActivateSensorAjax(specific=true,room=0,returnFunction=false, fromPageLoad=false) {
+        // called to activate a specific sensor based on the room it is in
+        if(specific == true) {
+        var room = document.getElementById("ActivateSensor").value;
+        }
+        else {
+           var room = room
+        }
+        
         $.ajax({
-            url: '/CameraViewControler/OnActivateOrDeactivateSensorsAJAX',
-            data: {roomNumber:RoomNumber},
+            url: '/CameraViewControler/OnActivateSensorAjax',
+            // Room array index starts at 0 so we subract 1
+            data: { roomNumber: room - 1 },
             dataType: 'json',
+            async: true,
             success: function (data) {
-                console.log(data);
+           
+                activateSesor(room)
+                if(returnFunction != false) {
+                    returnFunction();
+                    // alarm reported feature will get called in calling function
+                } else if (fromPageLoad) {
+                    // Do nothing
+                }
+                else {
+                    // function will only be called once so we should enter alarm reported procedure.
+                    alarmReportedProcedureAJAX();
+                }
             },
-            error: function(errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:" , errorThrown);
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for ActivateSensorAjax:", errorThrown);
             }
         });
     }
+
+     function DeactivateSensorAjax(specific=true,room=0) {
+        // called to Deactivate a specific sensor based on the room it is in
+        if(specific == true) {
+            var room = document.getElementById("DeactivateSensor").value;
+        } else {
+            var room = room
+        }
+        
+        $.ajax({
+            url: '/CameraViewControler/OnDeactivateSensorAjax',
+            data: { roomNumber: room },
+            dataType: 'json',
+            success: function (data) {
+                deactivateSensor(room);
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for DeactivateSensorAjax:", errorThrown);
+            }
+        });
+    }
+    function DeactivateAllSensors() {
+        for(var i=1; i<41; i++) {
+            DeactivateSensorAjax(false,i);
+        }
+    }
+    // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
+    var cnt = 0;
+
+        function setBackActiveSensorsOnRefreshAJAX() {
+        // After the page has been reloaded we need to check if the sensors were previously loaded
+   
+            if(cnt == 41) {
+                cnt = 0;
+                alarmReportedProcedureAJAX();
+                return;
+            }
+             $.ajax({
+                url: '/CameraViewControler/OnGetSpecificSensorStatus',
+                data: { roomNumber: cnt },
+                dataType: 'json',
+                aync: true,
+                success: function (data) {
+                    if(data == true) {
+                        activateSesor(cnt + 1)
+                        // performing a call back like this will make this run more sequentially.
+                    }
+                cnt++;
+                setBackActiveSensorsOnRefreshAJAX();
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
+                }
+            });
+ 
+    }
+    document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
+
+    function alarmReportedProcedureAJAX(){
+        // On UI first
+        // Should be called after sensors have been activated
+
+        /*
+        I could send a fetch to the backend, sends nothing, returns 2d array with things that need to be activated 
+        {
+         "confirmed": true,
+         "sprinklers": [6,20,22],
+         "alarm": [6,20,22],
+         "direction": [6,20,22],
+         "doors": [6,22],
+         "peopleCalled":["FireDepartment","OnCall"]
+        }
+
+        By the time the json is returned all logic should be handled
+
+        // First version will be for unmanned control center
+        // Confirm alarm
+        // if confirmed by multiple confirmed sensors
+        // Call emergency department - call oncall person - display symbol
+        // play audible alarm that can be muted activate direction indicators
+        // if person is not in the room lock doors and display them as locked
+        // activate sprinkler
+
+        */
+  
+         $.ajax({
+            url: '/CameraViewControler/OnActivateSensorAjax',
+     
+            dataType: 'json',
+            async: true,
+            success: function (data) {
+           
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for alarmReportedProcedureAJAX:", errorThrown);
+            }
+        });
+    }
+
+
 
     function  activateOrDeactivateAlarmAJAX(area){
     
@@ -292,8 +578,6 @@
     function  activateOrDeactivateDirectionIndicatorAJAX(area){
     
     }
-
-
     function addOrRemoveSensorAJAX(){
         //
     }
@@ -313,13 +597,9 @@
             dataType: 'json',
 
             success: function (data) {
-                console.log(data);
                 // if data is true return change page to index else remain on current page
                 document.getElementById("test1").innerHTML = data;
                 if (data == true) {
-                    // navigate to the home page on success
-                    //console.log(document.getElementById("link").getAttribute('href'));
-                    //window.location.href = document.getElementById("link").getAttribute('href');
                 } else {
 
                 }
@@ -329,7 +609,7 @@
             }
         });
     }
-    document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
+   document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
 
 
     ///////////////////////////////
@@ -338,6 +618,50 @@
     
     */
     ///////////////////////////////
+
+    function activateSesor(room){
+        //This is used to deactivate a single sensor
+        var checkMarker = document.getElementById("sensor-Marker" + room);
+        // there needs to be no marker made for that sensor
+        if(checkMarker === null) {
+                var sensor = document.getElementById("sensor-"+room);
+                if(sensor !== null) {
+                    //Get the sensor location
+                    var sensorLocation = sensor.coords.split(",")
+                    var x = sensorLocation[0];
+                    var y = sensorLocation[1];
+                    var radius = sensorLocation[2];
+            
+                    // create marker for the flashing icon
+                    var marker = document.createElement("div");
+                     marker.id = "sensor-Marker" + room;
+                    marker.className = "sensor active";
+                    // Set the top location of the marker
+                    marker.style.top = (y-radius) + "px";
+                    // Set the left position of the marker
+                    marker.style.left = (x - radius) + "px";
+                    // Set the marker width and height
+                    marker.style.height = (radius * 2) + "px";
+                    marker.style.width = marker.style.height;
+            
+                    // set up class properties
+                    sensor.marker = sensor.marker || marker
+                    if(!sensor.marker.parentNode) {
+                        // push the sensor to the room container
+                        document.getElementById("containerForRoom").appendChild(sensor.marker);
+                    } 
+                }
+        }
+
+    }
+    function deactivateSensor(room) {
+        // Just delete the sensor marker if it exists
+        var sensorMarker = document.getElementById("sensor-Marker" + room);
+        if(sensorMarker !== null) {
+            sensorMarker.remove();
+        }
+    }
+
     function activateOrDeactivateOrDeactivateSensors(area) {
         // Turns on the on color of a sensor if it is currently detecting a fire or chemical leak
         const coords = area.coords.split(',').map(Number);
@@ -357,16 +681,12 @@
     function activateOrDeactivateAlarm(area) {
         // draws alarm state over alarms 
     }
-
-    
     function activateOrDeactivateSprinkler(area) {
         // draws sprinker state
     }
-
     function  activateOrDeactivateDirectionIndicators(area) {
         // draws direction indicators state
     }
-
     function addOrRemoveSensor(){
         //
     }
@@ -383,19 +703,48 @@
 </script>
 
 <style>
-    .overlay {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: red;
-        border-radius: 50%;
+    .sensor {
+        position:absolute;
+        height: 25px;
+        width: 25px;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        border-radius: 60%;
+        background-color: red;
+        animation-name: sensorKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .sensor.active {
+        opacity: 0.5;
+    }
+    @@keyframes sensorKeyFrame {
+        0% {
+                height: 25px;
+                width: 25px;
+                background-color: red;
+        }
+        25% {
+                height: 20px;
+                width: 20px;
+                background-color: blue;
+        }
+        50% {
+                height: 0px;
+                width: 1px;
+                background-color: red;
+        }
+        75% {
+                height: 20px;
+                width: 20px;
+                background-color: green;
+        }
+        100% {
+                height: 25px;
+                width: 25px;
+                background-color: red;
+        }
     }
 
-        .overlay.active {
-            opacity: 0.5;
-        }
         .containerForRoom {
             position: relative;
         }

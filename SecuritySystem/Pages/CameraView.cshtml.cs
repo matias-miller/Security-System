@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
 using controlSystem;
 using System;
+using buildingSystem.roomComponents;
 
 namespace SecuritySystem.Pages;
 
@@ -19,11 +20,13 @@ public class CameraViewControler : Controller
     // Set up the building control system regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
     public static ControlCenter _controlCenter = new ControlCenter();
+    private static readonly IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
+
 
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
         _logger = logger;
-        Debug.WriteLine("zero");
+        //Debug.WriteLine("Instantiated");
         
     }
 
@@ -55,6 +58,7 @@ public class CameraViewControler : Controller
 
     private void updateControlCenterState()
     {
+        //Debug.WriteLine("updateControlCenterState");
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
@@ -76,11 +80,11 @@ public class CameraViewControler : Controller
 
     }
 
-    private IActionResult getControlCenterState()
+    private void getControlCenterState()
     {
         // This returnes the current shared building object
         var temp = HttpContext.Session.GetString("ControlCenter");
-        Debug.WriteLine(temp);
+        //Debug.WriteLine("getControlCenterState");
         if (temp != null)
         {
             try
@@ -92,14 +96,14 @@ public class CameraViewControler : Controller
                 Debug.WriteLine(exeption);
             }
         }
-        return Json(true);
 
     }
 
-    private IActionResult getBuildingState()
+    private void getBuildingState()
     {
         // This returnes the current shared building object
         var temp = HttpContext.Session.GetString("BuildingControl");
+        //Debug.WriteLine(temp);
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
@@ -112,11 +116,11 @@ public class CameraViewControler : Controller
                 Debug.WriteLine(exeption);
             }
         }
-        return Json(true);
     }
 
     private void updateBuildingState()
     {
+        //Debug.WriteLine(JsonConvert.SerializeObject(_buldingControl));
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
@@ -143,12 +147,92 @@ public class CameraViewControler : Controller
         return Json(data);
     }
 
+    [HttpGet("OnActivateSensorAjax")]
+    public IActionResult OnActivateSensorAjax([FromQuery] int roomNumber)
+    {
+  
+            getBuildingState();
+            // Turns specific sensor on
+            var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, true);
+            updateBuildingState();
+            return Json(data);
+
+
+        
+    }
+    [HttpGet("OnDeactivateSensorAjax")]
+    public IActionResult OnDeactivateSensorAjax([FromQuery] int roomNumber)
+    {
+        getBuildingState();
+        // turns sensor off
+        var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
+        updateBuildingState();
+        return Json(data);
+    }
+    [HttpGet("OnGetSpecificSensorStatus")]
+    public IActionResult OnGetSpecificSensorStatus([FromQuery] int roomNumber)
+    {
+        // Just gets a specicic sensors status
+        getBuildingState();
+        Debug.WriteLine("Room: " + roomNumber);
+        var data = _buldingControl.getSpecificSensorState(roomNumber);
+        return Json(data);
+    }
+
     [HttpGet("OnAttemptGetPassword")]
     public IActionResult OnAttemptGetPassword()
     {
         // Success needs to be true or false
         var success = _controlCenter.testGetEmployeePassword();
         return Json(success);
+    }
+
+
+    [HttpGet("OnAlarmReportedProcedureAJAX")]
+    public IActionResult OnAlarmReportedProcedureAJAX()
+    {
+        /* Returned from this should be in this form 
+         {
+         "confirmed": true,
+         "sprinklers": [6,20,22],
+         "alarm": [6,20,22],
+         "direction": [6,20,22],
+         "doors": [6,22],
+         "peopleCalled":["FireDepartment","OnCall"]
+        }
+ 
+        */
+        // First version will be for unmanned control center
+        // Confirm alarm
+        // if confirmed by multiple confirmed sensors
+        // Call emergency department - call oncall person - display symbol
+        // play audible alarm that can be muted activate direction indicators
+        // if person is not in the room lock doors and display them as locked
+        // activate sprinkler
+        // Success needs to be true or false
+        // var success = _controlCenter.testGetEmployeePassword();
+        if (_controlCenter.isManned)
+        {
+            // Control center is manned process
+        }
+        else {
+            // Control center is not manned process
+            //var alarmConfirmed = _buldingControl.
+            //
+            /* If the control area is unmanned and an alarm is activated
+            this alarm should not be ignored if it is potentially serious.
+            Emergency services should be automatically called. */
+            // need to call people
+            //new
+            //{
+            //    AlarmProcedureReturnResult = new[] {
+            //    new { confirmed = true}
+            //}
+            //};
+
+
+        }
+        return Json(false);
     }
 
 }
