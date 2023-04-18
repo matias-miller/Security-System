@@ -42,16 +42,5 @@
     "isOnCall": false,
     "isSupervisor": false,
     "employeeID": 4
-  },
-  {
-    "salary": 0,
-    "firstName": "Mike",
-    "lastName": "Cock",
-    "address": "",
-    "userName": "cawk",
-    "password": "test",
-    "isOnCall": false,
-    "isSupervisor": false,
-    "employeeID": 5
   }
 ]
