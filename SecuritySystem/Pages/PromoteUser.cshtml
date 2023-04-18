@@ -6,6 +6,8 @@
 
 <div class="border p-4">
     <form class="form-signin">
+        <div class="alert alert-danger" role="alert" id="promoteUserError" style="display:none;">User promotion failed. Try again.</div>
+        <div class="alert alert-success" role="alert" id="promoteUserWorked" style="display:none;">User promoted.</div>
         <label for="user">Choose a user:</label>
         <select class="form-select" name="user" id="users">
         </select>
@@ -29,9 +31,9 @@
                 console.log(data);
                 
                 if (data == true) {
-               
+                    document.getElementById("promoteUserWorked").style.display = "block"
                 } else {
-
+                    document.getElementById("promoteUserError").style.display = "block"
                 }
             },
             error: function (errorThrown) {

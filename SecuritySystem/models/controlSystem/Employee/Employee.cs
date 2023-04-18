@@ -167,9 +167,39 @@ namespace controlSystem.Employee{
             return false;
         }
 
-        public bool promoteUser() {
-            return true;
+        public bool promoteUser()
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for the user by userName
+            foreach (Employee employee in employees)
+            {
+                if (employee.userName == userName)
+                {
+                    // Promote the user to supervisor
+                    employee.isSupervisor = true;
+
+                    // Serialize the updated list back to JSON
+                    string updatedJson = JsonConvert.SerializeObject(employees, Formatting.Indented);
+
+                    // Write the updated JSON back to the file
+                    File.WriteAllText(fullPath, updatedJson);
+
+                    return true;
+                }
+            }
+
+            // User not found
+            return false;
         }
+
         public bool addUser(string first, string last, string email, string password)
         {
             // Read JSON file
