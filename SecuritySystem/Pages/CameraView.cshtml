@@ -82,7 +82,8 @@
                         <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
                     </div>
                     <div>
-                        <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
+                    
+                        <button onclick="ActivateRandomSensors">Activate Random Sensors</button>
                     </div>
                     <div>
                         <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
@@ -410,7 +411,10 @@
     function ActivateRandomSensors() {
         // Need to perform a callback loop so it will activate them randomly but sequentially random
         if(cnt2 == 0) {
-            DeactivateAllSensors(true)
+        for(var i=1; i<41; i++) {
+           DeactivateSensorAjax(false,i);
+        }
+            //await DeactivateAllSensors(true)
         }
         
         if(cnt2 == 40) {
@@ -489,11 +493,11 @@
             }
         });
     }
-    function DeactivateAllSensors(calledFromAnotherFunction=false) {
+    function DeactivateAllSensors() {
 
  
         for(var i=1; i<41; i++) {
-            DeactivateSensorAjax(false,i);
+           DeactivateSensorAjax(false,i);
         }
         if(calledFromAnotherFunction == false) {
             //This is because alarmReportedProcedure should only activate once

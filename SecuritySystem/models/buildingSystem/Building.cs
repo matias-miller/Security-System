@@ -97,6 +97,8 @@ namespace buildingSystem{
             var count = 0;
             for (int i = 0; i <= 40; i++) {
                 if (this.roomList[i].sensor.sendState()) {
+                    var room = i + 1;
+                    Debug.WriteLine("Roomfirs: " + room);
                     count = count + 1;
                 }
                 
@@ -110,7 +112,8 @@ namespace buildingSystem{
             var count = 0;
             for (int i = 0; i <= 40; i++)
             {
-                Debug.WriteLine("Room: " + i + 1 + this.roomList[i].sensor.sendState());
+                var room = i + 1;
+                Debug.WriteLine("Room: " + room + this.roomList[i].sensor.sendState());
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array

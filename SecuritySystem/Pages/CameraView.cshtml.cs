@@ -227,7 +227,6 @@ public class CameraViewControler : Controller
             // need to call people
             // Get 
             var numberOfActiveSensors = _buldingControl.getNumberOfActiveSensors();
-
             //Confirmed unconfirmed procedure
             var confirmed = false;
             if (numberOfActiveSensors > 0)
