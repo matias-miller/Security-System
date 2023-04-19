@@ -83,7 +83,7 @@
                     </div>
                     <div>
                     
-                        <button onclick="ActivateRandomSensors">Activate Random Sensors</button>
+                        <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
                     </div>
                     <div>
                         <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
@@ -407,18 +407,32 @@
         });
     }
 
-    var cnt2 = 0;
-    function ActivateRandomSensors() {
-        // Need to perform a callback loop so it will activate them randomly but sequentially random
-        if(cnt2 == 0) {
-        for(var i=1; i<41; i++) {
-           DeactivateSensorAjax(false,i);
+    var cnt3 = 0;
+    async function DeactivateRandomSensorsCallForActivateRandomSensors() {
+
+        
+        if(cnt3 == 40) {
+            cnt3=0;
+         return;
         }
-            //await DeactivateAllSensors(true)
+        await DeactivateSensorAjax(false,cnt3);
+        cnt3 = cnt3 + 1;
+        await DeactivateRandomSensorsCallForActivateRandomSensors();
+        
+    }
+
+    var cnt2 = 0;
+     async function ActivateRandomSensors() {
+        // Need to perform a callback loop so it will activate them randomly but sequentially random
+        
+        if(cnt2 == 0) {
+             await DeactivateRandomSensorsCallForActivateRandomSensors()
+     
         }
         
         if(cnt2 == 40) {
             cnt2 = 0;
+
             alarmReportedProcedureAJAX();
             return;
         }
@@ -480,20 +494,24 @@
         } else {
             var room = room
         }
-        
+        return new Promise((resolve,reject) => {
         $.ajax({
             url: '/CameraViewControler/OnDeactivateSensorAjax',
             data: { roomNumber: room },
             dataType: 'json',
             success: function (data) {
+                console.log(room);
                 deactivateSensor(room);
+                resolve();
             },
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for DeactivateSensorAjax:", errorThrown);
+                reject();
             }
         });
+        });
     }
-    function DeactivateAllSensors() {
+    function DeactivateAllSensors(calledFromAnotherFunction=false) {
 
  
         for(var i=1; i<41; i++) {
@@ -580,7 +598,7 @@
                     for(i=1;i<=41;i++) {
                         if(data[1][0].indexOf(i) !==  -1) {
                             // Sprinkler needs to be activated
-                            console.log(i)
+                 
                             activateAlarm(i);
                         } else {
                             // make sure sprinkler is off
@@ -699,7 +717,7 @@
         function activateAlarm(room){
         //This is used to deactivate a single alarm
         var checkMarker = document.getElementById("alarm-Marker" + room);
-        console.log(room)
+
         // there needs to be no marker made for that alarm
         if(checkMarker === null) {
                 var alarm = document.getElementById("alarm-"+room);
