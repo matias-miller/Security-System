@@ -66,6 +66,15 @@ namespace buildingSystem{
             return building.requestSpecificSensorState(room);
         }
 
+        public bool attemptToAddPersonToRoom(int room) {
+                return building.roomList[room].addPersonToRoom();
+        }
+
+        public bool attemptToRemovePersonToRoom(int room)
+        {
+            return building.roomList[room].removePersonToRoom();
+        }
+
         /// <summary>
         /// @return
         /// </summary>

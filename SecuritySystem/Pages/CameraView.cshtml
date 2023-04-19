@@ -77,10 +77,10 @@
                         <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
                     </div>
 
-                    <div>
+              @*      <div>
                         <input type="number" id="DeactivateSensor" min="1" max="41"></input>
                         <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
-                    </div>
+                    </div>*@
                     <div>
                     
                         <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
@@ -92,7 +92,10 @@
                 <div class="senarioBlock">
                     <h3>Person Related tests</h3>
                          <input type="number" id="AddPersonToRoom" min="1" max="41"></input>
-                        <button onclick="alert('NotImplemented')">Add person into room #</button>
+                        <button onclick="addPersonToRoomAJAX()">Add person into room #</button>
+
+                         <input type="number" id="RemovePersonToRoom" min="1" max="41"></input>
+                        <button onclick="removePersonToRoomAJAX()">Remove person in room #</button>
                  </div>
 
                   <div class="senarioBlock">
@@ -419,7 +422,7 @@
     async function DeactivateRandomSensorsCallForActivateRandomSensors() {
 
         
-        if(cnt3 == 40) {
+        if(cnt3 == 41) {
             cnt3=0;
          return;
         }
@@ -498,10 +501,13 @@
      function DeactivateSensorAjax(specific=true,room=0) {
         // called to Deactivate a specific sensor based on the room it is in
         if(specific == true) {
-            var room = document.getElementById("DeactivateSensor").value;
+            console.log("in2")
+            room = document.getElementById("DeactivateSensor").value;
+            console.log()
         } else {
             var room = room
         }
+        console.log(room)
         return new Promise((resolve,reject) => {
         $.ajax({
             url: '/CameraViewControler/OnDeactivateSensorAjax',
@@ -509,10 +515,7 @@
             dataType: 'json',
             success: function (data) {
                 deactivateSensor(room);
-                if(specific == true) {
-                    alarmReportedProcedureAJAX();
-                    
-                }
+              
                 resolve();
             },
             error: function (errorThrown) {
@@ -522,6 +525,42 @@
         });
         });
     }
+    function addPersonToRoomAJAX() {
+        
+        var room = document.getElementById("AddPersonToRoom").value;
+            $.ajax({
+            url: '/CameraViewControler/OnAttemptAddPersonToRoom',
+            // Room array index starts at 0 so we subract 1
+            data: { roomNumber: room - 1 },
+            dataType: 'json',
+            async: true,
+            success: function (data) {
+
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+            }
+        });
+    }
+
+        function removePersonToRoomAJAX() {
+        
+        var room = document.getElementById("RemovePersonToRoom").value;
+            $.ajax({
+            url: '/CameraViewControler/OnAttemptAddPersonToRoom',
+            // Room array index starts at 0 so we subract 1
+            data: { roomNumber: room - 1 },
+            dataType: 'json',
+            async: true,
+            success: function (data) {
+
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+            }
+        });
+    }
+
     function DeactivateAllSensors(calledFromAnotherFunction=false) {
 
  

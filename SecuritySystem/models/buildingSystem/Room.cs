@@ -34,6 +34,7 @@ namespace buildingSystem{
 
         public bool isElectricityActive = false;
 
+        public bool peoplePresent = false;
         /// <summary>
         /// This is the zone the room is located in
         /// </summary>
@@ -67,6 +68,15 @@ namespace buildingSystem{
         /// This holds the room attributes in a object to be sent to building
         /// </summary>
         public bool roomState = false;
+        public bool addPersonToRoom() {
+            this.peoplePresent = true;
+            return this.peoplePresent;
+        }
+        public bool removePersonToRoom()
+        {
+            this.peoplePresent = false;
+            return this.peoplePresent;
+        }
 
         public void requestTurnOnOffAlarm() {
             // TODO implement here

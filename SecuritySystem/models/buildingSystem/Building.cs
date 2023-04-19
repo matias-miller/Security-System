@@ -185,12 +185,16 @@ namespace buildingSystem{
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array
-                    Array.Resize(ref doors, doors.Length + 1);
-                    doors[doors.Length - 1] = i + 1;
-                    // lock all doors in room
-                    for (int j = 0; j < this.roomList[i].numberOfDoors; j++) {
-                        this.roomList[i].doorArray[j].lockDoor();
+                    if (!this.roomList[i].peoplePresent) {
+                        Array.Resize(ref doors, doors.Length + 1);
+                        doors[doors.Length - 1] = i + 1;
+                        // lock all doors in room
+                        for (int j = 0; j < this.roomList[i].numberOfDoors; j++)
+                        {
+                            this.roomList[i].doorArray[j].lockDoor();
+                        }
                     }
+  
                 }
                 else
                 {

@@ -168,6 +168,7 @@ public class CameraViewControler : Controller
         // turns sensor off
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
         updateBuildingState();
+        Debug.WriteLine(_buldingControl.getNumberOfActiveSensors());
         return Json(data);
     }
     [HttpGet("OnGetSpecificSensorStatus")]
@@ -187,6 +188,27 @@ public class CameraViewControler : Controller
         var success = _controlCenter.testGetEmployeePassword();
         return Json(success);
     }
+
+    [HttpGet("OnAttemptAddPersonToRoom")]
+    public IActionResult OnAttemptAddPersonToRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.attemptToAddPersonToRoom(roomNumber); 
+        updateBuildingState();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptRemovePersonToRoom")]
+    public IActionResult OnAttemptRemovePersonToRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.attemptToAddPersonToRoom(roomNumber);
+        updateBuildingState();
+        return Json(success);
+    }
+
 
 
     [HttpGet("OnAlarmReportedProcedureAJAX")]
