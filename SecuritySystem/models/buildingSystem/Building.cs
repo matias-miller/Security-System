@@ -110,11 +110,14 @@ namespace buildingSystem{
             var count = 0;
             for (int i = 0; i <= 40; i++)
             {
+                Debug.WriteLine("Room: " + i + 1 + this.roomList[i].sensor.sendState());
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array
+                    
                     Array.Resize(ref sprinklers, sprinklers.Length + 1);
                     sprinklers[sprinklers.Length - 1] = i + 1;
+                    Debug.WriteLine("was activated:  " + sprinklers[sprinklers.Length - 1]);
                     this.roomList[i].sprinkler.activateSprinkler();
                 }
                 else {
@@ -122,6 +125,7 @@ namespace buildingSystem{
                     this.roomList[i].sprinkler.turnOffSprinkler();
                 }
             }
+            Debug.WriteLine("--------------");
             return sprinklers;
         }
         public object activateAlarmsAutomated()
