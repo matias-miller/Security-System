@@ -93,6 +93,156 @@ namespace buildingSystem{
   
             return this.roomList[roomName].requestSpecificSensorState();
         }
+        public int getNumberOfActiveSensors() {
+            var count = 0;
+            for (int i = 0; i <= 40; i++) {
+                if (this.roomList[i].sensor.sendState()) {
+                    count = count + 1;
+                }
+                
+            }
+            return count;
+        }
+
+        public object activateSprinklersAutomated()
+        {
+            int[] sprinklers =  { };
+            var count = 0;
+            for (int i = 0; i <= 40; i++)
+            {
+                if (this.roomList[i].sensor.sendState())
+                { // Sensor is on
+                    // Push the on sprinkler to an array
+                    Array.Resize(ref sprinklers, sprinklers.Length + 1);
+                    sprinklers[sprinklers.Length - 1] = i + 1;
+                    this.roomList[i].sprinkler.activateSprinkler();
+                }
+                else {
+                    // Sensor is off
+                    this.roomList[i].sprinkler.turnOffSprinkler();
+                }
+            }
+            return sprinklers;
+        }
+        public object activateAlarmsAutomated()
+        {
+            int[] alarms = { };
+            var count = 0;
+            for (int i = 0; i <= 40; i++)
+            {
+                if (this.roomList[i].sensor.sendState())
+                { // Sensor is on
+                    // Push the on sprinkler to an array
+                    Array.Resize(ref alarms, alarms.Length + 1);
+                    alarms[alarms.Length - 1] = i + 1;
+                    this.roomList[i].alarm.activateAlarm();
+                }
+                else
+                {
+                    // Sensor is off
+                    this.roomList[i].alarm.deactivateAlarm();
+                }
+            }
+            return alarms;
+        }
+        public object activateDirectionsAutomated()
+        {
+            int[] direction = { };
+            var count = 0;
+            for (int i = 0; i <= 40; i++)
+            {
+                if (this.roomList[i].sensor.sendState())
+                { // Sensor is on
+                    // Push the on sprinkler to an array
+                    Array.Resize(ref direction, direction.Length + 1);
+                    direction[direction.Length - 1] = i + 1;
+                    this.roomList[i].directionIndecator.turnOnIndicators();
+                }
+                else
+                {
+                    // Sensor is off
+                    this.roomList[i].directionIndecator.turnOffIndicators();
+                }
+            }
+            return direction;
+
+        }
+        public object activateDoorsAutomated()
+        {
+            // need some logic here for people
+            int[] doors = { };
+            var count = 0;
+            for (int i = 0; i <= 40; i++)
+            {
+                if (this.roomList[i].sensor.sendState())
+                { // Sensor is on
+                    // Push the on sprinkler to an array
+                    Array.Resize(ref doors, doors.Length + 1);
+                    doors[doors.Length - 1] = i + 1;
+                    // lock all doors in room
+                    for (int j = 0; j < this.roomList[i].numberOfDoors; j++) {
+                        this.roomList[i].doorArray[j].lockDoor();
+                    }
+                }
+                else
+                {
+                    // Sensor is off
+                    //unlock all doors
+                    for (int j = 0; j < this.roomList[i].numberOfDoors; j++)
+                    {
+                        this.roomList[i].doorArray[j].unlockDoor();
+                    }
+                }
+            }
+            return doors;
+
+        }
+        public object makeCallsAutomated()
+        {
+            // need to set up sensor type 
+            string[] calls = { };
+            var count = 0;
+            for (int i = 0; i <= 40; i++)
+            {
+                if (this.roomList[i].sensor.sendState())
+                { // Sensor is on
+                    if (this.roomList[i].sensor.isSmokeSensor == true)
+                    {
+                        // only push once
+                        if (Array.IndexOf(calls, "FireDepartment") == -1)
+                        {
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "OnCall";
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "Police";
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "FireDepartment";
+                        }
+
+                    }
+                    else if(this.roomList[i].sensor.isGasSensor == true) {
+                        // only push once
+                        if (Array.IndexOf(calls, "GasDepartment") == -1) {
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "OnCall";
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "GasDepartment";
+                            Array.Resize(ref calls, calls.Length + 1);
+                            calls[calls.Length - 1] = "Police";
+                        }
+
+                    }
+                    // Push the on sprinkler to an array
+ 
+                }
+                else
+                {
+                    // Sensor is off
+                }
+            }
+            return calls;
+
+        }
 
     }
 }

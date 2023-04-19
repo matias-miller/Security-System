@@ -410,7 +410,7 @@
     function ActivateRandomSensors() {
         // Need to perform a callback loop so it will activate them randomly but sequentially random
         if(cnt2 == 0) {
-            DeactivateAllSensors()
+            DeactivateAllSensors(true)
         }
         
         if(cnt2 == 40) {
@@ -489,9 +489,15 @@
             }
         });
     }
-    function DeactivateAllSensors() {
+    function DeactivateAllSensors(calledFromAnotherFunction=false) {
+
+ 
         for(var i=1; i<41; i++) {
             DeactivateSensorAjax(false,i);
+        }
+        if(calledFromAnotherFunction == false) {
+            //This is because alarmReportedProcedure should only activate once
+            alarmReportedProcedureAJAX();
         }
     }
     // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
@@ -554,12 +560,16 @@
         */
   
          $.ajax({
-            url: '/CameraViewControler/OnActivateSensorAjax',
+            url: '/CameraViewControler/OnAlarmReportedProcedureAJAX',
      
             dataType: 'json',
             async: true,
             success: function (data) {
-           
+                console.log(data);
+                if(data[0][0] == true) {
+                    // Alarm was confirmed play alarm
+                    //playAlarm()
+                }
             },
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for alarmReportedProcedureAJAX:", errorThrown);

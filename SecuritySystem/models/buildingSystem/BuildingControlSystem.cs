@@ -108,5 +108,40 @@ namespace buildingSystem{
             return data;
         }
 
+        public int getNumberOfActiveSensors() {
+            // used to get the number of active alarms to confirm alarm
+            var number = building.getNumberOfActiveSensors();
+            return number;
+        }
+
+        public object requestToActivateSprinklersAutomated() {
+            var sprinklers = building.activateSprinklersAutomated();
+            return sprinklers;
+        }
+        public object requestToActivateAlarmsAutomated()
+        {
+            var alarms = building.activateAlarmsAutomated();
+            return alarms;
+
+        }
+        public object requestToActivateDirectionsAutomated()
+        {
+            var directions = building.activateDirectionsAutomated();
+            return directions;
+
+        }
+        public object requestToActivateDoorsAutomated()
+        {
+            var doors = building.activateDoorsAutomated();
+            return doors;
+
+        }
+        public object requestToMakeCallsAutomated()
+        {
+            var calls = building.makeCallsAutomated();
+            return calls;
+
+        }
+
     }
 }

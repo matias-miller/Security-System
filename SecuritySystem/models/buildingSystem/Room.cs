@@ -14,6 +14,7 @@ namespace buildingSystem{
         public Room(int numberOfDoors, string zone, int roomName) {
             this.zone = zone;
             this.roomName = roomName;
+            this.numberOfDoors = numberOfDoors;
 
             // set up the number of doors each room has
             this.doorArray = new roomComponents.Door[numberOfDoors];
@@ -39,6 +40,7 @@ namespace buildingSystem{
         public string zone = "";
 
         public int roomName = 0;
+        public int numberOfDoors = 0;
 
         public roomComponents.DirectionIndicators directionIndecator = new DirectionIndicators();
 
