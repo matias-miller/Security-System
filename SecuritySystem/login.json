@@ -1,0 +1,57 @@
+[
+  {
+    "salary": 50000,
+    "firstName": "Matias",
+    "lastName": "Miller",
+    "address": "123 Main St",
+    "userName": "matiasmiller@gmail.com",
+    "password": "password",
+    "isOnCall": false,
+    "isSupervisor": true,
+    "employeeID": 1
+  },
+  {
+    "salary": 40000,
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "address": "456 Oak Ave",
+    "userName": "jane",
+    "password": "secret123",
+    "isOnCall": true,
+    "isSupervisor": true,
+    "employeeID": 2
+  },
+  {
+    "salary": 0,
+    "firstName": "test",
+    "lastName": "test",
+    "address": "",
+    "userName": "test",
+    "password": "test",
+    "isOnCall": false,
+    "isSupervisor": true,
+    "employeeID": 3
+  },
+  {
+    "salary": 0,
+    "firstName": "dsad",
+    "lastName": "sdadsa",
+    "address": "",
+    "userName": "dsads",
+    "password": "what",
+    "isOnCall": false,
+    "isSupervisor": true,
+    "employeeID": 4
+  },
+  {
+    "salary": 0,
+    "firstName": "dsadsa",
+    "lastName": "dsadsa",
+    "address": "",
+    "userName": "dsdsa",
+    "password": "dsadsa",
+    "isOnCall": false,
+    "isSupervisor": true,
+    "employeeID": 5
+  }
+]

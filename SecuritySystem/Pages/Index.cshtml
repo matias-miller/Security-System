@@ -4,43 +4,103 @@
     ViewData["Title"] = "Home page";
 }
 
-<p>This is a test to check if control center varables stay alive, being user password::</p>
-<p id="test1"></p>
+<style>
+    .room-column {
+        padding: .6em .6em 0em .6em;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: hidden;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .room-button {
+        padding: .2em;
+        text-decoration: none;
+        margin: .2em;
+        border-radius: 10%;
+        border: 1px solid green;
+        color: green;
+        text-align: center;
+    }
+</style>
+
+<div class="modal" tabindex="-1" role="dialog" id="roomModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Room Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="roomDetails">Room details will be displayed here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="w-100">
     <div class="d-flex flex-column justify-content-between align-items-stretch h-100 home">
         <div class="row flex-grow-1">
-            <div class="col-md-4 d-flex flex-column justify-content-between align-items-center">
-                <h3>Camera Statuses</h3>
-                <div class="col-12 text-center">
-                    <button>
-                        <p>Camera 1 Powered:</p>S
-                        <p>Camera 1 Alarm:</p>
-                    </button>
-                </div>
-                <div class="col-12 text-center">
-                    <button>
-                        <p>Camera 2 Powered:</p>
-                        <p>Camera 2 Alarm:</p>
-                    </button>
-                </div>
-                <div class="col-12 text-center">
-                    <button>
-                        <p>Camera 3 Powered:</p>
-                        <p>Camera 3 Alarm:</p>
-                    </button>
-                </div>
-                <div class="col-12 text-center">
-                    <button>
-                        <p>Camera 4 Powered:</p>
-                        <p>Camera 4 Alarm:</p>
-                    </button>
-                </div>
-                <div class="col-12 text-center">
-                    <button>
-                        <p>Camera 5 Powered:</p>
-                        <p>Camera 5 Alarm:</p>
-                    </button>
-                </div>
+            <div class="col-md-4 d-flex flex-column">
+                <h3 class="text-center">Room Statuses</h3>
+                @{
+                    int totalRooms = 40;
+                    int numRows = (int)Math.Ceiling(totalRooms / 2.0);
+                }
+                @for (int i = 0; i < numRows; i++)
+                {
+                    <div class="row">
+                        <div class="col-6 text-center room-column">
+                            @Html.Raw(String.Format("<a onclick=\"roomClick({0})\" class=\"room-button\">Room {0}</a>", i))
+                        </div>
+                        @{
+                            int secondColumnRoom = i + numRows;
+                            if (secondColumnRoom <= totalRooms)
+                            {
+                                <div class="col-6 text-center room-column">
+                                    @Html.Raw(String.Format("<a onclick=\"roomClick({0})\" class=\"room-button\">Room {0}</a>", secondColumnRoom))
+                                </div>
+                            }
+                        }
+                    </div>
+                }
             </div>
             <div class="col-md-4 d-flex flex-column justify-content-between">
                 <div class="col-12 flex-grow-1 text-center">
@@ -64,15 +124,42 @@
                     <h3>Building Control System</h3>
                     <button class="custom-btn w-75">Call Emergency Services</button>
                     <button class="custom-btn w-75">Disable Alarm</button>
-                    
-                    <button class="custom-btn w-50">More Options</button>
+                    <button class="custom-btn w-75">Lock Door</button>
+                    <button class="custom-btn w-75">Sound Alarm & Evauate Site</button>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+
 <script>
+
+    function roomClick(roomNumber) {
+        // Your logic to handle the click event for each room
+        console.log("Room clicked:", roomNumber);
+
+        // Update the modal content with the room number
+        document.getElementById("roomDetails").innerHTML = "Details for Room " + roomNumber;
+
+        // Show the modal
+        var modal = document.getElementById("roomModal");
+        modal.style.display = "block";
+
+        // Set the close button functionality
+        var closeButton = document.getElementsByClassName("close")[0];
+        closeButton.onclick = function () {
+            modal.style.display = "none";
+        };
+
+        // Close the modal when clicking outside of it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
     ///////////////////////////////
     /*
     Ajax Functions
@@ -83,7 +170,7 @@
 
     //function setExampleInputAJAX() {
     //    // Get the current sensor number
-        
+
     //    $.ajax({
     //        url: '/Index/OnGetSpecificRoomState2',
     //        data: { exampleinput: document.getElementById("exampleInput").value },
@@ -136,6 +223,4 @@
         });
     }
     document.addEventListener("DOMContentLoaded", AttemptGetPasswordAJAX);
-
-
 </script>

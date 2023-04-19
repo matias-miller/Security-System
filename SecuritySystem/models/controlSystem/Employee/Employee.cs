@@ -1,9 +1,9 @@
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace controlSystem.Employee{
     /// <summary>
@@ -50,10 +50,29 @@ namespace controlSystem.Employee{
         /// @param password 
         /// @return
         /// </summary>
-        public bool login(string userName, string password) {
-            // TODO implement here
-            this.password = password;
-            return true;
+        public bool login(string userName, string password)
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for matching employee
+            foreach (Employee employee in employees)
+            {
+                if (employee.userName == userName && employee.password == password)
+                {
+                    // Set isSupervisor based on employee role
+                    isSupervisor = employee.isSupervisor;
+                    return true;
+                }
+            }
+
+            return false; // No matching employee found
         }
 
         /// <summary>
@@ -147,13 +166,85 @@ namespace controlSystem.Employee{
             return false;
         }
 
-        public bool promoteUser() {
+        public bool promoteUser()
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for the user by userName
+            foreach (Employee employee in employees)
+            {
+                if (employee.userName == userName)
+                {
+                    // Promote the user to supervisor
+                    employee.isSupervisor = true;
+
+                    // Serialize the updated list back to JSON
+                    string updatedJson = JsonConvert.SerializeObject(employees, Formatting.Indented);
+
+                    // Write the updated JSON back to the file
+                    File.WriteAllText(fullPath, updatedJson);
+
+                    return true;
+                }
+            }
+
+            // User not found
+            return false;
+        }
+
+        public bool addUser(string first, string last, string email, string password)
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Check for existing user
+            foreach (Employee employee in employees)
+            {
+                if (employee.userName == email)
+                {
+                    // User already exists
+                    return false;
+                }
+            }
+
+            // Create a new employee
+            Employee newEmployee = new Employee
+            {
+                firstName = first,
+                lastName = last,
+                userName = email,
+                password = password,
+                isSupervisor = false,
+                employeeID = employees.Count + 1,
+                salary = 0,
+                isOnCall = false
+            };
+
+            // Add new employee to the list
+            employees.Add(newEmployee);
+
+            // Serialize the updated list back to JSON
+            string updatedJson = JsonConvert.SerializeObject(employees, Formatting.Indented);
+
+            // Write the updated JSON back to the file
+            File.WriteAllText(fullPath, updatedJson);
+
             return true;
         }
-        public bool addUser(string first, string last, string email, string password) {
-            //TBD how you do this
-            return true;
-        }
+
 
     }
 }
