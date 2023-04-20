@@ -144,10 +144,12 @@ namespace buildingSystem{
             if (action == true)
             {
                 data = this.sensor.activateSensor();
+                this.isElectricityActive = false;
             }
             else
             {
                 data = this.sensor.deactivateSensor();
+                this.isElectricityActive = true;
             }
             return data;
         }
