@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace controlSystem{
         /// @return
         /// </summary>
         public bool callPolice() {
-            // TODO implement here
+            // TODO
             return false;
         }
 
@@ -29,24 +28,25 @@ namespace controlSystem{
         /// @return
         /// </summary>
         public bool callOnCallEmployee() {
-            // TODO implement here
-            return false;
+            // TODO
+            return true;
         }
 
         /// <summary>
         /// @return
         /// </summary>
         public bool callFireDepartment() {
-            // TODO implement here
-            return false;
+            // TODO
+            return true;
         }
 
         /// <summary>
         /// @return
         /// </summary>
         public bool callChemicalDepartment() {
-            // TODO implement here
-            return false;
+            // Returns true automatically to display pop-up confirmation of call
+            // displays notification on page upon trigger
+            return true;
         }
 
     }

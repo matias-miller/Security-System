@@ -16,6 +16,7 @@ public class Index : Controller
     // create a building object regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
     public static ControlCenter _controlCenter = new ControlCenter();
+    public static PhoneSystem _phoneSystem = new PhoneSystem();
 
     public Index(ILogger<Index> logger)
     {
@@ -115,7 +116,6 @@ public class Index : Controller
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
-
 
     [HttpGet("OnGetSpecificRoomState2")]
     public IActionResult OnGetSpecificRoomState2() {
