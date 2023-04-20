@@ -16,7 +16,6 @@ public class Index : Controller
     // create a building object regardless
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
     public static ControlCenter _controlCenter = new ControlCenter();
-    public static PhoneSystem _phoneSystem = new PhoneSystem();
 
     public Index(ILogger<Index> logger)
     {
@@ -47,7 +46,6 @@ public class Index : Controller
 
         base.OnActionExecuting(context);
     }
-
 
     private void updateControlCenterState()
     {
@@ -123,6 +121,39 @@ public class Index : Controller
         //updateBuildingState();
         return Json(_buldingControl.getSpecificRoomState(3));
     }
+
+    [HttpGet("OnAttemptGetBuildingState")]
+    public IActionResult AttemptGetBuildingState()
+    {
+        updateBuildingState();
+        getBuildingState();
+        return Json(_buldingControl);
+    }
+
+    [HttpGet("OnAttemptGetRoomState")]
+    public IActionResult OnAttemptGetRoomState()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnDutySupervisor();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptGetSupervisor")]
+    public IActionResult OnAttemptGetSupervisor()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnDutySupervisor();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptGetOnCall")]
+    public IActionResult OnAttemptGetOnCall()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnCallOperator();
+        return Json(success);
+    }
+
 
     [HttpGet("OnAttemptGetPassword")]
     public IActionResult OnAttemptGetPassword()

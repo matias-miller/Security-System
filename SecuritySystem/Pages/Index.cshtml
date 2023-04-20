@@ -219,48 +219,51 @@
         });
     }
 
-    function AttemptCallFireDepartment() {
-        // Get the current sensor number
-
-        $.ajax({
-            url: '/Index/AttemptCallFireDepartment',
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
+    function AttemptGetRoomState() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/AttemptGetRoomState",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    console.log(data);
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+                }
+            });
         });
     }
 
-    function AttemptCallPolice() {
-        // Get the current sensor number
-
-        $.ajax({
-            url: '/Index/AttemptCallPolice',
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
+    function AttemptGetSupervisor() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/AttemptGetSupervisor",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    console.log(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
+                }
+            });
         });
     }
 
-    function AttemptCallChemicalDepartment() {
-        // Get the current sensor number
-
-        $.ajax({
-            url: '/Index/AttemptCallChemicalDepartment',
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
+    function AttemptGetOnCall() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/AttemptGetOnCall",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    console.log(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
+                }
+            });
         });
     }
 
@@ -273,7 +276,6 @@
             success: function (data) {
                 console.log(data);
                 // if data is true return change page to index else remain on current page
-                document.getElementById("test1").innerHTML = data;
                 if (data == true) {
                     // navigate to the home page on success
                     //console.log(document.getElementById("link").getAttribute('href'));
