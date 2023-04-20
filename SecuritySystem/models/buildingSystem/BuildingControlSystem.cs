@@ -194,9 +194,9 @@ namespace buildingSystem{
             return doors;
 
         }
-        public object requestToMakeCallsAutomated()
+        public object requestToMakeCallsAutomated(bool Gas)
         {
-            var calls = building.makeCallsAutomated();
+            var calls = building.makeCallsAutomated(Gas);
             return calls;
 
         }
