@@ -65,7 +65,7 @@
         else {
             room = room2;
         }
-        console.log("tsdf")
+
            
             $.ajax({
                 url: '/CameraViewControler/OnAttemptAddSensorToRoom',
@@ -74,7 +74,7 @@
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    console.log(data)
+                   
                      if(single!=false) {
                         placeSensorsInRoomOnPageLoad(1);
                      }
@@ -94,7 +94,7 @@
         else {
             room = room2;
         }
-        //console.log("tsdf")
+
            
             $.ajax({
             url: '/CameraViewControler/OnAttemptRemoveSensorFromRoom',
@@ -103,7 +103,7 @@
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    //console.log(data)
+                  
                      if(single!=false) {
                         placeSensorsInRoomOnPageLoad(1);
                      }
@@ -118,29 +118,33 @@
     async function addAllSensors(){
         for(i = 1; i <=41; i++) {
              await addSensors(false, i);  
-             //console.log(i)
+
         }
         placeSensorsInRoomOnPageLoad(1);
+        
     }
 
    async function removeAllSensors() {
+        //await DeactivateAllSensors();
          for(i = 1; i <=41; i++) {
              await removeSensors(false, i);  
-             //console.log(i)
+
         }
         placeSensorsInRoomOnPageLoad(1);
+        alarmReportedProcedureAJAX();
+        
+        
     }
     
     function placeSensorsInRoomOnPageLoad(type){
-        console.log("out");
       
-            console.log("in")
+   
             $.ajax({
                 url: '/CameraViewControler/onPlaceSensorsInRoomOnPageLoad',
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    //console.log(data)
+             
                     for(i = 1; i <=41; i++) {
                         if(i != 2 && i != 38) {
                             if(!data.includes(i)) {
@@ -540,7 +544,7 @@
             url: URL,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+              
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('Error:', textStatus, errorThrown);
@@ -609,6 +613,7 @@
             dataType: 'json',
             async: true,
             success: function (data) {
+       
                 if(data == true) {
                     activateSesor(room)
                 }
@@ -633,13 +638,13 @@
      function DeactivateSensorAjax(specific=true,room=0) {
         // called to Deactivate a specific sensor based on the room it is in
         if(specific == true) {
-            console.log("in2")
+          
             room = document.getElementById("DeactivateSensor").value;
-            console.log()
+          
         } else {
             var room = room
         }
-        console.log(room)
+  
         return new Promise((resolve,reject) => {
         $.ajax({
             url: '/CameraViewControler/OnDeactivateSensorAjax',
@@ -694,11 +699,12 @@
         });
     }
 
-    function DeactivateAllSensors(calledFromAnotherFunction=false) {
+    async function DeactivateAllSensors(calledFromAnotherFunction=false) {
 
  
-        for(var i=1; i<41; i++) {
-           DeactivateSensorAjax(false,i);
+        for(var i=0; i<41; i++) {
+            console.log("in")
+           await DeactivateSensorAjax(false,i);
         }
         if(calledFromAnotherFunction == false) {
             //This is because alarmReportedProcedure should only activate once
@@ -769,14 +775,14 @@
         // activate sprinkler
 
         */
-  
+            
          $.ajax({
             url: '/CameraViewControler/OnAlarmReportedProcedureAJAX',
      
             dataType: 'json',
             async: true,
             success: function (data) {
-                console.log(data);
+           
                 if(data[0][0] == true) {
                     // Alarm was confirmed play alarm
                     // UNCOMMENT during presentation
@@ -882,11 +888,14 @@
     ///////////////////////////////
 
     function activateSesor(room){
+
         //This is used to deactivate a single sensor
         var checkMarker = document.getElementById("sensor-Marker" + room);
+
         // there needs to be no marker made for that sensor
         if(checkMarker === null) {
                 var sensor = document.getElementById("sensor-"+room);
+      
                 if(sensor !== null) {
                     //Get the sensor location
                     var sensorLocation = sensor.coords.split(",")
@@ -897,7 +906,7 @@
                     // create marker for the flashing icon
                     var marker = document.createElement("div");
                      marker.id = "sensor-Marker" + room;
-                    marker.className = "sensor active";
+                        marker.className = "sensor active";
                     // Set the top location of the marker
                     marker.style.top = (y-radius) + "px";
                     // Set the left position of the marker
@@ -906,8 +915,10 @@
                     marker.style.height = (radius * 2) + "px";
                     marker.style.width = marker.style.height;
             
-                    // set up class properties
-                    sensor.marker = sensor.marker || marker
+                    // set up class properties 
+                    
+                    sensor.marker =  marker 
+       
                     if(!sensor.marker.parentNode) {
                         // push the sensor to the room container
                         document.getElementById("containerForRoom").appendChild(sensor.marker);
@@ -916,6 +927,41 @@
         }
     }
 
+    function drawWhiteOverSensor(room) {
+
+        //This is used to deactivate a single sensor
+        var checkMarker = document.getElementById("sensor-Marker-white" + room);
+        // there needs to be no marker made for that sensor
+        if (checkMarker === null) {
+            var sensor = document.getElementById("sensor-" + room);
+            if (sensor !== null) {
+                //Get the sensor location
+                var sensorLocation = sensor.coords.split(",")
+                var x = sensorLocation[0];
+                var y = sensorLocation[1];
+                var radius = sensorLocation[2];
+
+                // create marker for the flashing icon
+                var marker = document.createElement("div");
+                marker.id = "sensor-Marker-white" + room;
+                marker.className = "whiteBackground";
+                // Set the top location of the marker
+                marker.style.top = (y - radius) + "px";
+                // Set the left position of the marker
+                marker.style.left = (x - radius) + "px";
+                // Set the marker width and height
+                marker.style.height = (radius * 2) + "px";
+                marker.style.width = marker.style.height;
+
+                // set up class properties
+                sensor.marker =  marker
+                if (!sensor.marker.parentNode) {
+                    // push the sensor to the room container
+                    document.getElementById("containerForRoom").appendChild(sensor.marker);
+                }
+            }
+        }
+        }
         function activateAlarm(room){
         //This is used to deactivate a single alarm
         var checkMarker = document.getElementById("alarm-Marker" + room);
@@ -1036,7 +1082,7 @@
             }
             for(j = 1; j <= iterations ;j++) {
                         var checkMarker = document.getElementById("door-Marker" + room+"-"+j);
-                        console.log(room + " " + 1);
+                     
                     if(checkMarker === null) {
                     var door = document.getElementById("door-"+room+"-"+j);
                     if(door !== null) {
@@ -1053,7 +1099,7 @@
                         marker.id = "door-Marker" + room+"-"+j;
                   
                         var leftOrUp = door.dataset.functionparameters.split(",")[2]
-                        console.log(leftOrUp)
+                       
                         if(leftOrUp == "'left'") {
                             marker.className = "doorLeft active";
                         } else {
@@ -1144,48 +1190,14 @@
         }
     }
 
-    function drawWhiteOverSensor(room) {
-        
-        //This is used to deactivate a single sensor
-        var checkMarker = document.getElementById("sensor-Marker-white" + room);
-        // there needs to be no marker made for that sensor
-        if (checkMarker === null) {
-            var sensor = document.getElementById("sensor-" + room);
-            if (sensor !== null) {
-                //Get the sensor location
-                var sensorLocation = sensor.coords.split(",")
-                var x = sensorLocation[0];
-                var y = sensorLocation[1];
-                var radius = sensorLocation[2];
-
-                // create marker for the flashing icon
-                var marker = document.createElement("div");
-                marker.id = "sensor-Marker-white" + room;
-                marker.className = "whiteBackground";
-                // Set the top location of the marker
-                marker.style.top = (y - radius) + "px";
-                // Set the left position of the marker
-                marker.style.left = (x - radius) + "px";
-                // Set the marker width and height
-                marker.style.height = (radius * 2) + "px";
-                marker.style.width = marker.style.height;
-
-                // set up class properties
-                sensor.marker = sensor.marker || marker
-                if (!sensor.marker.parentNode) {
-                    // push the sensor to the room container
-                    document.getElementById("containerForRoom").appendChild(sensor.marker);
-                }
-            }
-        }
+ 
     
-    }
     function removeWhiteOverSensor(room) {
         // Just delete the sensor marker if it exists
-        console.log("two")
+      
         var sensorMarker = document.getElementById("sensor-Marker-white" + room);
         if (sensorMarker !== null) {
-            console.log("three")
+         
             sensorMarker.remove();
         }
     }

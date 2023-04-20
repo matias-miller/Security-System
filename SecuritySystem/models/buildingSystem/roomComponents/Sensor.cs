@@ -40,10 +40,14 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool activateSensor() {
             // TODO implement here
+            if (this.isInRoom != false) {
                 this.isActive = true;
+                return this.isActive;
+            } else { return false; }
+               
             
            
-            return this.isActive;
+            
         }
 
         /// <summary>

@@ -159,15 +159,10 @@ namespace buildingSystem{
         /// @return
         /// </summary>
         public bool requestToModifyBuildingState(string requestType, int roomNumber, bool action) {
-            Debug.WriteLine("in");
-            if (building.roomList[roomNumber].sensor.isInRoom)
-            {
+     
                 var data = building.requestToModifyRoomState(requestType, roomNumber, action);
                 return data;
-            }
-            else {
-                return false;
-            }
+        
 
         }
 
