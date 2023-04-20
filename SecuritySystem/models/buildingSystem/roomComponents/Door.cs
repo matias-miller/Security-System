@@ -19,7 +19,8 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool lockDoor() {
             // TODO implement here
-            return false;
+            this.isLocked = true;
+            return this.isLocked;
         }
 
         /// <summary>
@@ -27,7 +28,8 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool unlockDoor() {
             // TODO implement here
-            return false;
+            this.isLocked = false;
+            return this.isLocked;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool sendState() {
             // TODO implement here
-            return false;
+            return this.isLocked;
         }
 
     }

@@ -14,7 +14,7 @@ namespace buildingSystem.roomComponents{
 
         public bool isGasSensor = false;
 
-        public bool isSmokeSensor = false;
+        public bool isSmokeSensor = true;
 
         public int sensorID = 0;
 

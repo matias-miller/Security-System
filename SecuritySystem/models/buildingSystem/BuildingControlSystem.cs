@@ -66,6 +66,15 @@ namespace buildingSystem{
             return building.requestSpecificSensorState(room);
         }
 
+        public bool attemptToAddPersonToRoom(int room) {
+                return building.roomList[room].addPersonToRoom();
+        }
+
+        public bool attemptToRemovePersonToRoom(int room)
+        {
+            return building.roomList[room].removePersonToRoom();
+        }
+
         /// <summary>
         /// @return
         /// </summary>
@@ -106,6 +115,41 @@ namespace buildingSystem{
         public bool requestToModifyBuildingState(string requestType, int roomNumber, bool action) {
             var data = building.requestToModifyRoomState(requestType, roomNumber, action);
             return data;
+        }
+
+        public int getNumberOfActiveSensors() {
+            // used to get the number of active alarms to confirm alarm
+            var number = building.getNumberOfActiveSensors();
+            return number;
+        }
+
+        public object requestToActivateSprinklersAutomated() {
+            var sprinklers = building.activateSprinklersAutomated();
+            return sprinklers;
+        }
+        public object requestToActivateAlarmsAutomated()
+        {
+            var alarms = building.activateAlarmsAutomated();
+            return alarms;
+
+        }
+        public object requestToActivateDirectionsAutomated()
+        {
+            var directions = building.activateDirectionsAutomated();
+            return directions;
+
+        }
+        public object requestToActivateDoorsAutomated()
+        {
+            var doors = building.activateDoorsAutomated();
+            return doors;
+
+        }
+        public object requestToMakeCallsAutomated()
+        {
+            var calls = building.makeCallsAutomated();
+            return calls;
+
         }
 
     }

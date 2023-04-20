@@ -22,6 +22,7 @@ public class CameraViewControler : Controller
     public static ControlCenter _controlCenter = new ControlCenter();
     private static readonly IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
 
+    
 
     public CameraViewControler(ILogger<CameraViewControler> logger)
     {
@@ -167,6 +168,7 @@ public class CameraViewControler : Controller
         // turns sensor off
         var data = _buldingControl.requestToModifyBuildingState("requestTurnOnOffSensor", roomNumber, false);
         updateBuildingState();
+        Debug.WriteLine(_buldingControl.getNumberOfActiveSensors());
         return Json(data);
     }
     [HttpGet("OnGetSpecificSensorStatus")]
@@ -187,10 +189,32 @@ public class CameraViewControler : Controller
         return Json(success);
     }
 
+    [HttpGet("OnAttemptAddPersonToRoom")]
+    public IActionResult OnAttemptAddPersonToRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.attemptToAddPersonToRoom(roomNumber); 
+        updateBuildingState();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptRemovePersonToRoom")]
+    public IActionResult OnAttemptRemovePersonToRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.attemptToAddPersonToRoom(roomNumber);
+        updateBuildingState();
+        return Json(success);
+    }
+
+
 
     [HttpGet("OnAlarmReportedProcedureAJAX")]
     public IActionResult OnAlarmReportedProcedureAJAX()
     {
+        getBuildingState();
         /* Returned from this should be in this form 
          {
          "confirmed": true,
@@ -217,22 +241,52 @@ public class CameraViewControler : Controller
         }
         else {
             // Control center is not manned process
-            //var alarmConfirmed = _buldingControl.
+
             //
             /* If the control area is unmanned and an alarm is activated
             this alarm should not be ignored if it is potentially serious.
             Emergency services should be automatically called. */
             // need to call people
-            //new
-            //{
-            //    AlarmProcedureReturnResult = new[] {
-            //    new { confirmed = true}
-            //}
-            //};
+            // Get 
+            var numberOfActiveSensors = _buldingControl.getNumberOfActiveSensors();
+            //Confirmed unconfirmed procedure
+            var confirmed = false;
+            if (numberOfActiveSensors > 0)
+            {
+                confirmed = true;
+            }
+            else {
+                confirmed = false;
+            }
+            object[][] AlarmReportedProcedure = new object[6][];
 
+            // "confirmed": true,
+            AlarmReportedProcedure[0] = new object[] { confirmed };
 
+            var sprinklers = _buldingControl.requestToActivateSprinklersAutomated();
+            // "sprinklers": [6,20,22],
+            AlarmReportedProcedure[1] = new object[] { sprinklers };
+
+            var alarms = _buldingControl.requestToActivateAlarmsAutomated();
+            //"alarm": [6,20,22],
+            AlarmReportedProcedure[2] = new object[] { alarms };
+
+            var directions = _buldingControl.requestToActivateDirectionsAutomated();
+            //"direction": [6,20,22],
+            AlarmReportedProcedure[3] = new object[] { directions };
+
+            var doors = _buldingControl.requestToActivateDoorsAutomated();
+            // "doors": [6,22],
+            AlarmReportedProcedure[4] = new object[] { doors };
+
+            var peopleCalled = _buldingControl.requestToMakeCallsAutomated();
+            // "peopleCalled":["FireDepartment","OnCall"]
+            AlarmReportedProcedure[5] = new object[] { peopleCalled };
+
+            updateBuildingState();
+            return Json(AlarmReportedProcedure);
         }
-        return Json(false);
+        return (Json(false));
     }
 
 }
