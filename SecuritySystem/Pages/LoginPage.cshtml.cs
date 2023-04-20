@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using EmployeeNamespace = controlSystem.Employee;
 
 namespace SecuritySystem.Pages;
 [Route("[controller]")]
@@ -14,7 +15,7 @@ public class Login : Controller
     private readonly ILogger<Login> _logger;
     public static ControlCenter _controlCenter = new ControlCenter();
     public static BuildingControlSystem _buldingControl = new BuildingControlSystem();
-
+    
     public Login(ILogger<Login> logger)
     {
         _logger = logger;

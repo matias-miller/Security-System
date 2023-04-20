@@ -47,7 +47,6 @@ public class Index : Controller
         base.OnActionExecuting(context);
     }
 
-
     private void updateControlCenterState()
     {
         if (_controlCenter != null)
@@ -116,13 +115,45 @@ public class Index : Controller
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
 
-
     [HttpGet("OnGetSpecificRoomState2")]
     public IActionResult OnGetSpecificRoomState2() {
         // This is just a example function to show how to use a specific method from the building control
         //updateBuildingState();
         return Json(_buldingControl.getSpecificRoomState(3));
     }
+
+    [HttpGet("OnAttemptGetBuildingState")]
+    public IActionResult AttemptGetBuildingState()
+    {
+        updateBuildingState();
+        getBuildingState();
+        return Json(_buldingControl);
+    }
+
+    [HttpGet("OnAttemptGetRoomState")]
+    public IActionResult OnAttemptGetRoomState()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnDutySupervisor();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptGetSupervisor")]
+    public IActionResult OnAttemptGetSupervisor()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnDutySupervisor();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptGetOnCall")]
+    public IActionResult OnAttemptGetOnCall()
+    {
+        // Success needs to be true or false
+        var success = _controlCenter.getOnCallOperator();
+        return Json(success);
+    }
+
 
     [HttpGet("OnAttemptGetPassword")]
     public IActionResult OnAttemptGetPassword()

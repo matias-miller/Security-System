@@ -22,7 +22,7 @@ namespace controlSystem.Employee{
         /// </summary>
         public int salary = 0;
 
-        public string firstName = "";
+        public string firstName = "test";
 
         public string lastName = "";
 
@@ -136,9 +136,45 @@ namespace controlSystem.Employee{
         /// <summary>
         /// @return
         /// </summary>
-        public bool checkIfOnCall() {
-            // TODO implement here
-            return false;
+        public string findOnCall() {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for the user by userName
+            foreach (Employee employee in employees)
+            {
+                if (employee.isOnCall == true) { return employee.firstName; }
+            }
+
+            // No one is on call
+            return "test";
+        }
+
+        public string findSupervisor()
+        {
+            // Read JSON file
+            string relativePath = "login.json";
+            // Combine the relative path with the current directory to get the full path
+            string fullPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, relativePath));
+            // Read the contents of the JSON file
+            string jsonContent = File.ReadAllText(fullPath);
+            // Deserialize JSON to list of Employees
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(jsonContent);
+
+            // Search for the user by userName
+            foreach (Employee employee in employees)
+            {
+                if (employee.isSupervisor == true) { return employee.firstName; }
+            }
+
+            // No one is a supervisor
+            return "";
         }
 
         /// <summary>

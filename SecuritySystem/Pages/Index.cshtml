@@ -46,14 +46,21 @@
         }
 
     .room-button {
+        display: block;
         padding: .2em;
         text-decoration: none;
         margin: .2em;
         border-radius: 10%;
         border: 1px solid green;
-        color: green;
+        color: white;
+        background-color: green;
         text-align: center;
     }
+
+    .zone {
+        margin-top: 4.5em;
+    }
+
 </style>
 
 <div class="modal" tabindex="-1" role="dialog" id="roomModal">
@@ -80,27 +87,7 @@
         <div class="row flex-grow-1">
             <div class="col-md-4 d-flex flex-column">
                 <h3 class="text-center">Room Statuses</h3>
-                @{
-                    int totalRooms = 40;
-                    int numRows = (int)Math.Ceiling(totalRooms / 2.0);
-                }
-                @for (int i = 0; i < numRows; i++)
-                {
-                    <div class="row">
-                        <div class="col-6 text-center room-column">
-                            @Html.Raw(String.Format("<a onclick=\"roomClick({0})\" class=\"room-button\">Room {0}</a>", i))
-                        </div>
-                        @{
-                            int secondColumnRoom = i + numRows;
-                            if (secondColumnRoom <= totalRooms)
-                            {
-                                <div class="col-6 text-center room-column">
-                                    @Html.Raw(String.Format("<a onclick=\"roomClick({0})\" class=\"room-button\">Room {0}</a>", secondColumnRoom))
-                                </div>
-                            }
-                        }
-                    </div>
-                }
+                <div id="roomStatuses" class="row"></div>
             </div>
             <div class="col-md-4 d-flex flex-column justify-content-between">
                 <div class="col-12 flex-grow-1 text-center">
@@ -109,31 +96,64 @@
                 </div>
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Notification</h3>
-                    </br>
+                    <br>
                     <p>This is a notification.</p>
                 </div>
             </div>
             <div class="col-md-4 d-flex flex-column justify-content-between">
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Other Information</h3>
-                    </br>
+                    <br>
                     <p>On-duty Supervisor:</p>
                     <p>On-call Operator:</p>
                 </div>
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Building Control System</h3>
-                    <button class="custom-btn w-75">Call Emergency Services</button>
-                    <button class="custom-btn w-75">Disable Alarm</button>
-                    <button class="custom-btn w-75">Lock Door</button>
-                    <button class="custom-btn w-75">Sound Alarm & Evauate Site</button>
+                    <button onclick="policeClick()" class="custom-btn w-75">Call Police</button>
+                    <button onclick="fireDepartmentClick()" class="custom-btn w-75">Call Fire Department</button>
+                    <button onclick="" class="custom-btn w-75">Disable Alarm</button>
+                    <button onclick="" class="custom-btn w-75">Lock Door</button>
+                    <button onclick="soundAlarmClick()" class="custom-btn w-75">Sound Alarm & Evauate Site</button>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const totalRooms = 40;
+        const zones = 4;
+        const roomsPerZone = Math.ceil(totalRooms / zones);
+        let roomStatusesHtml = '';
+
+        for (let z = 1; z <= zones; z++) {
+            roomStatusesHtml += `<div class="col-md-3 zone"><h4>Zone ${z}</h4>`;
+            for (let i = 1; i <= roomsPerZone; i++) {
+                const roomNumber = (z - 1) * roomsPerZone + i;
+                if (roomNumber <= totalRooms) {
+                    roomStatusesHtml += `<a onclick="roomClick(${roomNumber})" class="room-button">Room ${roomNumber}</a>`;
+                }
+            }
+            roomStatusesHtml += '</div>';
+        }
+
+        document.getElementById("roomStatuses").innerHTML = roomStatusesHtml;
+    });
+
+
+    function soundAlarmClick() {
+        alert("Evaccuate the site");
+    }
+
+    function policeClick() {
+       alert("Police Department Alerted");
+    }
+
+    function fireDepartmentClick() {
+        alert("Fire Department Alerted");
+    }
 
     function roomClick(roomNumber) {
         // Your logic to handle the click event for each room
@@ -198,5 +218,78 @@
             }
         });
     }
+
+    function AttemptGetRoomState() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/AttemptGetRoomState",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    console.log(data);
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+                }
+            });
+        });
+    }
+    
+    function AttemptGetSupervisor() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/OnAttemptGetSupervisor",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    
+                    console.log(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
+                }
+            });
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetSupervisor);
+    function AttemptGetOnCall() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/AttemptGetOnCall",
+                dataType: "json",
+                success: function (data) {
+                    // process the response
+                    console.log(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
+                }
+            });
+        });
+    }
+
+    function AttemptGetPasswordAJAX() {
+        // This is the function that should happen on page submit
+        $.ajax({
+            url: '/Index/OnAttemptGetPassword',
+            dataType: 'json',
+
+            success: function (data) {
+                console.log(data);
+                // if data is true return change page to index else remain on current page
+                if (data == true) {
+                    // navigate to the home page on success
+                    //console.log(document.getElementById("link").getAttribute('href'));
+                    //window.location.href = document.getElementById("link").getAttribute('href');
+                } else {
+
+                }
+            },
+            error: function (errorThrown) {
+                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+            }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetPasswordAJAX);
 
 </script>

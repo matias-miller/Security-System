@@ -70,6 +70,18 @@ namespace controlSystem
             return false;
         }
 
+        public string getOnCallOperator()
+        {
+            string onCallOperator = employee.findOnCall();
+            return onCallOperator;
+        }
+
+        public string getOnDutySupervisor()
+        {
+            string supervisor = employee.findSupervisor();
+            return supervisor;
+        }
+
         /// <summary>
         /// calls determinAlarmSeverity and getBuildingState
         /// @return
