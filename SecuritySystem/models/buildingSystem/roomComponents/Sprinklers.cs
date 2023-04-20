@@ -19,7 +19,8 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool activateSprinkler() {
             // TODO implement here
-            return false;
+            this.isActive = true;
+            return this.isActive;
         }
 
         /// <summary>
@@ -27,7 +28,8 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool turnOffSprinkler() {
             // TODO implement here
-            return false;
+            this.isActive = false;
+            return this.isActive;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace buildingSystem.roomComponents{
         /// </summary>
         public bool sendState() {
             // TODO implement here
-            return false;
+            return this.isActive;
         }
 
     }

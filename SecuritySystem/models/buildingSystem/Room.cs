@@ -14,6 +14,7 @@ namespace buildingSystem{
         public Room(int numberOfDoors, string zone, int roomName) {
             this.zone = zone;
             this.roomName = roomName;
+            this.numberOfDoors = numberOfDoors;
 
             // set up the number of doors each room has
             this.doorArray = new roomComponents.Door[numberOfDoors];
@@ -33,12 +34,14 @@ namespace buildingSystem{
 
         public bool isElectricityActive = false;
 
+        public bool peoplePresent = false;
         /// <summary>
         /// This is the zone the room is located in
         /// </summary>
         public string zone = "";
 
         public int roomName = 0;
+        public int numberOfDoors = 0;
 
         public roomComponents.DirectionIndicators directionIndecator = new DirectionIndicators();
 
@@ -65,6 +68,15 @@ namespace buildingSystem{
         /// This holds the room attributes in a object to be sent to building
         /// </summary>
         public bool roomState = false;
+        public bool addPersonToRoom() {
+            this.peoplePresent = true;
+            return this.peoplePresent;
+        }
+        public bool removePersonToRoom()
+        {
+            this.peoplePresent = false;
+            return this.peoplePresent;
+        }
 
         public void requestTurnOnOffAlarm() {
             // TODO implement here
