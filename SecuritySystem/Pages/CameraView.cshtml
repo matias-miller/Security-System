@@ -58,6 +58,57 @@
         }
     }
 
+    function addRemoveSensors(type){
+     
+         var room = document.getElementById("addSensorToRoom").value;
+
+            $.ajax({
+                url: '/CameraViewControler/OnAttemptAddSensorToRoom',
+                // Room array index starts at 0 so we subract 1
+                data: { roomNumber: room - 1 },
+                dataType: 'json',
+                async: true,
+                success: function (data) {
+                    console.log(data)
+                    
+                    placeSensorsInRoomOnPageLoad(1);
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+                }
+            });
+    }
+
+    
+    function placeSensorsInRoomOnPageLoad(type){
+        return new Promise((resolve,reject) => {
+            $.ajax({
+                url: '/CameraViewControler/onPlaceSensorsInRoomOnPageLoad',
+                dataType: 'json',
+                async: true,
+                success: function (data) {
+                    console.log(data)
+                    for(i = 1; i <=41; i++) {
+                        if(i != 2 && i != 38) {
+                            if(!data.includes(i)) {
+                                // Sensor not active
+                            
+                                drawWhiteOverSensor(i);
+                            } else {
+                                // deactivate
+                                removeWhiteOverSensor(i);
+                            }
+                        }
+                    
+                    }
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+                }
+            });
+            });
+    }
+    //document.addEventListener("DOMContentLoaded", placeSensorsInRoomOnPageLoad);
 
 </script>
 <div class="text-center">
@@ -70,19 +121,19 @@
 
             <div>
                 <input type="number" id="addSensorToRoom" min="1" max="41"></input>
-                <button onclick="alert('todo')">Add Sensor to room Room #</button>
+                <button onclick="addRemoveSensors(1)">Add Sensor to room Room #</button>
             </div>
 
             <div>
                 <input type="number" id="removeSensorInRoom" min="1" max="41"></input>
-                <button onclick="alert('todo')">Remove sensor in Room #</button>
+                <button onclick="addRemoveSensors(2)">Remove sensor in Room #</button>
             </div>
 
             <div>
-                <button onclick="alert('todo')">Add all Sensors</button>
+                <button onclick="addRemoveSensors(3)">Add all Sensors</button>
             </div>
              <div>
-                <button onclick="alert('todo')">Remove all Sensors</button>
+                <button onclick="addRemoveSensors(4)">Remove all Sensors</button>
             </div>
             
             
@@ -505,8 +556,10 @@
             dataType: 'json',
             async: true,
             success: function (data) {
-           
-                activateSesor(room)
+                if(data == true) {
+                    activateSesor(room)
+                }
+                
                 if(returnFunction != false) {
                     returnFunction();
                     // alarm reported feature will get called in calling function
@@ -540,6 +593,7 @@
             data: { roomNumber: room },
             dataType: 'json',
             success: function (data) {
+              
                 deactivateSensor(room);
               
                 resolve();
@@ -601,9 +655,11 @@
     // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
     var cnt = 0;
 
-        function setBackActiveSensorsOnRefreshAJAX() {
+        async function setBackActiveSensorsOnRefreshAJAX() {
         // After the page has been reloaded we need to check if the sensors were previously loaded
-   
+            if(cnt == 0) {
+                await placeSensorsInRoomOnPageLoad(1)
+            }
             if(cnt == 41) {
                 cnt = 0;
                 alarmReportedProcedureAJAX();
@@ -1033,6 +1089,52 @@
             document.getElementById('containerForRoom').appendChild(area.overlay);
         }
     }
+
+    function drawWhiteOverSensor(room) {
+        
+        //This is used to deactivate a single sensor
+        var checkMarker = document.getElementById("sensor-Marker-white" + room);
+        // there needs to be no marker made for that sensor
+        if (checkMarker === null) {
+            var sensor = document.getElementById("sensor-" + room);
+            if (sensor !== null) {
+                //Get the sensor location
+                var sensorLocation = sensor.coords.split(",")
+                var x = sensorLocation[0];
+                var y = sensorLocation[1];
+                var radius = sensorLocation[2];
+
+                // create marker for the flashing icon
+                var marker = document.createElement("div");
+                marker.id = "sensor-Marker-white" + room;
+                marker.className = "whiteBackground";
+                // Set the top location of the marker
+                marker.style.top = (y - radius) + "px";
+                // Set the left position of the marker
+                marker.style.left = (x - radius) + "px";
+                // Set the marker width and height
+                marker.style.height = (radius * 2) + "px";
+                marker.style.width = marker.style.height;
+
+                // set up class properties
+                sensor.marker = sensor.marker || marker
+                if (!sensor.marker.parentNode) {
+                    // push the sensor to the room container
+                    document.getElementById("containerForRoom").appendChild(sensor.marker);
+                }
+            }
+        }
+    
+    }
+    function removeWhiteOverSensor(room) {
+        // Just delete the sensor marker if it exists
+        console.log("two")
+        var sensorMarker = document.getElementById("sensor-Marker-white" + room);
+        if (sensorMarker !== null) {
+            console.log("three")
+            sensorMarker.remove();
+        }
+    }
     function activateOrDeactivateAlarm(area) {
         // draws alarm state over alarms 
     }
@@ -1058,6 +1160,17 @@
 </script>
 
 <style>
+    .whiteBackground {
+        position:absolute;
+        height: 25px;
+        width: 25px;
+        opacity: 0.9;
+        border-radius: 60%;
+        background-color: white;
+   
+    }
+
+
     /*alarm css*/
         .alarm {
         position:absolute;

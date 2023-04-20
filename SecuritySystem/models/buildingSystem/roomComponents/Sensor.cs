@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -18,12 +19,30 @@ namespace buildingSystem.roomComponents{
 
         public int sensorID = 0;
 
+
+        public bool isInRoom = false;
+
+
+        public bool addSensorToRoom() {
+            this.isInRoom = true;
+            Debug.WriteLine(this.isInRoom);
+            return this.isInRoom;
+        }
+
+        public bool RemoveSensorFromRoom()
+        {
+            this.isInRoom = false;
+            return this.isInRoom;
+        }
+
         /// <summary>
         /// @return
         /// </summary>
         public bool activateSensor() {
             // TODO implement here
-            this.isActive = true;
+                this.isActive = true;
+            
+           
             return this.isActive;
         }
 
