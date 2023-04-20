@@ -70,11 +70,13 @@ namespace buildingSystem{
         public bool roomState = false;
         public bool addPersonToRoom() {
             this.peoplePresent = true;
+            Debug.WriteLine(this.peoplePresent);
             return this.peoplePresent;
         }
         public bool removePersonToRoom()
         {
             this.peoplePresent = false;
+            Debug.WriteLine("remove" + this.peoplePresent);
             return this.peoplePresent;
         }
 

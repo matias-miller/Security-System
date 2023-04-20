@@ -184,6 +184,7 @@ namespace buildingSystem{
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array
+                    Debug.WriteLine(this.roomList[i].peoplePresent);
                     if (!this.roomList[i].peoplePresent) {
                         Array.Resize(ref doors, doors.Length + 1);
                         doors[doors.Length - 1] = i + 1;
