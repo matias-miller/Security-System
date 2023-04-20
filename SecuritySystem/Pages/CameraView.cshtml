@@ -62,8 +62,7 @@
 </script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
-    <p>This is a test to check if control center varables stay alive, being user password::</p>
-    <p id="test1"></p>
+    <p>Floor 1</p>
         <div>
             <div class="SenarioContainer" onclick="displaySenarios()">
                 <h1>Click to Display Senarios(Only On test version)</h1>
@@ -604,6 +603,9 @@
     }
     document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
+
+
+
     function alarmReportedProcedureAJAX(){
         // On UI first
         // Should be called after sensors have been activated
@@ -697,8 +699,10 @@
                         }
                     }
                 }
-                if(data[5].length > 0) {
+                if(data[5][0].length > 0) {
                     // show people to call
+                    //alert("The following have been called" + data[5][0])
+                    
                 }
             },
             error: function (errorThrown) {
@@ -730,26 +734,7 @@
     function addOrRemoveDirectionIndicatorAJAX() {
         //
     }
-    function AttemptGetPasswordAJAX() {
-        // This is the function that should happen on page submit
-        $.ajax({
-            url: '/CameraViewControler/OnAttemptGetPassword',
-            dataType: 'json',
 
-            success: function (data) {
-                // if data is true return change page to index else remain on current page
-                document.getElementById("test1").innerHTML = data;
-                if (data == true) {
-                } else {
-
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
-        });
-    }
-   document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
 
 
     ///////////////////////////////
