@@ -62,8 +62,7 @@
 </script>
 <div class="text-center">
     <h1 class="display-4">CameraView</h1>
-    <p>This is a test to check if control center varables stay alive, being user password::</p>
-    <p id="test1"></p>
+    <p>Floor 1</p>
         <div>
             <div class="SenarioContainer" onclick="displaySenarios()">
                 <h1>Click to Display Senarios(Only On test version)</h1>
@@ -74,7 +73,12 @@
                     <h3>Sensor Related tests</h3>
                     <div>
                         <input type="number" id="ActivateSensor" min="1" max="41"></input>
-                        <button onclick="ActivateSensorAjax()">Activate Sensor in Room #</button>
+                        <button onclick="ActivateSensorAjax()">Activate fire Sensor in Room #</button>
+                    </div>
+
+                     <div>
+                        <input type="number" id="ActivateGasSensor" min="1" max="41"></input>
+                        <button onclick="alert('todo')">Activate gas Sensor in Room #</button>
                     </div>
 
               @*      <div>
@@ -83,7 +87,11 @@
                     </div>*@
                     <div>
                     
-                        <button onclick="ActivateRandomSensors()">Activate Random Sensors</button>
+                        <button onclick="ActivateRandomSensors()">Activate Random Fire Sensors</button>
+                    </div>
+                     <div>
+                    
+                        <button onclick="ActivateRandomGasSensors()">Activate Random Gas Sensors</button>
                     </div>
                     <div>
                         <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
@@ -547,7 +555,7 @@
         
         var room = document.getElementById("RemovePersonToRoom").value;
             $.ajax({
-            url: '/CameraViewControler/OnAttemptAddPersonToRoom',
+            url: '/CameraViewControler/OnAttemptRemovePersonToRoom',
             // Room array index starts at 0 so we subract 1
             data: { roomNumber: room - 1 },
             dataType: 'json',
@@ -603,6 +611,9 @@
  
     }
     document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
+
+
+
 
     function alarmReportedProcedureAJAX(){
         // On UI first
@@ -697,8 +708,10 @@
                         }
                     }
                 }
-                if(data[5].length > 0) {
+                if(data[5][0].length > 0) {
                     // show people to call
+                    //alert("The following have been called" + data[5][0])
+                    
                 }
             },
             error: function (errorThrown) {
@@ -730,26 +743,7 @@
     function addOrRemoveDirectionIndicatorAJAX() {
         //
     }
-    function AttemptGetPasswordAJAX() {
-        // This is the function that should happen on page submit
-        $.ajax({
-            url: '/CameraViewControler/OnAttemptGetPassword',
-            dataType: 'json',
 
-            success: function (data) {
-                // if data is true return change page to index else remain on current page
-                document.getElementById("test1").innerHTML = data;
-                if (data == true) {
-                } else {
-
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
-        });
-    }
-   document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
 
 
     ///////////////////////////////

@@ -204,7 +204,7 @@ public class CameraViewControler : Controller
     {
         // Success needs to be true or false
         getBuildingState();
-        var success = _buldingControl.attemptToAddPersonToRoom(roomNumber);
+        var success = _buldingControl.attemptToRemovePersonToRoom(roomNumber);
         updateBuildingState();
         return Json(success);
     }
