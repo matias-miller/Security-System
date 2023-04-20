@@ -234,14 +234,15 @@
             });
         });
     }
-
+    
     function AttemptGetSupervisor() {
         $(document).ready(function () {
             $.ajax({
-                url: "/Index/AttemptGetSupervisor",
+                url: "/Index/OnAttemptGetSupervisor",
                 dataType: "json",
                 success: function (data) {
                     // process the response
+                    
                     console.log(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -250,7 +251,7 @@
             });
         });
     }
-
+    document.addEventListener("DOMContentLoaded", AttemptGetSupervisor);
     function AttemptGetOnCall() {
         $(document).ready(function () {
             $.ajax({
