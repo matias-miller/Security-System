@@ -52,6 +52,15 @@ namespace buildingSystem{
             return getRoomsWithSensors() ;
         }
 
+        public object RequestToRemoveSensorFromRoom(int room)
+        {
+
+            building.roomList[room].sensor.RemoveSensorFromRoom();
+
+            return getRoomsWithSensors();
+        }
+
+
 
         public object getRoomsWithSensors() {
             List<int> roomsWithSensors = new List<int>();

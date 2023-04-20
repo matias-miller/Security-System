@@ -87,14 +87,49 @@
           
     }
 
+    function removeSensors(single,room2=0) {
+            if(single == true) { 
+             var room = document.getElementById("removeSensorInRoom").value;
+        }
+        else {
+            room = room2;
+        }
+        //console.log("tsdf")
+           
+            $.ajax({
+            url: '/CameraViewControler/OnAttemptRemoveSensorFromRoom',
+                // Room array index starts at 0 so we subract 1
+                data: { roomNumber: room - 1 },
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    //console.log(data)
+                     if(single!=false) {
+                        placeSensorsInRoomOnPageLoad(1);
+                     }
+                     
+                },
+                error: function (errorThrown) {
+                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+                }
+            });
+    }
+
     async function addAllSensors(){
         for(i = 1; i <=41; i++) {
              await addSensors(false, i);  
-             console.log(i)
+             //console.log(i)
         }
         placeSensorsInRoomOnPageLoad(1);
     }
 
+   async function removeAllSensors() {
+         for(i = 1; i <=41; i++) {
+             await removeSensors(false, i);  
+             //console.log(i)
+        }
+        placeSensorsInRoomOnPageLoad(1);
+    }
     
     function placeSensorsInRoomOnPageLoad(type){
         console.log("out");
@@ -105,7 +140,7 @@
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    console.log(data)
+                    //console.log(data)
                     for(i = 1; i <=41; i++) {
                         if(i != 2 && i != 38) {
                             if(!data.includes(i)) {
@@ -144,14 +179,14 @@
 
             <div>
                 <input type="number" id="removeSensorInRoom" min="1" max="41"></input>
-                <button onclick="addRemoveSensors(2)">Remove sensor in Room #</button>
+                <button onclick="removeSensors(true)">Remove sensor in Room #</button>
             </div>
 
             <div>
             <button onclick="addAllSensors(3)">Add all Sensors</button>
             </div>
              <div>
-                <button onclick="addRemoveSensors(4)">Remove all Sensors</button>
+                <button onclick="removeAllSensors(4)">Remove all Sensors</button>
             </div>
             
             

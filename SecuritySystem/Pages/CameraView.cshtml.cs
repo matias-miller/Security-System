@@ -219,6 +219,17 @@ public class CameraViewControler : Controller
         return Json(success);
     }
 
+    [HttpGet("OnAttemptRemoveSensorFromRoom")]
+    public IActionResult OnAttemptRemoveSensorFromRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.RequestToRemoveSensorFromRoom(roomNumber);
+        updateBuildingState();
+        return Json(success);
+    }
+
+
     [HttpGet("onPlaceSensorsInRoomOnPageLoad")]
     public IActionResult onPlaceSensorsInRoomOnPageLoad([FromQuery] int roomNumber)
     {
