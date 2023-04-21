@@ -113,7 +113,6 @@ namespace buildingSystem{
             for (int i = 0; i <= 40; i++)
             {
                 var room = i + 1;
-                Debug.WriteLine("Room: " + room + this.roomList[i].sensor.sendState());
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array
@@ -128,7 +127,6 @@ namespace buildingSystem{
                     this.roomList[i].sprinkler.turnOffSprinkler();
                 }
             }
-            Debug.WriteLine("--------------");
             return sprinklers;
         }
         public object activateAlarmsAutomated()
@@ -209,7 +207,7 @@ namespace buildingSystem{
             return doors;
 
         }
-        public object makeCallsAutomated()
+        public object makeCallsAutomated(bool Gas)
         {
             // need to set up sensor type 
             string[] calls = { };
@@ -218,27 +216,27 @@ namespace buildingSystem{
             {
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
-                    if (this.roomList[i].sensor.isSmokeSensor == true)
+                    if (Gas == false)
                     {
                         // only push once
-                        if (Array.IndexOf(calls, "FireDepartment") == -1)
+                        if (Array.IndexOf(calls, "Fire Department") == -1)
                         {
                             Array.Resize(ref calls, calls.Length + 1);
-                            calls[calls.Length - 1] = "OnCall";
+                            calls[calls.Length - 1] = "On Call Operator";
                             Array.Resize(ref calls, calls.Length + 1);
                             calls[calls.Length - 1] = "Police";
                             Array.Resize(ref calls, calls.Length + 1);
-                            calls[calls.Length - 1] = "FireDepartment";
+                            calls[calls.Length - 1] = "Fire Department";
                         }
 
                     }
-                    else if(this.roomList[i].sensor.isGasSensor == true) {
+                    else if(Gas == true) {
                         // only push once
-                        if (Array.IndexOf(calls, "GasDepartment") == -1) {
+                        if (Array.IndexOf(calls, "Gas Department") == -1) {
                             Array.Resize(ref calls, calls.Length + 1);
-                            calls[calls.Length - 1] = "OnCall";
+                            calls[calls.Length - 1] = "On Call Operator";
                             Array.Resize(ref calls, calls.Length + 1);
-                            calls[calls.Length - 1] = "GasDepartment";
+                            calls[calls.Length - 1] = "Gas Department";
                             Array.Resize(ref calls, calls.Length + 1);
                             calls[calls.Length - 1] = "Police";
                         }

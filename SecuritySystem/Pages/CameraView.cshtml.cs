@@ -209,10 +209,41 @@ public class CameraViewControler : Controller
         return Json(success);
     }
 
+    [HttpGet("OnAttemptAddSensorToRoom")]
+    public IActionResult OnAttemptAddSensorToRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.RequestToAddSensorToRoom(roomNumber);
+        updateBuildingState();
+        return Json(success);
+    }
+
+    [HttpGet("OnAttemptRemoveSensorFromRoom")]
+    public IActionResult OnAttemptRemoveSensorFromRoom([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.RequestToRemoveSensorFromRoom(roomNumber);
+        updateBuildingState();
+        return Json(success);
+    }
+
+
+    [HttpGet("onPlaceSensorsInRoomOnPageLoad")]
+    public IActionResult onPlaceSensorsInRoomOnPageLoad([FromQuery] int roomNumber)
+    {
+        // Success needs to be true or false
+        getBuildingState();
+        var success = _buldingControl.getRoomsWithSensors();
+        updateBuildingState();
+        return Json(success);
+    }
+
 
 
     [HttpGet("OnAlarmReportedProcedureAJAX")]
-    public IActionResult OnAlarmReportedProcedureAJAX()
+    public IActionResult OnAlarmReportedProcedureAJAX([FromQuery] bool Gas)
     {
         getBuildingState();
         /* Returned from this should be in this form 
@@ -263,9 +294,18 @@ public class CameraViewControler : Controller
             // "confirmed": true,
             AlarmReportedProcedure[0] = new object[] { confirmed };
 
-            var sprinklers = _buldingControl.requestToActivateSprinklersAutomated();
-            // "sprinklers": [6,20,22],
-            AlarmReportedProcedure[1] = new object[] { sprinklers };
+            if (Gas == true)
+            {
+                // dont push anything if its a gas alarm
+                AlarmReportedProcedure[1] = new object[] {  };
+            }
+            else {
+
+                var sprinklers = _buldingControl.requestToActivateSprinklersAutomated();
+                // "sprinklers": [6,20,22],
+                AlarmReportedProcedure[1] = new object[] { sprinklers };
+            }
+  
 
             var alarms = _buldingControl.requestToActivateAlarmsAutomated();
             //"alarm": [6,20,22],
@@ -279,7 +319,7 @@ public class CameraViewControler : Controller
             // "doors": [6,22],
             AlarmReportedProcedure[4] = new object[] { doors };
 
-            var peopleCalled = _buldingControl.requestToMakeCallsAutomated();
+            var peopleCalled = _buldingControl.requestToMakeCallsAutomated(Gas);
             // "peopleCalled":["FireDepartment","OnCall"]
             AlarmReportedProcedure[5] = new object[] { peopleCalled };
 

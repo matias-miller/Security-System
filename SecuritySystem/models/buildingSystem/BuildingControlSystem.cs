@@ -44,14 +44,60 @@ namespace buildingSystem{
             // TODO implement here
             return false;
         }
-        
-  
+
+        public object RequestToAddSensorToRoom(int room) {
+            
+             building.roomList[room].sensor.addSensorToRoom();
+            
+            return getRoomsWithSensors() ;
+        }
+
+        public object RequestToRemoveSensorFromRoom(int room)
+        {
+
+            building.roomList[room].sensor.RemoveSensorFromRoom();
+
+            return getRoomsWithSensors();
+        }
+
+
+
+        public object getRoomsWithSensors() {
+            List<int> roomsWithSensors = new List<int>();
+            // get all sensors that are active
+            for (int i = 0; i <= 40; i++)
+            {
+                
+                if (building.roomList[i].sensor.isInRoom)
+                {
+                    Debug.WriteLine(i);
+                    if (i != 1 || i != 38) {
+                       
+                        roomsWithSensors.Add(i + 1);
+                    }
+                 
+                }
+
+            }
+
+            return roomsWithSensors;
+
+        }
 
         public bool setSpecificRoomState(int room,bool value) {
             // just a test function
-            building.requestToModifyRoomState("requestTurnOnOffSensor", room, value);
-            return true;
+            Debug.WriteLine("is in " + building.roomList[room].sensor.isInRoom);
+            if (building.roomList[room].sensor.isInRoom)
+            {
+                building.requestToModifyRoomState("requestTurnOnOffSensor", room, value);
+                return true;
+            }
+            else {
+                return false;
+            }
+    
         }
+     
 
         public bool getSpecificRoomState(int room)
         {
@@ -113,8 +159,11 @@ namespace buildingSystem{
         /// @return
         /// </summary>
         public bool requestToModifyBuildingState(string requestType, int roomNumber, bool action) {
-            var data = building.requestToModifyRoomState(requestType, roomNumber, action);
-            return data;
+     
+                var data = building.requestToModifyRoomState(requestType, roomNumber, action);
+                return data;
+        
+
         }
 
         public int getNumberOfActiveSensors() {
@@ -145,9 +194,9 @@ namespace buildingSystem{
             return doors;
 
         }
-        public object requestToMakeCallsAutomated()
+        public object requestToMakeCallsAutomated(bool Gas)
         {
-            var calls = building.makeCallsAutomated();
+            var calls = building.makeCallsAutomated(Gas);
             return calls;
 
         }

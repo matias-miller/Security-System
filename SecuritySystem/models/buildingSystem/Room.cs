@@ -143,6 +143,7 @@ namespace buildingSystem{
             var data = false;
             if (action == true)
             {
+            
                 data = this.sensor.activateSensor();
                 this.isElectricityActive = false;
             }
