@@ -57,6 +57,7 @@
         text-align: center;
     }
 
+
     .zone {
         margin-top: 4.5em;
     }
@@ -104,8 +105,8 @@
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Other Information</h3>
                     <br>
-                    <p>On-duty Supervisor:</p>
-                    <p>On-call Operator:</p>
+                    <p id="supervisor">On-duty Supervisor: </p>
+                    <p id="onCallOp">On-call Operator: </p>
                 </div>
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Building Control System</h3>
@@ -144,7 +145,7 @@
 
 
     function soundAlarmClick() {
-        alert("Evaccuate the site");
+        alert("Evacuate the site");
     }
 
     function policeClick() {
@@ -156,7 +157,7 @@
     }
 
     function roomClick(roomNumber) {
-        // Your logic to handle the click event for each room
+
         console.log("Room clicked:", roomNumber);
 
         // Update the modal content with the room number
@@ -234,16 +235,16 @@
             });
         });
     }
-    
+
     function AttemptGetSupervisor() {
         $(document).ready(function () {
             $.ajax({
                 url: "/Index/OnAttemptGetSupervisor",
                 dataType: "json",
                 success: function (data) {
-                    // process the response
-                    
-                    console.log(data);
+                    console.log(data)
+                    // Update the supervisor <p> element with the response data
+                    $("#supervisor").append(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
@@ -252,14 +253,16 @@
         });
     }
     document.addEventListener("DOMContentLoaded", AttemptGetSupervisor);
+
     function AttemptGetOnCall() {
         $(document).ready(function () {
             $.ajax({
-                url: "/Index/AttemptGetOnCall",
+                url: "/Index/OnAttemptGetOnCall",
                 dataType: "json",
                 success: function (data) {
-                    // process the response
-                    console.log(data);
+                    console.log(data)
+                    // Update the on-call operator <p> element with the response data
+                    $("#onCallOp").append(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
@@ -267,6 +270,69 @@
             });
         });
     }
+    document.addEventListener("DOMContentLoaded", AttemptGetOnCall);
+
+    function iterateOverDataOnLoad(data) {
+        const parsedData = $.parseJSON(data);
+        $.each(parsedData.building.roomList, function (index, room) {
+            console.log(`Room ${room.roomName} in zone ${room.zone}`);
+            let sensorActive = false;
+            let alarmActive = false;
+            $.each(room, function (key, value) {
+                if (key === "alarm" && (value.isSmokeAlarm || value.isGasAlarm)) { // check if the key is "alarm" and value is a gas/smoke alarm
+                    //console.log(`${key}.isSmokeAlarm: ${value.isSmokeAlarm}`);
+                    //console.log(`${key}.isGasAlarm: ${value.isGasAlarm}`);
+                    //console.log(`${key}.alarmID: ${value.alarmID}`);
+                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    if ((value.isActive === true) || (value.isActive === true)) {
+                        alarmActive = true;
+                    }
+                }
+                if (key === "sensor" && (value.isSmokeSensor || value.isGasSensor)) { // check if the key is "sensor" and value is a gas/smoke sensor
+                    //console.log(`${key}.isSmokeSensor: ${value.isSmokeSensor}`);
+                    //console.log(`${key}.isGasSensor: ${value.isGasSensor}`);
+                    //console.log(`${key}.sensorID: ${value.sensorID}`);
+                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    if ((value.isActive === true) || (value.isActive === true)) {
+                        sensorActive = true;
+                    }
+                }
+                if (typeof value === "object") {
+                    $.each(value, function (k, v) {
+                        //console.log(`${key}.${k}: ${v}`);
+                    });
+                } else {
+                    //console.log(`${key}: ${value}`);
+                }
+            });
+
+            if (alarmActive || sensorActive) {
+                // Change the color of the room button to red
+                $(`a:contains("Room ${room.roomName}")`).css("background-color", "red");
+            } else {
+                // Change the color of the room button to green
+                $(`a:contains("Room ${room.roomName}")`).css("background-color", "green");
+            }
+
+        });
+    }
+
+
+    function AttemptGetBuildingJson() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/OnAttemptGetBuildingJson",
+                dataType: "json",
+                success: function (data) {
+                    iterateOverDataOnLoad(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + " - " + errorThrown);
+                }
+            });
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetBuildingJson);
 
     function AttemptGetPasswordAJAX() {
         // This is the function that should happen on page submit

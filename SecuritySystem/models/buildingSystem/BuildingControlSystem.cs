@@ -84,6 +84,7 @@ namespace buildingSystem{
 
         }
 
+
         public bool setSpecificRoomState(int room,bool value) {
             // just a test function
             Debug.WriteLine("is in " + building.roomList[room].sensor.isInRoom);
@@ -99,11 +100,10 @@ namespace buildingSystem{
         }
      
 
-        public bool getSpecificRoomState(int room)
+        public bool getSpecificRoomState(int roomNumber)
         {
             //function used to get the specific state of a room
-            Debug.WriteLine("Room2: " + room);
-            return building.requestSpecificSensorState(room);
+            return building.requestSpecificSensorState(roomNumber);
         }
 
         public bool getSpecificSensorState(int room)
