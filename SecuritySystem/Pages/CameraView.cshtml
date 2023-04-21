@@ -486,42 +486,43 @@
         <h3>Not this is usually handeled automatically</h3>
 
         <div>
-        <button onclick="alert('todo')">Remove Sensor</button>
-        <button onclick="alert('todo')">Add Sensor</button>
+        <button onclick="drawWhiteOverSensor('tutorial')">Remove Sensor</button>
+        <button onclick="removeWhiteOverSensor('tutorial')">Add Sensor</button>
         </div>
 
         <div>
-        <button onclick="alert('todo')">Activate Sensor</button>
-        <button onclick="alert('todo')">Deactivate Sensor</button>
+        <button onclick="activateSesor('tutorial')">Activate Sensor</button>
+        <button onclick="deactivateSensor('tutorial')">Deactivate Sensor</button>
         </div>
 
         <div>
-        <button onclick="alert('todo')">Activate Alarm</button>
-        <button onclick="alert('todo')">Deactivate Alarm</button>
+        <button onclick="activateAlarm('tutorial')">Activate Alarm</button>
+        <button onclick="deactivateAlarms('tutorial')">Deactivate Alarm</button>
         </div>
 
         <div>
-        <button onclick="alert('todo')">Activate Sprinkler</button>
-        <button onclick="alert('todo')">Deactivate Sprinkler</button>
+        <button onclick="activateSprinkler('tutorial')">Activate Sprinkler</button>
+        <button onclick="deactivateSprinkler('tutorial')">Deactivate Sprinkler</button>
         </div>
 
         <div>
-            <button onclick="alert('todo')">Activate Direction Indicator</button>
-            <button onclick="alert('todo')">Deactivate Direction Indicator</button>
+            <button onclick="activateDirection('tutorial')">Activate Direction Indicator</button>
+        <button onclick="deactivateDirection('tutorial')">Deactivate Direction Indicator</button>
         </div>
 
         <div>
-            <button onclick="alert('todo')">Open Doors</button>
-            <button onclick="alert('todo')">Close Doors</button>
+            <button onclick="activateDoors('tutorial',1,'left')">Open Doors</button>
+            <button onclick="deactivateDoors('tutorial')">Close Doors</button>
         </div>
-
-        <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
+        <div id="containerForRoom2" class="containerForRoom" style="display:inline-block">
+            <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
+        </div>
         <map name="image_map">
-            <area  coords="194,119,31" shape="circle">
-            <area  coords="140,211,243,252" shape="rect">
-            <area  coords="45,68,110,145" shape="rect">
-            <area  coords="37,188,125,266" shape="rect">
-            <area  coords="116,-1,228,16" shape="rect">
+        <area id="sensor-tutorial" coords="194,119,31" shape="circle">
+            <area id="direction-tutorial" coords="140,211,243,252" shape="rect">
+            <area id="alarm-tutorial" coords="45,68,110,145" shape="rect">
+            <area id="sprinkler-tutorial" coords="37,188,125,266" shape="rect">
+            <area id="door-tutorial-1" data-functionParameters="'tutorial',1,'left'"  coords="116,-1,228,16" shape="rect">
         </map>
     </div>
 <script>
@@ -901,7 +902,13 @@
                     // create marker for the flashing icon
                     var marker = document.createElement("div");
                      marker.id = "sensor-Marker" + room;
+                     
+                     if(room != "tutorial") {
                         marker.className = "sensor active";
+                     } else {
+                        marker.className = "sensorLarge active";
+                     }
+                        
                     // Set the top location of the marker
                     marker.style.top = (y-radius) + "px";
                     // Set the left position of the marker
@@ -916,7 +923,11 @@
        
                     if(!sensor.marker.parentNode) {
                         // push the sensor to the room container
-                        document.getElementById("containerForRoom").appendChild(sensor.marker);
+                        var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+                        document.getElementById("containerForRoom"+addition).appendChild(sensor.marker);
                     } 
                 }
         }
@@ -952,7 +963,11 @@
                 sensor.marker =  marker
                 if (!sensor.marker.parentNode) {
                     // push the sensor to the room container
-                    document.getElementById("containerForRoom").appendChild(sensor.marker);
+                          var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+                    document.getElementById("containerForRoom" + addition).appendChild(sensor.marker);
                 }
             }
         }
@@ -976,7 +991,12 @@
                     // create marker for the flashing icon
                     var marker = document.createElement("div");
                      marker.id = "alarm-Marker" + room;
-                    marker.className = "alarm active";
+                     if(room != "tutorial") {
+                        marker.className = "alarm active";
+                     } else {
+                        marker.className = "alarmLarge active";
+                     }
+                    
                     // Set the top location of the marker
                     marker.style.top = (y) + "px";
                     // Set the left position of the marker
@@ -989,7 +1009,11 @@
                     alarm.marker = alarm.marker || marker
                     if(!alarm.marker.parentNode) {
                         // push the sensor to the room container
-                        document.getElementById("containerForRoom").appendChild(alarm.marker);
+                               var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+                        document.getElementById("containerForRoom" + addition).appendChild(alarm.marker);
                     } 
                 }
         }
@@ -1014,7 +1038,12 @@
                     // create marker for the flashing icon
                     var marker = document.createElement("div");
                      marker.id = "sprinkler-Marker" + room;
-                    marker.className = "sprinkler active";
+                     if(room != "tutorial") {
+                        marker.className = "sprinkler active";
+                     } else {
+                            marker.className = "sprinklerLarge active";
+                     }
+                    
                     // Set the top location of the marker
                     marker.style.top = (y) + "px";
                     // Set the left position of the marker
@@ -1027,7 +1056,11 @@
                     sprinkler.marker = sprinkler.marker || marker
                     if(!sprinkler.marker.parentNode) {
                         // push the sensor to the room container
-                    document.getElementById("containerForRoom").appendChild(sprinkler.marker);
+                              var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+                    document.getElementById("containerForRoom" + addition).appendChild(sprinkler.marker);
                     } 
                 }
         }
@@ -1051,7 +1084,12 @@
                     // create marker for the flashing icon
                     var marker = document.createElement("div");
                      marker.id = "direction-Marker" + room;
-                    marker.className = "direction active";
+                     if(room != "tutorial") {
+                        marker.className = "direction active";
+                     } else {
+                        marker.className = "directionLarge active";
+                     }
+                    
                     // Set the top location of the marker
                     marker.style.top = (y) + "px";
                     // Set the left position of the marker
@@ -1064,7 +1102,12 @@
                     direction.marker = direction.marker || marker
                     if(!direction.marker.parentNode) {
                         // push the sensor to the room container
-                    document.getElementById("containerForRoom").appendChild(direction.marker);
+                              var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+
+                    document.getElementById("containerForRoom" + addition).appendChild(direction.marker);
                     } 
                 }
         }
@@ -1076,10 +1119,12 @@
             iterations = 2
             }
             for(j = 1; j <= iterations ;j++) {
+               
                         var checkMarker = document.getElementById("door-Marker" + room+"-"+j);
                      
                     if(checkMarker === null) {
                     var door = document.getElementById("door-"+room+"-"+j);
+                     
                     if(door !== null) {
                         //Get the alarm location
                 
@@ -1097,6 +1142,12 @@
                        
                         if(leftOrUp == "'left'") {
                             marker.className = "doorLeft active";
+                            
+                            if(room== "tutorial") {
+                                
+                                 marker.className = "doorLeftLarge active";
+                            }
+                            
                         } else {
                             marker.className = "doorUp active";
                         }
@@ -1112,7 +1163,12 @@
                         door.marker = door.marker || marker
                         if(!door.marker.parentNode) {
                             // push the sensor to the room container
-                        document.getElementById("containerForRoom").appendChild(door.marker);
+                                  var addition = ""
+                        if(room == "tutorial"){
+                            addition = "2"
+                        }
+                    
+                        document.getElementById("containerForRoom" + addition).appendChild(door.marker);
                         } 
                     }
             }
@@ -1233,7 +1289,7 @@
 
 
     /*alarm css*/
-        .alarm {
+    .alarm {
         position:absolute;
         height: 40px;
         width: 25px;
@@ -1496,6 +1552,260 @@
                 background-color: red;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*alarmLarge css*/
+    .alarmLarge {
+        position:absolute;
+        height: 70px;
+        width: 55px;
+        opacity: 0;
+
+        background-color: red;
+        animation-name: alarmLargeKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .alarmLarge.active {
+        opacity: 0.5;
+    }
+    @@keyframes alarmLargeKeyFrame {
+        0% {
+                height: 70px;
+                width: 55px;
+                background-color: red;
+        }
+        25% {
+                height: 30px;
+                width: 55px;
+                background-color: blue;
+        }
+        50% {
+                height: 0px;
+                width: 55px;
+                background-color: red;
+        }
+        75% {
+                height: 30px;
+                width: 55px;
+                background-color: green;
+        }
+        100% {
+                height: 70px;
+                width: 55px;
+                background-color: red;
+        }
+    }
+    /*sprinkler css */
+     .sprinklerLarge {
+        position:absolute;
+        height: 80px;
+        width: 50px;
+        opacity: 0;
+
+        background-color: red;
+        animation-name: sprinklerLargeKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .sprinklerLarge.active {
+        opacity: 0.5;
+    }
+    @@keyframes sprinklerLargeKeyFrame {
+        0% {
+                height: 80px;
+                width: 100px;
+                background-color: red;
+        }
+        25% {
+                height: 40px;
+                width: 100px;
+                background-color: blue;
+        }
+        50% {
+                height: 0px;
+                width: 100px;
+                background-color: red;
+        }
+        75% {
+                height: 40px;
+                width: 100px;
+                background-color: green;
+        }
+        100% {
+                height: 80px;
+            width: 100px;
+                background-color: red;
+        }
+    }
+
+
+        /*directionLarge css */
+     .directionLarge {
+        position:absolute;
+        height: 50px;
+        width: 100px;
+        opacity: 0;
+
+        background-color: red;
+        animation-name: directionLargeKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .directionLarge.active {
+        opacity: 0.5;
+    }
+    @@keyframes directionLargeKeyFrame {
+        0% {
+                height: 50px;
+                width: 100px;
+                background-color: red;
+        }
+        25% {
+                height: 50px;
+                width: 50px;
+                background-color: blue;
+        }
+        50% {
+                height: 50px;
+                width: 0px;
+                background-color: red;
+        }
+        75% {
+                height: 50px;
+                width: 50px;
+                background-color: green;
+        }
+        100% {
+                height: 50px;
+                width: 100px;
+                background-color: red;
+        }
+    }
+
+
+           /*direction css */
+     .doorLeftLarge {
+        position:absolute;
+        height: 40px;
+        width: 100px;
+        opacity: 0;
+
+        background-color: red;
+        animation-name: doorLeftLargeKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .doorLeftLarge.active {
+        opacity: 0.5;
+    }
+    @@keyframes doorLeftLargeKeyFrame {
+        0% {
+                height: 40px;
+                width: 100px;
+                background-color: red;
+        }
+        25% {
+                height: 40px;
+                width: 50px;
+                background-color: blue;
+        }
+        50% {
+                height: 40px;
+                width: 0px;
+                background-color: red;
+        }
+        75% {
+                height: 40px;
+                width: 50px;
+                background-color: green;
+        }
+        100% {
+                height: 40px;
+                width: 100px;
+                background-color: red;
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /*sensor css*/
+    .sensorLarge {
+        position:absolute;
+        height: 55px;
+        width: 55px;
+        opacity: 0;
+        border-radius: 60%;
+        background-color: red;
+        animation-name: sensorLargeKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+    }
+    .sensorLarge.active {
+        opacity: 0.5;
+    }
+    @@keyframes sensorLargeKeyFrame {
+        0% {
+                height: 55px;
+                width: 55px;
+                background-color: red;
+        }
+        25% {
+                height: 20px;
+                width: 20px;
+                background-color: blue;
+        }
+        50% {
+                height: 0px;
+                width: 1px;
+                background-color: red;
+        }
+        75% {
+                height: 20px;
+                width: 20px;
+                background-color: green;
+        }
+        100% {
+                height: 55px;
+                width: 55px;
+                background-color: red;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         .containerForRoom {
             position: relative;
