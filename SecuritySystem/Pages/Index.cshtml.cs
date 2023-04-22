@@ -115,27 +115,26 @@ public class Index : Controller
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
 
-    [HttpGet("OnGetSpecificRoomState2")]
-    public IActionResult OnGetSpecificRoomState2() {
+    [HttpGet("OnAttemptGetRoomStateOnClick")] // probably need later - still trying to get it working
+    public IActionResult OnAttemptGetRoomStateOnClick()
+    {
+        // returns building data on click
+        getBuildingState();
+        return Json(HttpContext.Session.GetString("BuildingControl"));
+    }
+
+    [HttpGet("OnGetSpecificRoomState")]
+    public IActionResult OnGetSpecificRoomState() {
         // This is just a example function to show how to use a specific method from the building control
         //updateBuildingState();
         return Json(_buldingControl.getSpecificRoomState(3));
     }
 
-    [HttpGet("OnAttemptGetBuildingState")]
-    public IActionResult AttemptGetBuildingState()
+    [HttpGet("OnAttemptGetBuildingJson")]
+    public IActionResult OnAttemptGetBuildingJson()
     {
-        updateBuildingState();
         getBuildingState();
-        return Json(_buldingControl);
-    }
-
-    [HttpGet("OnAttemptGetRoomState")]
-    public IActionResult OnAttemptGetRoomState()
-    {
-        // Success needs to be true or false
-        var success = _controlCenter.getOnDutySupervisor();
-        return Json(success);
+        return Json(HttpContext.Session.GetString("BuildingControl"));
     }
 
     [HttpGet("OnAttemptGetSupervisor")]
