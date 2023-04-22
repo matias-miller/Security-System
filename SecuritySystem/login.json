@@ -4,8 +4,8 @@
     "firstName": "Matias",
     "lastName": "Miller",
     "address": "123 Main St",
-    "userName": "test",
-    "password": "test",
+    "userName": "matiasmiller@gmail.com",
+    "password": "password",
     "isOnCall": false,
     "isSupervisor": true,
     "employeeID": 1
@@ -15,8 +15,8 @@
     "firstName": "Jane",
     "lastName": "Doe",
     "address": "456 Oak Ave",
-    "userName": "jane",
-    "password": "secret123",
+    "userName": "a@a.com",
+    "password": "pass",
     "isOnCall": true,
     "isSupervisor": true,
     "employeeID": 2
