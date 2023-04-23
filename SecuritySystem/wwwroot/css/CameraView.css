@@ -1,0 +1,542 @@
+/* This is the css file for Camera view */
+/* It looks large but it is basically 5 unique classes and the rest of the classes are basically the same but have different heights and widths*/
+
+/* Holder for the Senarios*/
+.SenarioContainer {
+        border-radius: 10px;
+        border: 4px solid green;
+}
+/* This changes the color of the Senarios when it is hovered over */
+.SenarioContainer :hover{
+        background-color: lightblue;
+}
+/* holds the hidden tests */
+.senarioBlock {
+        border: 1px solid green;
+        border-radius: 10px;
+}
+/* Container for the ledgend with a nice rounded border*/
+.Ledgend {
+        margin: 200px;
+        border-radius: 10px;
+        border: 4px solid green;
+        text-align: center;
+}
+/* Container for room is where the sensors, sprinklers ext end up living */
+.containerForRoom {
+        position: relative;
+}
+
+/* This white background is used to hide the sensor on remove sensor and or when it just isnt there to begin with */
+.whiteBackground {
+        position:absolute;
+        height: 25px;
+        width: 25px;
+        opacity: 0.9;
+        border-radius: 60%;
+        background-color: white;
+}
+
+/*alarm css*/
+/* This places a square red box over the Alarm when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.alarm {
+        position:absolute;
+        height: 40px;
+        width: 25px;
+        opacity: 0;
+        background-color: red;
+        animation-name: alarmKeyFrame;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+}
+/* This will make the alarm show */
+.alarm.active {
+        opacity: 0.5;
+}
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes alarmKeyFrame {
+    0% {
+            height: 40px;
+            width: 25px;
+            background-color: red;
+    }
+    25% {
+            height: 20px;
+            width: 25px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 25px;
+            background-color: red;
+    }
+    75% {
+            height: 20px;
+            width: 25px;
+            background-color: green;
+    }
+    100% {
+            height: 40px;
+            width: 25px;
+            background-color: red;
+    }
+}
+
+/*sprinkler css */
+/* This places a square red box over the sprinkler when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+ .sprinkler {
+    position:absolute;
+    height: 40px;
+    width: 35px;
+    opacity: 0;
+    background-color: red;
+    animation-name: sprinklerKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the sprinkler show */
+.sprinkler.active {
+    opacity: 0.5;
+}
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes sprinklerKeyFrame {
+    0% {
+            height: 40px;
+            width: 45px;
+            background-color: red;
+    }
+    25% {
+            height: 20px;
+            width: 45px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 45px;
+            background-color: red;
+    }
+    75% {
+            height: 20px;
+            width: 45px;
+            background-color: green;
+    }
+    100% {
+            height: 40px;
+            width: 45px;
+            background-color: red;
+    }
+}
+
+
+/*direction css */
+/* This places a square red box over the direction indicators when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+ .direction {
+    position:absolute;
+    height: 20px;
+    width: 50px;
+    opacity: 0;
+
+    background-color: red;
+    animation-name: directionKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the direction indicators show */
+.direction.active {
+    opacity: 0.5;
+}
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes directionKeyFrame {
+    0% {
+            height: 20px;
+            width: 50px;
+            background-color: red;
+    }
+    25% {
+            height: 20px;
+            width: 25px;
+            background-color: blue;
+    }
+    50% {
+            height: 20px;
+            width: 0px;
+            background-color: red;
+    }
+    75% {
+            height: 20px;
+            width: 25px;
+            background-color: green;
+    }
+    100% {
+            height: 20px;
+            width: 50px;
+            background-color: red;
+    }
+}
+
+/*Door Left css */
+/* By door left it means that the door shows left to right */
+/* This places a square red box over the door Left when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.doorLeft {
+    position:absolute;
+    height: 40px;
+    width: 50px;
+    opacity: 0;
+    background-color: red;
+    animation-name: doorLeftKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the door left show */
+.doorLeft.active {
+    opacity: 0.5;
+}
+
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes doorLeftKeyFrame {
+    0% {
+            height: 10px;
+            width: 50px;
+            background-color: red;
+    }
+    25% {
+            height: 10px;
+            width: 25px;
+            background-color: blue;
+    }
+    50% {
+            height: 10px;
+            width: 0px;
+            background-color: red;
+    }
+    75% {
+            height: 10px;
+            width: 25px;
+            background-color: green;
+    }
+    100% {
+            height: 10px;
+            width: 50px;
+            background-color: red;
+    }
+}
+
+/*Door UP css */
+/* door up means that the door points up and down */
+/* This places a square red box over the door up when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+ .doorUp {
+    position:absolute;
+    height: 50px;
+    width: 10px;
+    opacity: 0;
+    background-color: red;
+    animation-name: doorUpKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+    /* This will make the door up show */
+.doorUp.active {
+    opacity: 0.5;
+}
+
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes doorUpKeyFrame {
+    0% {
+            height: 50px;
+            width: 10px;
+            background-color: red;
+    }
+    25% {
+            height: 25px;
+            width: 10px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 10px;
+            background-color: red;
+    }
+    75% {
+            height: 25px;
+            width: 10px;
+            background-color: green;
+    }
+    100% {
+            height: 50px;
+            width: 10px;
+            background-color: red;
+    }
+}
+
+/*sensor css*/
+/* This places a circle over the sensor when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.sensor {
+    position:absolute;
+    height: 25px;
+    width: 25px;
+    opacity: 0;
+    border-radius: 60%;
+    background-color: red;
+    animation-name: sensorKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the sensor show */
+.sensor.active {
+    opacity: 0.5;
+}
+/* Changes the width,height,and color over a period of time making the div apear to move and flash */
+@keyframes sensorKeyFrame {
+    0% {
+            height: 25px;
+            width: 25px;
+            background-color: red;
+    }
+    25% {
+            height: 20px;
+            width: 20px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 1px;
+            background-color: red;
+    }
+    75% {
+            height: 20px;
+            width: 20px;
+            background-color: green;
+    }
+    100% {
+            height: 25px;
+            width: 25px;
+            background-color: red;
+    }
+}
+
+/*alarmLarge css*/
+/* The large part just means that the  the css is larger then the previous ones. Other than that it is completly identical*/
+/* This places a square red box over the Alarm Large when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.alarmLarge {
+    position:absolute;
+    height: 70px;
+    width: 55px;
+    opacity: 0;
+    background-color: red;
+    animation-name: alarmLargeKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+.alarmLarge.active {
+    opacity: 0.5;
+}
+/* This will make the Alarm Large show */
+@keyframes alarmLargeKeyFrame {
+    0% {
+            height: 70px;
+            width: 55px;
+            background-color: red;
+    }
+    25% {
+            height: 30px;
+            width: 55px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 55px;
+            background-color: red;
+    }
+    75% {
+            height: 30px;
+            width: 55px;
+            background-color: green;
+    }
+    100% {
+            height: 70px;
+            width: 55px;
+            background-color: red;
+    }
+}
+
+/*sprinkler Large css */
+/* The large part just means that the  the css is larger then the previous ones. Other than that it is completly identical*/
+/* This places a square red box over the Sprinkler large when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+ .sprinklerLarge {
+    position:absolute;
+    height: 80px;
+    width: 50px;
+    opacity: 0;
+    background-color: red;
+    animation-name: sprinklerLargeKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the Sprinkler large show */
+.sprinklerLarge.active {
+    opacity: 0.5;
+}
+@keyframes sprinklerLargeKeyFrame {
+    0% {
+            height: 80px;
+            width: 100px;
+            background-color: red;
+    }
+    25% {
+            height: 40px;
+            width: 100px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 100px;
+            background-color: red;
+    }
+    75% {
+            height: 40px;
+            width: 100px;
+            background-color: green;
+    }
+    100% {
+            height: 80px;
+        width: 100px;
+            background-color: red;
+    }
+}
+
+/*directionLarge css */
+/* The large part just means that the  the css is larger then the previous ones. Other than that it is completly identical*/
+/* This places a square red box over the Direction Large when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.directionLarge {
+    position:absolute;
+    height: 50px;
+    width: 100px;
+    opacity: 0;
+    background-color: red;
+    animation-name: directionLargeKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the Direction large show */
+.directionLarge.active {
+    opacity: 0.5;
+}
+@keyframes directionLargeKeyFrame {
+    0% {
+            height: 50px;
+            width: 100px;
+            background-color: red;
+    }
+    25% {
+            height: 50px;
+            width: 50px;
+            background-color: blue;
+    }
+    50% {
+            height: 50px;
+            width: 0px;
+            background-color: red;
+    }
+    75% {
+            height: 50px;
+            width: 50px;
+            background-color: green;
+    }
+    100% {
+            height: 50px;
+            width: 100px;
+            background-color: red;
+    }
+}
+
+/*door Left large css */
+/* The large part just means that the  the css is larger then the previous ones. Other than that it is completly identical*/
+/* By left it means the door is facing left to right */
+/* This places a square red box over the door Left large when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.doorLeftLarge {
+    position:absolute;
+    height: 40px;
+    width: 100px;
+    opacity: 0;
+    background-color: red;
+    animation-name: doorLeftLargeKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the door left large show */
+.doorLeftLarge.active {
+    opacity: 0.5;
+}
+@keyframes doorLeftLargeKeyFrame {
+    0% {
+            height: 40px;
+            width: 100px;
+            background-color: red;
+    }
+    25% {
+            height: 40px;
+            width: 50px;
+            background-color: blue;
+    }
+    50% {
+            height: 40px;
+            width: 0px;
+            background-color: red;
+    }
+    75% {
+            height: 40px;
+            width: 50px;
+            background-color: green;
+    }
+    100% {
+            height: 40px;
+            width: 100px;
+            background-color: red;
+    }
+}
+
+/*sensor Large css*/
+/* The large part just means that the  the css is larger then the previous ones. Other than that it is completly identical*/
+/* This places a square red box over the Sensor Large when its active, by default it is hidden because of the opacity of zero. It also calls an infinite animation function*/
+.sensorLarge {
+    position:absolute;
+    height: 55px;
+    width: 55px;
+    opacity: 0;
+    border-radius: 60%;
+    background-color: red;
+    animation-name: sensorLargeKeyFrame;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+/* This will make the sensor Large show */
+.sensorLarge.active {
+    opacity: 0.5;
+}
+@keyframes sensorLargeKeyFrame {
+    0% {
+            height: 55px;
+            width: 55px;
+            background-color: red;
+    }
+    25% {
+            height: 20px;
+            width: 20px;
+            background-color: blue;
+    }
+    50% {
+            height: 0px;
+            width: 1px;
+            background-color: red;
+    }
+    75% {
+            height: 20px;
+            width: 20px;
+            background-color: green;
+    }
+    100% {
+            height: 55px;
+            width: 55px;
+            background-color: red;
+    }
+}

@@ -1,1795 +1,398 @@
-﻿@page
+﻿@* 
+This CameraView page shows the building layout if you were looking at it from the top down.
+It provides the user with an easy way to tell what portion of the building have alarms that are going off
+ *@
+@page
 @using buildingSystem
 @model CameraViewControler
 @{
     ViewData["Title"] = "Camera View Page";
-    // This is how Im doing the image mapping
+    @* Notes *@
+    // This website allowed me to draw cordanants over the blueprints
     // https://imagemap.org/
-    // image source 
+    // This is the source of where I found the blueprint image
     // https://www.edrawsoft.com/templates/pdf/mall-floor-plan.pdf
 
-    // Onclick handler 
-    //    https://www.youtube.com/watch?v=QeRszt0OKUw
-    // Model controlers
-    
-    // when buildingControl changes Call a seperate function
-
+    // This was my source of being able to figure out mixing AJAX and C# throughout the site
+    // it was a technique used heavily so I linked it
+    // https://www.youtube.com/watch?v=QeRszt0OKUw
 
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-    .SenarioContainer {
-        border-radius: 10px;
-        border: 4px solid green;
-    }
-    .SenarioContainer :hover{
-        background-color: lightblue;
-    }
-    .senarioBlock {
-        border: 1px solid green;
-        border-radius: 10px;
-    }
-</style>
-<script>
-    function displaySenarios() {
-        // This just shows or hids the senarios page
-        var senarioBlock = document.getElementById("testSenarios");
-        if(senarioBlock.style.display == "none") {
-            senarioBlock.style.display = "block";
-        }else {
-            senarioBlock.style.display = "none";
-        }
-    }
+<script src="~/js/CameraView.js"></script>
 
-    function muteOrUnmute() {
-        //This toggles the <p> soundOn to soundOff or visa versa, which will allow adible alarm to play
-        var sound = document.getElementById("soundStatus");
-        if(sound.innerHTML == "SoundOn") {
-            sound.innerHTML = "SoundOff";
-        }
-        else {sound.innerHTML = "SoundOn";}
-    }
-    function playAlarm() {
-        // play sound if system is not muted
-        if(document.getElementById("soundStatus").innerHTML == "SoundOn") {
-            var alarm = new Audio();
-            alarm.src = document.querySelector('source').src;
-            alarm.play();
-        }
-    }
-
-     function addSensors(single, room2=0){
-        if(single == true) { 
-             var room = document.getElementById("addSensorToRoom").value;
-        }
-        else {
-            room = room2;
-        }
-
-           
-            $.ajax({
-                url: '/CameraViewControler/OnAttemptAddSensorToRoom',
-                // Room array index starts at 0 so we subract 1
-                data: { roomNumber: room - 1 },
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                   
-                     if(single!=false) {
-                        placeSensorsInRoomOnPageLoad(1);
-                     }
-                     
-                },
-                error: function (errorThrown) {
-                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
-                }
-            });
-          
-    }
-
-    function removeSensors(single,room2=0) {
-            if(single == true) { 
-             var room = document.getElementById("removeSensorInRoom").value;
-        }
-        else {
-            room = room2;
-        }
-
-           
-            $.ajax({
-            url: '/CameraViewControler/OnAttemptRemoveSensorFromRoom',
-                // Room array index starts at 0 so we subract 1
-                data: { roomNumber: room - 1 },
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                  
-                     if(single!=false) {
-                        placeSensorsInRoomOnPageLoad(1);
-                     }
-                     
-                },
-                error: function (errorThrown) {
-                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
-                }
-            });
-    }
-
-    async function addAllSensors(){
-        for(i = 1; i <=41; i++) {
-             await addSensors(false, i);  
-
-        }
-        placeSensorsInRoomOnPageLoad(1);
-        
-    }
-
-   async function removeAllSensors() {
-        //await DeactivateAllSensors();
-         for(i = 1; i <=41; i++) {
-             await removeSensors(false, i);  
-
-        }
-        placeSensorsInRoomOnPageLoad(1);
-        alarmReportedProcedureAJAX();
-        
-        
-    }
-    
-    function placeSensorsInRoomOnPageLoad(type){
-      
-   
-            $.ajax({
-                url: '/CameraViewControler/onPlaceSensorsInRoomOnPageLoad',
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-             
-                    for(i = 1; i <=41; i++) {
-                        if(i != 2 && i != 38) {
-                            if(!data.includes(i)) {
-                                // Sensor not active
-                            
-                                drawWhiteOverSensor(i);
-                            } else {
-                                // deactivate
-                                removeWhiteOverSensor(i);
-                            }
-                        }
-                    
-                    }
-                },
-                error: function (errorThrown) {
-                    console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
-                }
-            });
-      
-    }
-    //document.addEventListener("DOMContentLoaded", placeSensorsInRoomOnPageLoad);
-
-</script>
-<div class="text-center">
-    <h1 class="display-4">CameraView</h1>
-    <p>Floor 1</p>
-        <div>
-            <div class="SenarioContainer" onclick="displaySenarios()">
-                <h1>Click to Display Senarios(Only On test version)</h1>
-            </div>
-
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="~/css/CameraView.css" />
+    @* Overall container for the header to the start of the map *@
+    <div class="text-center">
+        <h1 class="display-4">CameraView</h1>
+        @* Display the floor number *@
+        <p>Floor 1</p>
+            @* Test container div *@
             <div>
-                <input type="number" id="addSensorToRoom" min="1" max="41"></input>
-                <button onclick="addSensors(true)">Add Sensor to room Room #</button>
-            </div>
+                @* Senarios Container *@
+                <div class="SenarioContainer" onclick="displaySenarios()">
+                    <h1>Click to Display Senarios(Only On test version)</h1>
+                </div>
 
-            <div>
-                <input type="number" id="removeSensorInRoom" min="1" max="41"></input>
-                <button onclick="removeSensors(true)">Remove sensor in Room #</button>
-            </div>
-
-            <div>
-            <button onclick="addAllSensors(3)">Add all Sensors</button>
-            </div>
-             <div>
-                <button onclick="removeAllSensors(4)">Remove all Sensors</button>
-            </div>
-            
-            
-            <div style="display: none;" id="testSenarios">
-                <div class="senarioBlock">
-                    <h3>Sensor Related tests</h3>
-                    <div>
-                        <input type="number" id="ActivateSensor" min="1" max="41"></input>
-                        <button onclick="ActivateSensorAjax()">Activate fire Sensor in Room #</button>
+                @* Container for hidden test senarios *@
+                <div style="display: none;" id="testSenarios">
+                    @* Sensor test cases *@
+                    <div class="senarioBlock">
+                        <h3>Sensor Related tests</h3>
+                        @* Activate Fire by room Number button *@
+                        <div>
+                            <input type="number" id="ActivateSensor" min="1" max="41"></input>
+                            <button onclick="ActivateSensorAjax()">Activate fire Sensor in Room #</button>
+                        </div>
+                        @* Activate Random Fire sensor button *@
+                        <div>
+                            <button onclick="ActivateRandomSensors()">Activate Random Fire Sensors</button>
+                        </div>
+                        @* Activate Random Gas sensor button *@
+                        <div>
+                            <button onclick="ActivateRandomSensors(true)">Activate Random Gas Sensors</button>
+                        </div>
+                        @* Deactivate All sensors button *@
+                        <div>
+                            <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
+                        </div>
                     </div>
 
-              @*      <div>
-                        <input type="number" id="DeactivateSensor" min="1" max="41"></input>
-                        <button onclick="DeactivateSensorAjax()">Deactivate Sensor in Room #</button>
-                    </div>*@
-                    <div>
-                    
-                        <button onclick="ActivateRandomSensors()">Activate Random Fire Sensors</button>
+                    @* Person Related tests *@
+                    <div class="senarioBlock">
+                        <h3>Person Related tests</h3>
+                        @* Add person to room button *@
+                        <input type="number" id="AddPersonToRoom" min="1" max="41"></input>
+                        <button onclick="addPersonToRoomAJAX()">Add person into room #</button>
+                        @* Remove person from room button *@
+                        <input type="number" id="RemovePersonToRoom" min="1" max="41"></input>
+                        <button onclick="removePersonToRoomAJAX()">Remove person in room #</button>
                     </div>
-                     <div>
-                    
-                        <button onclick="ActivateRandomSensors(true)">Activate Random Gas Sensors</button>
-                    </div>
-                    <div>
-                        <button onclick="DeactivateAllSensors()">Deactivate All Sensors</button>
+
+                    @* Sound settings *@
+                    <div class="senarioBlock">
+                        <h3>Sound related</h3>
+                        <p>Note that muting would not be avalible in actual system</p>
+                        @* This sound on when it says sound on will determin if play alarm runs or not *@
+                        <p id="soundStatus">SoundOn</p>
+                        @* mute and unmute button*@
+                        <button onclick="muteOrUnmute()">Mute and unmute</button>
+                        @* Play sound button *@
+                        <button onclick="playAlarm()">Test the audible sound</button>
                     </div>
                 </div>
-                <div class="senarioBlock">
-                    <h3>Person Related tests</h3>
-                         <input type="number" id="AddPersonToRoom" min="1" max="41"></input>
-                        <button onclick="addPersonToRoomAJAX()">Add person into room #</button>
 
-                         <input type="number" id="RemovePersonToRoom" min="1" max="41"></input>
-                        <button onclick="removePersonToRoomAJAX()">Remove person in room #</button>
-                 </div>
+                @* Add sensors button *@
+                <div>
+                    <input type="number" id="addSensorToRoom" min="1" max="41"></input>
+                    <button onclick="addSensors(true)">Add Sensor to room Room #</button>
+                </div>
 
-                  <div class="senarioBlock">
-                    <h3>Sound related</h3>
-                        <p>Note that muting would not be avalible in actual system</p>
-                         <p id="soundStatus">SoundOn</p>
-                        <button onclick="muteOrUnmute()">Mute and unmute</button>
-                        <button onclick="playAlarm()">Test the audible sound</button>
-                 </div>
+                @* Remove sensors button *@
+                <div>
+                    <input type="number" id="removeSensorInRoom" min="1" max="41"></input>
+                    <button onclick="removeSensors(true)">Remove sensor in Room #</button>
+                </div>
 
+                @* Add all sensors button *@
+                <div>
+                    <button onclick="addAllSensors(3)">Add all Sensors</button>
+                </div>
+
+                @* Remove all sensors button *@
+                <div>
+                    <button onclick="removeAllSensors(4)">Remove all Sensors</button>
+                </div>
             </div>
-        </div>
-
-</div>
-@*Hidden audio container*@
-<source src="~/img/Alarm.mp3?v=2" type="audio/mpeg">
-
-<div style="text-align: center;">
-    <div id="containerForRoom" class="containerForRoom" style="display:inline-block">
-        <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="display: inline-block;">
     </div>
-    
-    <map name="image_map">
-    @*Sensor really referes to the room number. So sensor-3 means room 3. Note that not all rooms have sensors*@
-    <area id="sensor-1"   coords="257,73,15" shape="circle">
-    <area id="sensor-3"   coords="534,255,13" shape="circle">
-    <area id="sensor-4"   coords="728,242,13" shape="circle">
-    <area id="sensor-5"   coords="935,236,14" shape="circle">
-    <area id="sensor-6"   coords="126,202,18" shape="circle">
-    <area id="sensor-7"   coords="135,333,18" shape="circle">
-    <area id="sensor-8"   coords="127,511,12" shape="circle">
-    <area id="sensor-9"   coords="438,583,17" shape="circle">
-    <area id="sensor-10"  coords="732,572,15" shape="circle">
-    <area id="sensor-11"  coords="850,519,14" shape="circle">
-    <area id="sensor-12"  coords="1063,539,11" shape="circle">
-    <area id="sensor-13"  coords="139,709,15" shape="circle">
-    <area id="sensor-14"  coords="431,760,18" shape="circle">
-    <area id="sensor-15"  coords="678,635,16" shape="circle">
-    <area id="sensor-16"  coords="846,690,15" shape="circle">
-    <area id="sensor-17"  coords="1056,662,15" shape="circle">
-    <area id="sensor-18"  coords="135,881,15" shape="circle">
-    <area id="sensor-19"  coords="344,986,17" shape="circle">
-    <area id="sensor-20"  coords="446,986,13" shape="circle">
-    <area id="sensor-21"  coords="675,953,17" shape="circle">
-    <area id="sensor-22"  coords="811,969,14" shape="circle">
-    <area id="sensor-23"  coords="1061,814,15" shape="circle">
-    <area id="sensor-24"  coords="1064,942,15" shape="circle">
-    <area id="sensor-25"  coords="141,1060,17" shape="circle">
-    <area id="sensor-26"  coords="351,1091,15" shape="circle">
-    <area id="sensor-27"  coords="455,1094,17" shape="circle">
-    <area id="sensor-28"  coords="653,1142,17" shape="circle">
-    <area id="sensor-29"  coords="769,1145,16" shape="circle">
-    <area id="sensor-30"  coords="866,1143,15" shape="circle">
-    <area id="sensor-31"  coords="1063,1079,17" shape="circle">
-    <area id="sensor-32"  coords="142,1224,15" shape="circle">
-    <area id="sensor-33"  coords="345,1187,15" shape="circle">
-    <area id="sensor-34"  coords="452,1191,16" shape="circle">
-    <area id="sensor-35"  coords="345,1277,13" shape="circle">
-    <area id="sensor-36"  coords="454,1280,15" shape="circle">
-    <area id="sensor-37"  coords="1055,1216,15" shape="circle">
-    <area id="sensor-39"  coords="1063,1355,15" shape="circle">
-    <area id="sensor-40"  coords="255,1517,18" shape="circle">
-    <area id="sensor-41"  coords="472,1487,19" shape="circle">
 
 
+    @*Hidden audio container, this is the element that is toggled on and off*@
+    <source src="~/img/Alarm.mp3?v=2" type="audio/mpeg">
 
-
-        <area id="alarm-1" onclick="activateAlarm(1)" coords="201,50,236,92" shape="rect">
-        <area  id="alarm-3" onclick="activateAlarm(3)" coords="442,146,472,187" shape="rect">
-        <area id="alarm-4" onclick="activateAlarm(4)"  coords="593,220,623,258" shape="rect">
-        <area id="alarm-5" onclick="activateAlarm(5)"  coords="793,219,825,254" shape="rect">
-        <area id="alarm-6" onclick="activateAlarm(6)"  coords="38,184,64,224" shape="rect">
-        <area id="alarm-7" onclick="activateAlarm(7)"  coords="51,320,82,360" shape="rect">
-        <area id="alarm-8" onclick="activateAlarm(8)"  coords="45,497,73,537" shape="rect"> 
-        <area id="alarm-9" onclick="activateAlarm(9)"  coords="274,478,302,518" shape="rect">
-        <area id="alarm-10" onclick="activateAlarm(10)"  coords="599,498,625,537" shape="rect">
-        <area id="alarm-11" onclick="activateAlarm(11)"  coords="792,500,820,538" shape="rect">
-        <area id="alarm-12" onclick="activateAlarm(12)"  coords="992,513,1021,551" shape="rect">
-        <area id="alarm-13" onclick="activateAlarm(13)"  coords="58,686,85,726" shape="rect">
-        <area id="alarm-14" onclick="activateAlarm(14)"  coords="271,740,301,782" shape="rect">
-        <area id="alarm-15"  onclick="activateAlarm(15)" coords="603,618,630,657" shape="rect">
-        <area id="alarm-16" onclick="activateAlarm(16)"  coords="801,638,824,673" shape="rect">
-        <area id="alarm-17" onclick="activateAlarm(17)"  coords="995,646,1024,685" shape="rect">
-        <area id="alarm-23" onclick="activateAlarm(23)"  coords="988,786,1017,825" shape="rect">
-        <area id="alarm-18" onclick="activateAlarm(18)"  coords="51,859,81,902" shape="rect">
-        <area id="alarm-19" onclick="activateAlarm(19)"  coords="278,971,302,1010" shape="rect">
-        <area id="alarm-20"  onclick="activateAlarm(20)" coords="385,971,411,1008" shape="rect">
-        <area id="alarm-21"  onclick="activateAlarm(21)" coords="619,939,647,974" shape="rect">
-        <area id="alarm-22" onclick="activateAlarm(22)"  coords="794,906,821,947" shape="rect">
-        <area id="alarm-24"  onclick="activateAlarm(24)" coords="991,932,1021,973" shape="rect">
-        <area id="alarm-31" onclick="activateAlarm(31)" coords="1001,1062,1029,1099" shape="rect">
-        <area id="alarm-30"  onclick="activateAlarm(30)" coords="805,1130,831,1167" shape="rect">
-        <area id="alarm-37"  onclick="activateAlarm(37)" coords="995,1197,1021,1236" shape="rect">
-        <area id="alarm-39"  onclick="activateAlarm(39)" coords="991,1340,1021,1374" shape="rect">
-        <area id="alarm-29" onclick="activateAlarm(29)"  coords="705,1127,738,1169" shape="rect">
-        <area id="alarm-28"  onclick="activateAlarm(28)" coords="589,1122,623,1163" shape="rect">
-        <area id="alarm-25" onclick="activateAlarm(25)"  coords="48,1044,81,1084" shape="rect">
-        <area id="alarm-26" onclick="activateAlarm(26)"  coords="283,1073,311,1109" shape="rect">
-        <area id="alarm-27" onclick="activateAlarm(27)"  coords="377,1080,407,1116" shape="rect">
-        <area id="alarm-32" onclick="activateAlarm(32)"  coords="53,1213,82,1254" shape="rect">
-        <area id="alarm-33" onclick="activateAlarm(33)"  coords="277,1169,305,1207" shape="rect">
-        <area id="alarm-34"  onclick="activateAlarm(34)" coords="379,1171,408,1213" shape="rect">
-        <area id="alarm-35" onclick="activateAlarm(35)"  coords="280,1260,302,1296" shape="rect">
-        <area id="alarm-36" onclick="activateAlarm(36)"  coords="385,1261,404,1300" shape="rect">
-        <area id="alarm-40" onclick="activateAlarm(40)"  coords="186,1503,213,1540" shape="rect">
-        <area id="alarm-41" onclick="activateAlarm(41)"  coords="399,1466,426,1500" shape="rect">
-
-
-          <area id="sprinkler-1" onclick=" activateSprinkler(1)" coords="227,102,272,143" shape="rect">
-  <area id="sprinkler-3" onclick=" activateSprinkler(3)"  coords="441,237,483,279" shape="rect">
-  <area id="sprinkler-4" onclick=" activateSprinkler(4)"  coords="580,271,625,310" shape="rect">
-  <area id="sprinkler-5" onclick=" activateSprinkler(5)"  coords="796,271,834,311" shape="rect">
-  <area id="sprinkler-6"  onclick=" activateSprinkler(6)" coords="34,250,79,290" shape="rect">
-  <area id="sprinkler-7" onclick=" activateSprinkler(7)"  coords="34,404,82,444" shape="rect">
-  <area id="sprinkler-8"  onclick=" activateSprinkler(8)" coords="29,609,76,653" shape="rect">
-  <area id="sprinkler-9"  onclick=" activateSprinkler(9)" coords="272,540,315,585" shape="rect">
-  <area id="sprinkler-10"  onclick=" activateSprinkler(10)" coords="592,560,638,603" shape="rect">
-  <area id="sprinkler-11" onclick=" activateSprinkler(11)"  coords="841,558,880,601" shape="rect">
-  <area id="sprinkler-12" onclick=" activateSprinkler(12)"  coords="1033,586,1077,628" shape="rect">
-  <area id="sprinkler-13" onclick=" activateSprinkler(13)"  coords="39,783,81,824" shape="rect">
-  <area id="sprinkler-14" onclick=" activateSprinkler(14)"  coords="256,833,301,876" shape="rect">
-  <area id="sprinkler-15" onclick=" activateSprinkler(15)"  coords="611,770,655,810" shape="rect">
-  <area id="sprinkler-16" onclick=" activateSprinkler(16)"  coords="806,748,854,790" shape="rect">
-  <area id="sprinkler-17" onclick=" activateSprinkler(17)"  coords="1029,715,1077,758" shape="rect">
-  <area id="sprinkler-23" onclick=" activateSprinkler(23)"  coords="1035,868,1078,910" shape="rect">
-  <area id="sprinkler-24" onclick=" activateSprinkler(24)"  coords="1033,1006,1081,1048" shape="rect">
-  <area id="sprinkler-22" onclick=" activateSprinkler(22)"  coords="799,1071,847,1112" shape="rect">
-  <area id="sprinkler-21" onclick=" activateSprinkler(21)"  coords="613,1001,660,1040" shape="rect">
-  <area id="sprinkler-20" onclick=" activateSprinkler(20)"  coords="436,1022,479,1058" shape="rect">
-  <area id="sprinkler-18" onclick=" activateSprinkler(18)"  coords="41,970,81,1011" shape="rect">
-  <area id="sprinkler-19" onclick=" activateSprinkler(19)"  coords="323,1023,367,1059" shape="rect">
-  <area id="sprinkler-25" onclick=" activateSprinkler(25)"  coords="33,1131,79,1169" shape="rect">
-  <area id="sprinkler-26" onclick=" activateSprinkler(26)"  coords="324,1125,365,1160" shape="rect">
-  <area id="sprinkler-27" onclick=" activateSprinkler(27)"  coords="436,1122,480,1158" shape="rect">
-  <area id="sprinkler-32" onclick=" activateSprinkler(32)"  coords="44,1293,87,1334" shape="rect">
-  <area id="sprinkler-33" onclick=" activateSprinkler(33)"  coords="323,1217,365,1250" shape="rect">
-  <area id="sprinkler-34" onclick=" activateSprinkler(34)" coords="432,1219,474,1252" shape="rect">
-  <area id="sprinkler-36" onclick=" activateSprinkler(36)"  coords="430,1307,471,1337" shape="rect">
-  <area id="sprinkler-35" onclick=" activateSprinkler(35)"  coords="327,1302,365,1335" shape="rect">
-  <area id="sprinkler-28" onclick=" activateSprinkler(28)"  coords="633,1181,679,1214" shape="rect">
-  <area id="sprinkler-29"  onclick=" activateSprinkler(29)" coords="744,1184,788,1221" shape="rect">
-  <area id="sprinkler-30" onclick=" activateSprinkler(30)"  coords="845,1183,879,1220" shape="rect">
-  <area id="sprinkler-31" onclick=" activateSprinkler(31)"  coords="1031,1132,1078,1177" shape="rect">
-  <area id="sprinkler-37"  onclick=" activateSprinkler(37)" coords="1032,1272,1076,1315" shape="rect">
-  <area id="sprinkler-39"  onclick=" activateSprinkler(39)" coords="1038,1412,1075,1452" shape="rect">
-  <area id="sprinkler-40"  onclick=" activateSprinkler(40)" coords="129,1490,175,1529" shape="rect">
-  <area id="sprinkler-41" onclick=" activateSprinkler(41)"  coords="395,1520,436,1565" shape="rect">
-
-        <area id="direction-1" onclick="activateDirection(1)" coords="159,111,211,136" shape="rect">
-        <area id="direction-3" onclick="activateDirection(3)" coords="502,148,558,172" shape="rect">
-        <area id="direction-4" onclick="activateDirection(4)"  coords="701,271,754,295" shape="rect">
-        <area id="direction-5"  onclick="activateDirection(5)" coords="910,274,961,294" shape="rect">
-        <area id="direction-6" onclick="activateDirection(6)"  coords="106,268,158,288" shape="rect">
-        <area id="direction-7" onclick="activateDirection(7)"  coords="109,424,161,444" shape="rect">
-        <area id="direction-9" onclick="activateDirection(9)"  coords="407,491,459,510" shape="rect">
-        <area id="direction-10" onclick="activateDirection(10)"  coords="720,517,769,538" shape="rect">
-        <area id="direction-11" onclick="activateDirection(11)"  coords="790,578,841,597" shape="rect">
-        <area id="direction-12" onclick="activateDirection(12)"  coords="971,605,1022,621" shape="rect">
-        <area id="direction-8" onclick="activateDirection(8)"  coords="109,620,156,641" shape="rect">
-        <area id="direction-15" onclick="activateDirection(15)"  coords="719,634,768,655" shape="rect">
-        <area id="direction-13" onclick="activateDirection(13)"  coords="109,795,162,813" shape="rect">
-        <area id="direction-14" onclick="activateDirection(14)"  coords="393,836,443,855" shape="rect">
-        <area id="direction-21" onclick="activateDirection(21)"  coords="708,942,756,963" shape="rect">
-        <area id="direction-22" onclick="activateDirection(22)"  coords="793,1025,847,1044" shape="rect">
-        <area id="direction-16" onclick="activateDirection(16)"  coords="805,809,857,824" shape="rect">
-        <area id="direction-17" onclick="activateDirection(17)"  coords="967,737,1018,753" shape="rect">
-        <area id="direction-23" onclick="activateDirection(23)"  coords="970,876,1024,900" shape="rect">
-        <area id="direction-24" onclick="activateDirection(24)"  coords="969,1016,1024,1036" shape="rect">
-        <area id="direction-31" onclick="activateDirection(31)"  coords="972,1152,1026,1167" shape="rect">
-        <area id="direction-37" onclick="activateDirection(37)"  coords="969,1285,1022,1305" shape="rect">
-        <area id="direction-30" onclick="activateDirection(30)"  coords="801,1207,845,1230" shape="rect">
-        <area id="direction-29" onclick="activateDirection(29)"  coords="687,1198,736,1216" shape="rect">
-        <area id="direction-28" onclick="activateDirection(28)"  coords="571,1194,619,1214" shape="rect">
-        <area id="direction-18" onclick="activateDirection(18)"  coords="111,989,159,1012" shape="rect">
-        <area id="direction-19" onclick="activateDirection(19)"  coords="262,1041,313,1059" shape="rect">
-        <area id="direction-20" onclick="activateDirection(20)"  coords="379,1038,429,1059" shape="rect">
-        <area id="direction-26"  coords="268,1136,318,1158" shape="rect">
-        <area id="direction-27" onclick="activateDirection(27)"  coords="381,1136,431,1157" shape="rect">
-        <area id="direction-33" onclick="activateDirection(33)"  coords="261,1232,311,1254" shape="rect">
-        <area id="direction-34" onclick="activateDirection(34)"  coords="375,1226,427,1247" shape="rect">
-        <area id="direction-35" onclick="activateDirection(35)"  coords="276,1313,327,1335" shape="rect">
-        <area id="direction-36" onclick="activateDirection(36)"  coords="376,1321,426,1340" shape="rect">
-        <area id="direction-25" onclick="activateDirection(25)"  coords="103,1154,154,1173" shape="rect">
-        <area id="direction-32" onclick="activateDirection(32)"  coords="106,1312,162,1332" shape="rect">
-        <area id="direction-40" onclick="activateDirection(40)"  coords="222,1567,269,1588" shape="rect">
-        <area id="direction-41" onclick="activateDirection(41)"  coords="446,1535,497,1556" shape="rect">
-        <area id="direction-39" onclick="activateDirection(39)" coords="967,1437,1014,1454" shape="rect">
-
-
-  <area id="door-1-1" onclick="activateDoors(1,1,'left')" data-functionParameters="1,1,'left'"  coords="213,164,272,182" shape="rect">
-  <area id="door-6-1" onclick="activateDoors(6,1,'up')" data-functionParameters="6,1,'up'"   coords="179,217,198,268" shape="rect">
- 
-  <area id="door-3-1" onclick="activateDoors(3,1,'left')" data-functionParameters="3,1,'left'"    coords="456,315,509,328" shape="rect">
-  <area id="door-4-1" onclick="activateDoors(4,1,'left')" data-functionParameters="4,1,'left'"    coords="648,314,702,329" shape="rect">
-  <area id="door-5-1" onclick="activateDoors(5,1,'left')" data-functionParameters="5,1,'left'"    coords="850,313,906,333" shape="rect">
-  <area id="door-7-1" onclick="activateDoors(7,1,'up')"  data-functionParameters="7,1,'up'"   coords="183,356,196,412" shape="rect">
-  <area id="door-8-1" onclick="activateDoors(8,1,'up')"  data-functionParameters="8,1,'up'"    coords="180,553,196,605" shape="rect">
-  <area id="door-9-1" onclick="activateDoors(9,1,'left')" data-functionParameters="9,1,'left'"   coords="325,639,386,657" shape="rect">
-  <area id="door-9-2" onclick="activateDoors(9,2,'up')" data-functionParameters="9,2,'up'"   coords="495,534,507,589" shape="rect">
-  <area id="door-10-1"  onclick="activateDoors(10,1,'left')"  data-functionParameters="10,1,'left'"   coords="651,482,708,500" shape="rect">
-  <area id="door-11-1"  onclick="activateDoors(11,1,'up')"  data-functionParameters="11,1,'up'"   coords="889,518,899,573" shape="rect">
-  <area id="door-12-1"  onclick="activateDoors(12,1,'up')"  data-functionParameters="12,1,'up'"   coords="953,544,964,591" shape="rect">
-  
-  <area id="door-13-1"  onclick="activateDoors(13,1,'up')"  data-functionParameters="13,1,'up'"   coords="186,730,194,784" shape="rect">
-  <area id="door-14-2"  onclick="activateDoors(14,2,'up')"  data-functionParameters="14,2,'up'"   coords="494,788,504,840" shape="rect">
-  <area id="door-15-1" onclick="activateDoors(15,1,'up')"   data-functionParameters="15,1,'up'"   coords="575,690,584,745" shape="rect">
-  <area id="door-15-2"  onclick="activateDoors(15,2,'left')" data-functionParameters="15,2,'left'"    coords="661,832,716,842" shape="rect">
-
-  <area id="door-16-2" onclick="activateDoors(16,2,'up')" data-functionParameters="16,2,'up'"   coords="889,755,897,810" shape="rect">
-  <area id="door-16-1"  onclick="activateDoors(16,1,'up')" data-functionParameters="16,1,'up'"   coords="885,643,898,696" shape="rect">
-  <area id="door-17-1" onclick="activateDoors(17,1,'up')"  data-functionParameters="17,1,'up'"   coords="954,669,961,725" shape="rect">
-  <area id="door-23-1"  onclick="activateDoors(23,1,'up')" data-functionParameters="23,1,'up'"   coords="955,815,962,867" shape="rect">
-  <area id="door-22-1" onclick="activateDoors(22,1,'up')"  data-functionParameters="22,1,'up'"   coords="887,920,895,972" shape="rect">
-  <area id="door-24-1" onclick="activateDoors(24,1,'up')" data-functionParameters="24,1,'up'"    coords="953,952,962,1007" shape="rect">
-  <area id="door-21-2" onclick="activateDoors(21,2,'left')" data-functionParameters="21,2,'left'"    coords="660,887,713,897" shape="rect">
-  <area id="door-21-1"  onclick="activateDoors(21,1,'up')" data-functionParameters="21,1,'up'"   coords="573,983,578,1037" shape="rect">
-  <area id="door-18-1" onclick="activateDoors(18,1,'up')" data-functionParameters="18,1,'up'"    coords="187,913,196,967" shape="rect">
-  <area id="door-25-1" onclick="activateDoors(25,1,'up')"  data-functionParameters="25,1,'up'"   coords="185,1100,196,1150" shape="rect">
-
-  <area id="door-26-1" onclick="activateDoors(26,1,'up')"  data-functionParameters="26,1,'up'"  coords="238,1090,256,1142" shape="rect">
-
-  <area id="door-32-1" onclick="activateDoors(32,1,'up')"  data-functionParameters="32,1,'up'"   coords="184,1248,197,1305" shape="rect">
-  <area id="door-40-1" onclick="activateDoors(40,1,'up')"  data-functionParameters="40,1,'up'"   coords="305,1512,315,1563" shape="rect">
-  <area id="door-291-1" onclick="activateDoors(291,1,'left')" data-functionParameters=""    coords="322,1606,373,1615" shape="rect">
-  <area id="door-41-1" onclick="activateDoors(41,1,'left')" data-functionParameters="41,1,'left'"    coords="438,1432,492,1442" shape="rect">
-  <area id="door-311-1" onclick="activateDoors(311,1,'left')" data-functionParameters=""    coords="746,1603,799,1617" shape="rect">
-  <area id="door-39-1" onclick="activateDoors(39,1,'up')" data-functionParameters="39,1,'up'"    coords="953,1360,963,1411" shape="rect">
-  <area id="door-37-1" onclick="activateDoors(37,1,'up')"  data-functionParameters="37,1,'up'"   coords="951,1231,963,1281" shape="rect">
-  <area id="door-31-1" onclick="activateDoors(31,1,'up')"  data-functionParameters="31,1,'up'"   coords="952,1098,963,1148" shape="rect">
-  <area id="door-22-2" onclick="activateDoors(22,2,'up')" data-functionParameters="22,2,'up'"    coords="886,1032,895,1091" shape="rect">
-  <area id="door-14-1" onclick="activateDoors(14,1,'left')" data-functionParameters="14,1,'left'"    coords="331,901,389,911" shape="rect">
-  <area id="door-36-1" onclick="activateDoors(36,1,'up')" data-functionParameters="36,1,'up'"    coords="494,1272,502,1325" shape="rect">
-  <area id="door-35-1" onclick="activateDoors(35,1,'up')" data-functionParameters="35,1,'up'"    coords="244,1270,255,1324" shape="rect">
-  <area id="door-33-1" onclick="activateDoors(33,1,'up')" data-functionParameters="33,1,'up'"    coords="243,1183,255,1236" shape="rect">
-  <area id="door-34-1" onclick="activateDoors(34,1,'up')"  data-functionParameters="34,1,'up'"   coords="494,1183,503,1235" shape="rect">
-  <area id="door-27-1" onclick="activateDoors(27,1,'up')"  data-functionParameters="27,1,'up'"   coords="494,1092,505,1147" shape="rect">
-  <area id="door-20-1" onclick="activateDoors(20,1,'up')" data-functionParameters="20,1,'up'"    coords="494,984,504,1038" shape="rect">
-  <area id="door-19-1" onclick="activateDoors(19,1,'up')" data-functionParameters="19,1,'up'"    coords="244,986,255,1035" shape="rect">
-
-    <area id="door-28-1" onclick="activateDoors(28,1,'left')" data-functionParameters="28,1,'left'"   coords="605,1231,659,1242" shape="rect">
-    <area id="door-29-1" onclick="activateDoors(29,1,'left')" data-functionParameters="29,1,'left'"  coords="700,1232,757,1243" shape="rect">
-    <area id="door-30-1" onclick="activateDoors(30,1,'up')" data-functionParameters="30,1,'up'"   coords="884,1155,897,1209" shape="rect">
-    </map>
-</div>
-
-    <style>
-        .Ledgend{
-            margin: 200px;
-            border-radius: 10px;
-            border: 4px solid green;
-            text-align: center;
-        }
-
-    </style>
-
-    <div class="Ledgend">
-        <h1>Page Ledgend</h1>
-        <h3>This is to help understand the room states</h3>
-        <h3>Not this is usually handeled automatically</h3>
-
-        <div>
-        <button onclick="drawWhiteOverSensor('tutorial')">Remove Sensor</button>
-        <button onclick="removeWhiteOverSensor('tutorial')">Add Sensor</button>
+    @* Map area container *@
+    <div style="text-align: center;">
+        @* This div physically holds the map and is where the divs are actually appended to *@
+        <div id="containerForRoom" class="containerForRoom" style="display:inline-block">
+            <img src='~/img/mall-floor-plan.jpg?v=2'  usemap="#image_map" style="display: inline-block;">
         </div>
-
-        <div>
-        <button onclick="activateSesor('tutorial')">Activate Sensor</button>
-        <button onclick="deactivateSensor('tutorial')">Deactivate Sensor</button>
-        </div>
-
-        <div>
-        <button onclick="activateAlarm('tutorial')">Activate Alarm</button>
-        <button onclick="deactivateAlarms('tutorial')">Deactivate Alarm</button>
-        </div>
-
-        <div>
-        <button onclick="activateSprinkler('tutorial')">Activate Sprinkler</button>
-        <button onclick="deactivateSprinkler('tutorial')">Deactivate Sprinkler</button>
-        </div>
-
-        <div>
-            <button onclick="activateDirection('tutorial')">Activate Direction Indicator</button>
-        <button onclick="deactivateDirection('tutorial')">Deactivate Direction Indicator</button>
-        </div>
-
-        <div>
-            <button onclick="activateDoors('tutorial',1,'left')">Open Doors</button>
-            <button onclick="deactivateDoors('tutorial')">Close Doors</button>
-        </div>
-        <div id="containerForRoom2" class="containerForRoom" style="display:inline-block">
-            <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
-        </div>
+        
         <map name="image_map">
-        <area id="sensor-tutorial" coords="194,119,31" shape="circle">
-            <area id="direction-tutorial" coords="140,211,243,252" shape="rect">
-            <area id="alarm-tutorial" coords="45,68,110,145" shape="rect">
-            <area id="sprinkler-tutorial" coords="37,188,125,266" shape="rect">
-            <area id="door-tutorial-1" data-functionParameters="'tutorial',1,'left'"  coords="116,-1,228,16" shape="rect">
+            @*Sensor really referes to the room number. So sensor-3 means room 3. Note that not all rooms have sensors*@
+            @* Each area is a area on the jpg that has specific cordanants and represents an object like a sensor, fire alarm ext *@
+            @* SENSORS *@
+            <area id="sensor-1"   coords="257,73,15" shape="circle">
+            <area id="sensor-3"   coords="534,255,13" shape="circle">
+            <area id="sensor-4"   coords="728,242,13" shape="circle">
+            <area id="sensor-5"   coords="935,236,14" shape="circle">
+            <area id="sensor-6"   coords="126,202,18" shape="circle">
+            <area id="sensor-7"   coords="135,333,18" shape="circle">
+            <area id="sensor-8"   coords="127,511,12" shape="circle">
+            <area id="sensor-9"   coords="438,583,17" shape="circle">
+            <area id="sensor-10"  coords="732,572,15" shape="circle">
+            <area id="sensor-11"  coords="850,519,14" shape="circle">
+            <area id="sensor-12"  coords="1063,539,11" shape="circle">
+            <area id="sensor-13"  coords="139,709,15" shape="circle">
+            <area id="sensor-14"  coords="431,760,18" shape="circle">
+            <area id="sensor-15"  coords="678,635,16" shape="circle">
+            <area id="sensor-16"  coords="846,690,15" shape="circle">
+            <area id="sensor-17"  coords="1056,662,15" shape="circle">
+            <area id="sensor-18"  coords="135,881,15" shape="circle">
+            <area id="sensor-19"  coords="344,986,17" shape="circle">
+            <area id="sensor-20"  coords="446,986,13" shape="circle">
+            <area id="sensor-21"  coords="675,953,17" shape="circle">
+            <area id="sensor-22"  coords="811,969,14" shape="circle">
+            <area id="sensor-23"  coords="1061,814,15" shape="circle">
+            <area id="sensor-24"  coords="1064,942,15" shape="circle">
+            <area id="sensor-25"  coords="141,1060,17" shape="circle">
+            <area id="sensor-26"  coords="351,1091,15" shape="circle">
+            <area id="sensor-27"  coords="455,1094,17" shape="circle">
+            <area id="sensor-28"  coords="653,1142,17" shape="circle">
+            <area id="sensor-29"  coords="769,1145,16" shape="circle">
+            <area id="sensor-30"  coords="866,1143,15" shape="circle">
+            <area id="sensor-31"  coords="1063,1079,17" shape="circle">
+            <area id="sensor-32"  coords="142,1224,15" shape="circle">
+            <area id="sensor-33"  coords="345,1187,15" shape="circle">
+            <area id="sensor-34"  coords="452,1191,16" shape="circle">
+            <area id="sensor-35"  coords="345,1277,13" shape="circle">
+            <area id="sensor-36"  coords="454,1280,15" shape="circle">
+            <area id="sensor-37"  coords="1055,1216,15" shape="circle">
+            <area id="sensor-39"  coords="1063,1355,15" shape="circle">
+            <area id="sensor-40"  coords="255,1517,18" shape="circle">
+            <area id="sensor-41"  coords="472,1487,19" shape="circle">
+
+            @* ALARMS *@
+            <area id="alarm-1" coords="201,50,236,92" shape="rect">
+            <area id="alarm-3" coords="442,146,472,187" shape="rect">
+            <area id="alarm-4" coords="593,220,623,258" shape="rect">
+            <area id="alarm-5" coords="793,219,825,254" shape="rect">
+            <area id="alarm-6" coords="38,184,64,224" shape="rect">
+            <area id="alarm-7"  coords="51,320,82,360" shape="rect">
+            <area id="alarm-8"  coords="45,497,73,537" shape="rect"> 
+            <area id="alarm-9"   coords="274,478,302,518" shape="rect">
+            <area id="alarm-10"   coords="599,498,625,537" shape="rect">
+            <area id="alarm-11"   coords="792,500,820,538" shape="rect">
+            <area id="alarm-12"   coords="992,513,1021,551" shape="rect">
+            <area id="alarm-13"   coords="58,686,85,726" shape="rect">
+            <area id="alarm-14"   coords="271,740,301,782" shape="rect">
+            <area id="alarm-15"   coords="603,618,630,657" shape="rect">
+            <area id="alarm-16"   coords="801,638,824,673" shape="rect">
+            <area id="alarm-17"   coords="995,646,1024,685" shape="rect">
+            <area id="alarm-23"   coords="988,786,1017,825" shape="rect">
+            <area id="alarm-18"  coords="51,859,81,902" shape="rect">
+            <area id="alarm-19"   coords="278,971,302,1010" shape="rect">
+            <area id="alarm-20"   coords="385,971,411,1008" shape="rect">
+            <area id="alarm-21"   coords="619,939,647,974" shape="rect">
+            <area id="alarm-22"   coords="794,906,821,947" shape="rect">
+            <area id="alarm-24"   coords="991,932,1021,973" shape="rect">
+            <area id="alarm-31"  coords="1001,1062,1029,1099" shape="rect">
+            <area id="alarm-30"  coords="805,1130,831,1167" shape="rect">
+            <area id="alarm-37"   coords="995,1197,1021,1236" shape="rect">
+            <area id="alarm-39"   coords="991,1340,1021,1374" shape="rect">
+            <area id="alarm-29"  coords="705,1127,738,1169" shape="rect">
+            <area id="alarm-28"   coords="589,1122,623,1163" shape="rect">
+            <area id="alarm-25"   coords="48,1044,81,1084" shape="rect">
+            <area id="alarm-26"  coords="283,1073,311,1109" shape="rect">
+            <area id="alarm-27"   coords="377,1080,407,1116" shape="rect">
+            <area id="alarm-32"   coords="53,1213,82,1254" shape="rect">
+            <area id="alarm-33"   coords="277,1169,305,1207" shape="rect">
+            <area id="alarm-34"   coords="379,1171,408,1213" shape="rect">
+            <area id="alarm-35"  coords="280,1260,302,1296" shape="rect">
+            <area id="alarm-36"  coords="385,1261,404,1300" shape="rect">
+            <area id="alarm-40"  coords="186,1503,213,1540" shape="rect">
+            <area id="alarm-41"   coords="399,1466,426,1500" shape="rect">
+
+            @* SPRINKLERS *@
+            <area id="sprinkler-1"  coords="227,102,272,143" shape="rect">
+            <area id="sprinkler-3"   coords="441,237,483,279" shape="rect">
+            <area id="sprinkler-4"   coords="580,271,625,310" shape="rect">
+            <area id="sprinkler-5"   coords="796,271,834,311" shape="rect">
+            <area id="sprinkler-6"   coords="34,250,79,290" shape="rect">
+            <area id="sprinkler-7"  coords="34,404,82,444" shape="rect">
+            <area id="sprinkler-8"   coords="29,609,76,653" shape="rect">
+            <area id="sprinkler-9"   coords="272,540,315,585" shape="rect">
+            <area id="sprinkler-10"   coords="592,560,638,603" shape="rect">
+            <area id="sprinkler-11"   coords="841,558,880,601" shape="rect">
+            <area id="sprinkler-12"   coords="1033,586,1077,628" shape="rect">
+            <area id="sprinkler-13"   coords="39,783,81,824" shape="rect">
+            <area id="sprinkler-14"   coords="256,833,301,876" shape="rect">
+            <area id="sprinkler-15"   coords="611,770,655,810" shape="rect">
+            <area id="sprinkler-16"   coords="806,748,854,790" shape="rect">
+            <area id="sprinkler-17"   coords="1029,715,1077,758" shape="rect">
+            <area id="sprinkler-23"   coords="1035,868,1078,910" shape="rect">
+            <area id="sprinkler-24"   coords="1033,1006,1081,1048" shape="rect">
+            <area id="sprinkler-22"  coords="799,1071,847,1112" shape="rect">
+            <area id="sprinkler-21"  coords="613,1001,660,1040" shape="rect">
+            <area id="sprinkler-20"   coords="436,1022,479,1058" shape="rect">
+            <area id="sprinkler-18"   coords="41,970,81,1011" shape="rect">
+            <area id="sprinkler-19"   coords="323,1023,367,1059" shape="rect">
+            <area id="sprinkler-25"   coords="33,1131,79,1169" shape="rect">
+            <area id="sprinkler-26"   coords="324,1125,365,1160" shape="rect">
+            <area id="sprinkler-27"   coords="436,1122,480,1158" shape="rect">
+            <area id="sprinkler-32"   coords="44,1293,87,1334" shape="rect">
+            <area id="sprinkler-33"   coords="323,1217,365,1250" shape="rect">
+            <area id="sprinkler-34"  coords="432,1219,474,1252" shape="rect">
+            <area id="sprinkler-36"   coords="430,1307,471,1337" shape="rect">
+            <area id="sprinkler-35"   coords="327,1302,365,1335" shape="rect">
+            <area id="sprinkler-28"   coords="633,1181,679,1214" shape="rect">
+            <area id="sprinkler-29"   coords="744,1184,788,1221" shape="rect">
+            <area id="sprinkler-30"   coords="845,1183,879,1220" shape="rect">
+            <area id="sprinkler-31"   coords="1031,1132,1078,1177" shape="rect">
+            <area id="sprinkler-37"   coords="1032,1272,1076,1315" shape="rect">
+            <area id="sprinkler-39"   coords="1038,1412,1075,1452" shape="rect">
+            <area id="sprinkler-40"   coords="129,1490,175,1529" shape="rect">
+            <area id="sprinkler-41"   coords="395,1520,436,1565" shape="rect">
+
+            @* Directions *@
+            <area id="direction-1"  coords="159,111,211,136" shape="rect">
+            <area id="direction-3"  coords="502,148,558,172" shape="rect">
+            <area id="direction-4"   coords="701,271,754,295" shape="rect">
+            <area id="direction-5"   coords="910,274,961,294" shape="rect">
+            <area id="direction-6"   coords="106,268,158,288" shape="rect">
+            <area id="direction-7"   coords="109,424,161,444" shape="rect">
+            <area id="direction-9"  coords="407,491,459,510" shape="rect">
+            <area id="direction-10"   coords="720,517,769,538" shape="rect">
+            <area id="direction-11"   coords="790,578,841,597" shape="rect">
+            <area id="direction-12"   coords="971,605,1022,621" shape="rect">
+            <area id="direction-8"  coords="109,620,156,641" shape="rect">
+            <area id="direction-15"   coords="719,634,768,655" shape="rect">
+            <area id="direction-13"   coords="109,795,162,813" shape="rect">
+            <area id="direction-14"   coords="393,836,443,855" shape="rect">
+            <area id="direction-21"   coords="708,942,756,963" shape="rect">
+            <area id="direction-22"   coords="793,1025,847,1044" shape="rect">
+            <area id="direction-16"   coords="805,809,857,824" shape="rect">
+            <area id="direction-17"  coords="967,737,1018,753" shape="rect">
+            <area id="direction-23"   coords="970,876,1024,900" shape="rect">
+            <area id="direction-24"  coords="969,1016,1024,1036" shape="rect">
+            <area id="direction-31"  coords="972,1152,1026,1167" shape="rect">
+            <area id="direction-37"   coords="969,1285,1022,1305" shape="rect">
+            <area id="direction-30"   coords="801,1207,845,1230" shape="rect">
+            <area id="direction-29"  coords="687,1198,736,1216" shape="rect">
+            <area id="direction-28"   coords="571,1194,619,1214" shape="rect">
+            <area id="direction-18"   coords="111,989,159,1012" shape="rect">
+            <area id="direction-19"   coords="262,1041,313,1059" shape="rect">
+            <area id="direction-20"  coords="379,1038,429,1059" shape="rect">
+            <area id="direction-26"  coords="268,1136,318,1158" shape="rect">
+            <area id="direction-27"   coords="381,1136,431,1157" shape="rect">
+            <area id="direction-33"   coords="261,1232,311,1254" shape="rect">
+            <area id="direction-34"   coords="375,1226,427,1247" shape="rect">
+            <area id="direction-35"   coords="276,1313,327,1335" shape="rect">
+            <area id="direction-36"   coords="376,1321,426,1340" shape="rect">
+            <area id="direction-25"  coords="103,1154,154,1173" shape="rect">
+            <area id="direction-32"  coords="106,1312,162,1332" shape="rect">
+            <area id="direction-40"  coords="222,1567,269,1588" shape="rect">
+            <area id="direction-41"   coords="446,1535,497,1556" shape="rect">
+            <area id="direction-39"  coords="967,1437,1014,1454" shape="rect">
+
+            @* DOORS note that data-functionParameters are how I store information for each door *@
+            @* Also the the id door-9-2 means the door 2 in room 9. also note that each doors direction can either be left or up *@
+            <area id="door-1-1"  data-functionParameters="1,1,'left'"  coords="213,164,272,182" shape="rect">
+            <area id="door-6-1"  data-functionParameters="6,1,'up'"   coords="179,217,198,268" shape="rect">
+            <area id="door-3-1"  data-functionParameters="3,1,'left'"    coords="456,315,509,328" shape="rect">
+            <area id="door-4-1"  data-functionParameters="4,1,'left'"    coords="648,314,702,329" shape="rect">
+            <area id="door-5-1"  data-functionParameters="5,1,'left'"    coords="850,313,906,333" shape="rect">
+            <area id="door-7-1"   data-functionParameters="7,1,'up'"   coords="183,356,196,412" shape="rect">
+            <area id="door-8-1"   data-functionParameters="8,1,'up'"    coords="180,553,196,605" shape="rect">
+            <area id="door-9-1"  data-functionParameters="9,1,'left'"   coords="325,639,386,657" shape="rect">
+            <area id="door-9-2"  data-functionParameters="9,2,'up'"   coords="495,534,507,589" shape="rect">
+            <area id="door-10-1"    data-functionParameters="10,1,'left'"   coords="651,482,708,500" shape="rect">
+            <area id="door-11-1"    data-functionParameters="11,1,'up'"   coords="889,518,899,573" shape="rect">
+            <area id="door-12-1"    data-functionParameters="12,1,'up'"   coords="953,544,964,591" shape="rect">
+            <area id="door-13-1"    data-functionParameters="13,1,'up'"   coords="186,730,194,784" shape="rect">
+            <area id="door-14-2"    data-functionParameters="14,2,'up'"   coords="494,788,504,840" shape="rect">
+            <area id="door-15-1"    data-functionParameters="15,1,'up'"   coords="575,690,584,745" shape="rect">
+            <area id="door-15-2"   data-functionParameters="15,2,'left'"    coords="661,832,716,842" shape="rect">
+            <area id="door-16-2"  data-functionParameters="16,2,'up'"   coords="889,755,897,810" shape="rect">
+            <area id="door-16-1"   data-functionParameters="16,1,'up'"   coords="885,643,898,696" shape="rect">
+            <area id="door-17-1"   data-functionParameters="17,1,'up'"   coords="954,669,961,725" shape="rect">
+            <area id="door-23-1"   data-functionParameters="23,1,'up'"   coords="955,815,962,867" shape="rect">
+            <area id="door-22-1"   data-functionParameters="22,1,'up'"   coords="887,920,895,972" shape="rect">
+            <area id="door-24-1"  data-functionParameters="24,1,'up'"    coords="953,952,962,1007" shape="rect">
+            <area id="door-21-2"  data-functionParameters="21,2,'left'"    coords="660,887,713,897" shape="rect">
+            <area id="door-21-1"   data-functionParameters="21,1,'up'"   coords="573,983,578,1037" shape="rect">
+            <area id="door-18-1"  data-functionParameters="18,1,'up'"    coords="187,913,196,967" shape="rect">
+            <area id="door-25-1"   data-functionParameters="25,1,'up'"   coords="185,1100,196,1150" shape="rect">
+            <area id="door-26-1"   data-functionParameters="26,1,'up'"  coords="238,1090,256,1142" shape="rect">
+            <area id="door-32-1"   data-functionParameters="32,1,'up'"   coords="184,1248,197,1305" shape="rect">
+            <area id="door-40-1"   data-functionParameters="40,1,'up'"   coords="305,1512,315,1563" shape="rect">
+            <area id="door-291-1"  data-functionParameters=""    coords="322,1606,373,1615" shape="rect">
+            <area id="door-41-1"  data-functionParameters="41,1,'left'"    coords="438,1432,492,1442" shape="rect">
+            <area id="door-311-1"  data-functionParameters=""    coords="746,1603,799,1617" shape="rect">
+            <area id="door-39-1"  data-functionParameters="39,1,'up'"    coords="953,1360,963,1411" shape="rect">
+            <area id="door-37-1"   data-functionParameters="37,1,'up'"   coords="951,1231,963,1281" shape="rect">
+            <area id="door-31-1"   data-functionParameters="31,1,'up'"   coords="952,1098,963,1148" shape="rect">
+            <area id="door-22-2"  data-functionParameters="22,2,'up'"    coords="886,1032,895,1091" shape="rect">
+            <area id="door-14-1"  data-functionParameters="14,1,'left'"    coords="331,901,389,911" shape="rect">
+            <area id="door-36-1"  data-functionParameters="36,1,'up'"    coords="494,1272,502,1325" shape="rect">
+            <area id="door-35-1"  data-functionParameters="35,1,'up'"    coords="244,1270,255,1324" shape="rect">
+            <area id="door-33-1"  data-functionParameters="33,1,'up'"    coords="243,1183,255,1236" shape="rect">
+            <area id="door-34-1"   data-functionParameters="34,1,'up'"   coords="494,1183,503,1235" shape="rect">
+            <area id="door-27-1"   data-functionParameters="27,1,'up'"   coords="494,1092,505,1147" shape="rect">
+            <area id="door-20-1"  data-functionParameters="20,1,'up'"    coords="494,984,504,1038" shape="rect">
+            <area id="door-19-1" data-functionParameters="19,1,'up'"    coords="244,986,255,1035" shape="rect">
+            <area id="door-28-1"  data-functionParameters="28,1,'left'"   coords="605,1231,659,1242" shape="rect">
+            <area id="door-29-1"  data-functionParameters="29,1,'left'"  coords="700,1232,757,1243" shape="rect">
+            <area id="door-30-1"  data-functionParameters="30,1,'up'"   coords="884,1155,897,1209" shape="rect">
         </map>
+
+        @* Ledgend container *@
+        <div class="Ledgend">
+            <h1>Page Ledgend</h1>
+            <h3>This is to help understand the room states</h3>
+            <h3>Not this is usually handeled automatically</h3>
+
+            @* Add remove sensors *@
+            <div>
+                <button onclick="drawWhiteOverSensor('tutorial')">Remove Sensor</button>
+                <button onclick="removeWhiteOverSensor('tutorial')">Add Sensor</button>
+            </div>
+
+            @* Activate deactivate sensors *@
+            <div>
+                <button onclick="activateSesor('tutorial')">Activate Sensor</button>
+                <button onclick="deactivateSensor('tutorial')">Deactivate Sensor</button>
+            </div>
+
+            @* Activate deactivate alarms *@
+            <div>
+                <button onclick="activateAlarm('tutorial')">Activate Alarm</button>
+                <button onclick="deactivateAlarms('tutorial')">Deactivate Alarm</button>
+            </div>
+
+            @* Activate deactivate sprinkler *@
+            <div>
+                <button onclick="activateSprinkler('tutorial')">Activate Sprinkler</button>
+                <button onclick="deactivateSprinkler('tutorial')">Deactivate Sprinkler</button>
+            </div>
+
+            @* Activate deactivate direction indicators *@
+            <div>
+                <button onclick="activateDirection('tutorial')">Activate Direction Indicator</button>
+                <button onclick="deactivateDirection('tutorial')">Deactivate Direction Indicator</button>
+            </div>
+
+            @* Activate deactivate doors *@
+            <div>
+                <button onclick="activateDoors('tutorial',1,'left')">Open Doors</button>
+                <button onclick="deactivateDoors('tutorial')">Close Doors</button>
+            </div>
+
+            @* This tutorial building layout works exactly like the real one but its just smaller *@
+            <div id="containerForRoom2" class="containerForRoom" style="display:inline-block">
+                @* The containerForRoom2 is where the drawings end up *@
+                <img src="~/img/ledgendPhoto.jpg?v=2" usemap="#image_map">
+            </div>
+            @* Image map area *@
+            <map name="image_map">
+                <area id="sensor-tutorial" coords="194,119,31" shape="circle">
+                <area id="direction-tutorial" coords="140,211,243,252" shape="rect">
+                <area id="alarm-tutorial" coords="45,68,110,145" shape="rect">
+                <area id="sprinkler-tutorial" coords="37,188,125,266" shape="rect">
+                <area id="door-tutorial-1" data-functionParameters="'tutorial',1,'left'"  coords="116,-1,228,16" shape="rect">
+            </map>
+        </div>
     </div>
-<script>
-
-    ///////////////////////////////
-    /*
-    Ajax Functions
-    
-    */
-    ///////////////////////////////
-    function ExampleFunctionForAJAX() {
-        // The purpouse of this function is show how to use AJAX to call the Controller for this page
-        var URL = '/CameraViewControler/OnGetSpecificRoomState';
-        $.ajax({
-            url: URL,
-            dataType: 'json',
-            success: function (data) {
-              
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log('Error:', textStatus, errorThrown);
-            }
-        });
-    }
-
-    var cnt3 = 0;
-    async function DeactivateRandomSensorsCallForActivateRandomSensors() {
-
-        
-        if(cnt3 == 41) {
-            cnt3=0;
-         return;
-        }
-        await DeactivateSensorAjax(false,cnt3);
-        cnt3 = cnt3 + 1;
-        await DeactivateRandomSensorsCallForActivateRandomSensors();
-        
-    }
-
-    var cnt2 = 0;
-     async function ActivateRandomSensors(Gas=false) {
-        // Need to perform a callback loop so it will activate them randomly but sequentially random
-    
-        if(cnt2 == 0) {
-             await DeactivateRandomSensorsCallForActivateRandomSensors()
-     
-        }
-        
-        if(cnt2 == 40) {
-            cnt2 = 0;
-         
-            alarmReportedProcedureAJAX(Gas);
-            return;
-        }
-        // Loop through all rooms with a 1/3 chance of it becomming active
-        if(Math.floor(Math.random() * 3) == 2) {
-            // perform another callback
-            var test = ActivateSensorAjax(false,cnt2+1,function(){
-                    cnt2++;
-                    ActivateRandomSensors(Gas);
-            });
-            
-        } else {
-                // perform callback
-                cnt2++;
-                ActivateRandomSensors(Gas);
-        }
-
-    }
-
-    function ActivateSensorAjax(specific=true,room=0,returnFunction=false, fromPageLoad=false) {
-        // called to activate a specific sensor based on the room it is in
-        if(specific == true) {
-        var room = document.getElementById("ActivateSensor").value;
-        }
-        else {
-           var room = room
-        }
-        
-        $.ajax({
-            url: '/CameraViewControler/OnActivateSensorAjax',
-            // Room array index starts at 0 so we subract 1
-            data: { roomNumber: room - 1 },
-            dataType: 'json',
-            async: true,
-            success: function (data) {
-       
-                if(data == true) {
-                    activateSesor(room)
-                }
-                
-                if(returnFunction != false) {
-                    returnFunction();
-                    // alarm reported feature will get called in calling function
-                } else if (fromPageLoad) {
-                    // Do nothing
-                }
-                else {
-                    // function will only be called once so we should enter alarm reported procedure.
-                    alarmReportedProcedureAJAX();
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for ActivateSensorAjax:", errorThrown);
-            }
-        });
-    }
-
-     function DeactivateSensorAjax(specific=true,room=0) {
-        // called to Deactivate a specific sensor based on the room it is in
-        if(specific == true) {
-          
-            room = document.getElementById("DeactivateSensor").value;
-          
-        } else {
-            var room = room
-        }
-  
-        return new Promise((resolve,reject) => {
-        $.ajax({
-            url: '/CameraViewControler/OnDeactivateSensorAjax',
-            data: { roomNumber: room },
-            dataType: 'json',
-            success: function (data) {
-              
-                deactivateSensor(room);
-              
-                resolve();
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for DeactivateSensorAjax:", errorThrown);
-                reject();
-            }
-        });
-        });
-    }
-    function addPersonToRoomAJAX() {
-        
-        var room = document.getElementById("AddPersonToRoom").value;
-            $.ajax({
-            url: '/CameraViewControler/OnAttemptAddPersonToRoom',
-            // Room array index starts at 0 so we subract 1
-            data: { roomNumber: room - 1 },
-            dataType: 'json',
-            async: true,
-            success: function (data) {
-
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
-            }
-        });
-    }
-
-        function removePersonToRoomAJAX() {
-        
-        var room = document.getElementById("RemovePersonToRoom").value;
-            $.ajax({
-            url: '/CameraViewControler/OnAttemptRemovePersonToRoom',
-            // Room array index starts at 0 so we subract 1
-            data: { roomNumber: room - 1 },
-            dataType: 'json',
-            async: true,
-            success: function (data) {
-
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
-            }
-        });
-    }
-
-    async function DeactivateAllSensors(calledFromAnotherFunction=false) {
-
- 
-        for(var i=0; i<41; i++) {
-           
-           await DeactivateSensorAjax(false,i);
-        }
-        if(calledFromAnotherFunction == false) {
-            //This is because alarmReportedProcedure should only activate once
-            alarmReportedProcedureAJAX();
-        }
-    }
-    // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
-    var cnt = 0;
-
-        async function setBackActiveSensorsOnRefreshAJAX() {
-        // After the page has been reloaded we need to check if the sensors were previously loaded
-            if(cnt == 0) {
-                //await placeSensorsInRoomOnPageLoad(1)
-            }
-            if(cnt == 41) {
-                cnt = 0;
-            await placeSensorsInRoomOnPageLoad(1)
-                alarmReportedProcedureAJAX();
-                return;
-            }
-             $.ajax({
-                url: '/CameraViewControler/OnGetSpecificSensorStatus',
-                data: { roomNumber: cnt },
-                dataType: 'json',
-                aync: true,
-                success: function (data) {
-                    if(data == true) {
-                        activateSesor(cnt + 1)
-                        // performing a call back like this will make this run more sequentially.
-                    }
-                cnt++;
-                setBackActiveSensorsOnRefreshAJAX();
-                },
-                error: function (errorThrown) {
-                    console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
-                }
-            });
- 
-    }
-    document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
-
-
-
-
-    function alarmReportedProcedureAJAX(Gas = false) {
-        // On UI first
-        // Should be called after sensors have been activated
-
-        /*
-        I could send a fetch to the backend, sends nothing, returns 2d array with things that need to be activated 
-        {
-         "confirmed": true,
-         "sprinklers": [6,20,22],
-         "alarm": [6,20,22],
-         "direction": [6,20,22],
-         "doors": [6,22],
-         "peopleCalled":["FireDepartment","OnCall"]
-        }
-
-        By the time the json is returned all logic should be handled
-
-        // First version will be for unmanned control center
-        // Confirm alarm
-        // if confirmed by multiple confirmed sensors
-        // Call emergency department - call oncall person - display symbol
-        // play audible alarm that can be muted activate direction indicators
-        // if person is not in the room lock doors and display them as locked
-        // activate sprinkler
-
-        */
-       
-         $.ajax({
-            url: '/CameraViewControler/OnAlarmReportedProcedureAJAX',
-            data: { Gas: Gas },
-            dataType: 'json',
-            async: true,
-            success: function (data) {
-           
-                if(data[0][0] == true) {
-                    // Alarm was confirmed play alarm
-                    // UNCOMMENT during presentation
-                    //playAlarm()
-                }
-                if(data[1].length > 0) {
-                    // activate sprinkler
-                    for(i=1;i<=41;i++) {
-                        if(data[1][0].indexOf(i) !==  -1) {
-                            // sprinkler needs to be activated
-                 
-                            activateSprinkler(i);
-                        } else {
-                            // make sure alarm is off
-                            deactivateSprinkler(i)
-                        }
-                        
-                    }
-                   
-                }
-                if(data[2].length > 0) {
-                    // activate alarm
-                    for(i=1;i<=41;i++) {
-                        if(data[2][0].indexOf(i) !==  -1) {
-                            // Sprinkler needs to be activated
-                 
-                            activateAlarm(i);
-                        } else {
-                            // make sure sprinkler is off
-                            deactivateAlarms(i)
-                        }
-                        
-                    }
-                }
-                if(data[3].length > 0) {
-                    // activate directions
-                    for(i=1;i<=41;i++) {
-                        if(data[3][0].indexOf(i) !==  -1) {
-                            // directions needs to be activated
-                            activateDirection(i);
-                        } else {
-                            // make sure sprinkler is off
-                            deactivateDirection(i)
-                        }
-                        
-                    }
-                }
-                if(data[4].length > 0) {
-                    // activate doors
-                      for(i=1;i<=41;i++) {
-                        if(data[4][0].indexOf(i) !==  -1) {
-                            // directions needs to be activated
-                            activateDoors(i);
-                        } else {
-                            // make sure sprinkler is off
-                            deactivateDoors(i)
-                        }
-                    }
-                }
-                if(data[5][0].length > 0) {
-                    // show people to call
-                    alert("The following have been called: " + data[5][0])
-                    
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for alarmReportedProcedureAJAX:", errorThrown);
-            }
-        });
-    }
-
-
-
-    function  activateOrDeactivateAlarmAJAX(area){
-    
-    }
-    function  activateOrDeactivateSprinklerAJAX(area){
-    
-    }
-    function  activateOrDeactivateDirectionIndicatorAJAX(area){
-    
-    }
-    function addOrRemoveSensorAJAX(){
-        //
-    }
-    function addOrRemoveAlarmAJAX() {
-        //
-    }
-    function addOrRemoveSprinklerAJAX() {
-        //
-    }
-    function addOrRemoveDirectionIndicatorAJAX() {
-        //
-    }
-
-
-
-    ///////////////////////////////
-    /*
-    Drawing Functions
-    
-    */
-    ///////////////////////////////
-
-    function activateSesor(room){
-
-        //This is used to deactivate a single sensor
-        var checkMarker = document.getElementById("sensor-Marker" + room);
-
-        // there needs to be no marker made for that sensor
-        if(checkMarker === null) {
-                var sensor = document.getElementById("sensor-"+room);
-      
-                if(sensor !== null) {
-                    //Get the sensor location
-                    var sensorLocation = sensor.coords.split(",")
-                    var x = sensorLocation[0];
-                    var y = sensorLocation[1];
-                    var radius = sensorLocation[2];
-            
-                    // create marker for the flashing icon
-                    var marker = document.createElement("div");
-                     marker.id = "sensor-Marker" + room;
-                     
-                     if(room != "tutorial") {
-                        marker.className = "sensor active";
-                     } else {
-                        marker.className = "sensorLarge active";
-                     }
-                        
-                    // Set the top location of the marker
-                    marker.style.top = (y-radius) + "px";
-                    // Set the left position of the marker
-                    marker.style.left = (x - radius) + "px";
-                    // Set the marker width and height
-                    marker.style.height = (radius * 2) + "px";
-                    marker.style.width = marker.style.height;
-            
-                    // set up class properties 
-                    
-                    sensor.marker =  marker 
-       
-                    if(!sensor.marker.parentNode) {
-                        // push the sensor to the room container
-                        var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-                        document.getElementById("containerForRoom"+addition).appendChild(sensor.marker);
-                    } 
-                }
-        }
-    }
-
-    function drawWhiteOverSensor(room) {
-
-        //This is used to deactivate a single sensor
-        var checkMarker = document.getElementById("sensor-Marker-white" + room);
-        // there needs to be no marker made for that sensor
-        if (checkMarker === null) {
-            var sensor = document.getElementById("sensor-" + room);
-            if (sensor !== null) {
-                //Get the sensor location
-                var sensorLocation = sensor.coords.split(",")
-                var x = sensorLocation[0];
-                var y = sensorLocation[1];
-                var radius = sensorLocation[2];
-
-                // create marker for the flashing icon
-                var marker = document.createElement("div");
-                marker.id = "sensor-Marker-white" + room;
-                marker.className = "whiteBackground";
-                // Set the top location of the marker
-                marker.style.top = (y - radius) + "px";
-                // Set the left position of the marker
-                marker.style.left = (x - radius) + "px";
-                // Set the marker width and height
-                marker.style.height = (radius * 2) + "px";
-                marker.style.width = marker.style.height;
-
-                // set up class properties
-                sensor.marker =  marker
-                if (!sensor.marker.parentNode) {
-                    // push the sensor to the room container
-                          var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-                    document.getElementById("containerForRoom" + addition).appendChild(sensor.marker);
-                }
-            }
-        }
-        }
-        function activateAlarm(room){
-        //This is used to deactivate a single alarm
-        var checkMarker = document.getElementById("alarm-Marker" + room);
-
-        // there needs to be no marker made for that alarm
-        if(checkMarker === null) {
-                var alarm = document.getElementById("alarm-"+room);
-                if(alarm !== null) {
-                    //Get the alarm location
-                
-                    var alarmLocation = alarm.coords.split(",")
-                    var x = alarmLocation[0];
-                    var y = alarmLocation[1];
-                    var height = alarmLocation[2];
-                    var width =  alarmLocation[3];
-            
-                    // create marker for the flashing icon
-                    var marker = document.createElement("div");
-                     marker.id = "alarm-Marker" + room;
-                     if(room != "tutorial") {
-                        marker.className = "alarm active";
-                     } else {
-                        marker.className = "alarmLarge active";
-                     }
-                    
-                    // Set the top location of the marker
-                    marker.style.top = (y) + "px";
-                    // Set the left position of the marker
-                    marker.style.left = (x) + "px";
-                    // Set the marker width and height
-                    marker.style.height = (height) + "px";
-                    marker.style.width = (width) + "px";
-            
-                    // set up class properties
-                    alarm.marker = alarm.marker || marker
-                    if(!alarm.marker.parentNode) {
-                        // push the sensor to the room container
-                               var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-                        document.getElementById("containerForRoom" + addition).appendChild(alarm.marker);
-                    } 
-                }
-        }
-    }
-
-    function activateSprinkler(room){
-        //This is used to deactivate a single alarm
-        var checkMarker = document.getElementById("sprinkler-Marker" + room);
-
-        // there needs to be no marker made for that alarm
-        if(checkMarker === null) {
-                var sprinkler = document.getElementById("sprinkler-"+room);
-                if(sprinkler !== null) {
-                    //Get the alarm location
-                
-                    var sprinklerLocation = sprinkler.coords.split(",")
-                    var x = sprinklerLocation[0];
-                    var y = sprinklerLocation[1];
-                    var height = sprinklerLocation[2];
-                    var width =  sprinklerLocation[3];
-            
-                    // create marker for the flashing icon
-                    var marker = document.createElement("div");
-                     marker.id = "sprinkler-Marker" + room;
-                     if(room != "tutorial") {
-                        marker.className = "sprinkler active";
-                     } else {
-                            marker.className = "sprinklerLarge active";
-                     }
-                    
-                    // Set the top location of the marker
-                    marker.style.top = (y) + "px";
-                    // Set the left position of the marker
-                    marker.style.left = (x) + "px";
-                    // Set the marker width and height
-                    marker.style.height = (height) + "px";
-                    marker.style.width = (width) + "px";
-            
-                    // set up class properties
-                    sprinkler.marker = sprinkler.marker || marker
-                    if(!sprinkler.marker.parentNode) {
-                        // push the sensor to the room container
-                              var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-                    document.getElementById("containerForRoom" + addition).appendChild(sprinkler.marker);
-                    } 
-                }
-        }
-    }
-
-    function activateDirection(room){
-        //This is used to deactivate a direction alarm
-        var checkMarker = document.getElementById("direction-Marker" + room);
-        // there needs to be no marker made for that alarm
-        if(checkMarker === null) {
-                var direction = document.getElementById("direction-"+room);
-                if(direction !== null) {
-                    //Get the alarm location
-                
-                    var directionLocation = direction.coords.split(",")
-                    var x = directionLocation[0];
-                    var y = directionLocation[1];
-                    var height = directionLocation[2];
-                    var width =  directionLocation[3];
-            
-                    // create marker for the flashing icon
-                    var marker = document.createElement("div");
-                     marker.id = "direction-Marker" + room;
-                     if(room != "tutorial") {
-                        marker.className = "direction active";
-                     } else {
-                        marker.className = "directionLarge active";
-                     }
-                    
-                    // Set the top location of the marker
-                    marker.style.top = (y) + "px";
-                    // Set the left position of the marker
-                    marker.style.left = (x) + "px";
-                    // Set the marker width and height
-                    marker.style.height = (height) + "px";
-                    marker.style.width = (width) + "px";
-            
-                    // set up class properties
-                    direction.marker = direction.marker || marker
-                    if(!direction.marker.parentNode) {
-                        // push the sensor to the room container
-                              var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-
-                    document.getElementById("containerForRoom" + addition).appendChild(direction.marker);
-                    } 
-                }
-        }
-    }
-
-    function activateDoors(room,doorNumber=0,direction=0){
-        var iterations = 1;
-            if(room == 9 ||room == 14 || room == 15 || room == 21 || room == 22) {
-            iterations = 2
-            }
-            for(j = 1; j <= iterations ;j++) {
-               
-                        var checkMarker = document.getElementById("door-Marker" + room+"-"+j);
-                     
-                    if(checkMarker === null) {
-                    var door = document.getElementById("door-"+room+"-"+j);
-                     
-                    if(door !== null) {
-                        //Get the alarm location
-                
-                        var doorLocation = door.coords.split(",")
-                        var x = doorLocation[0];
-                        var y = doorLocation[1];
-                        var height = doorLocation[2];
-                        var width =  doorLocation[3];
-            
-                        // create marker for the flashing icon
-                        var marker = document.createElement("div");
-                        marker.id = "door-Marker" + room+"-"+j;
-                  
-                        var leftOrUp = door.dataset.functionparameters.split(",")[2]
-                       
-                        if(leftOrUp == "'left'") {
-                            marker.className = "doorLeft active";
-                            
-                            if(room== "tutorial") {
-                                
-                                 marker.className = "doorLeftLarge active";
-                            }
-                            
-                        } else {
-                            marker.className = "doorUp active";
-                        }
-                        
-                        // Set the top location of the marker
-                        marker.style.top = (y) + "px";
-                        // Set the left position of the marker
-                        marker.style.left = (x) + "px";
-                        // Set the marker width and height
-                        marker.style.height = (height) + "px";
-                        marker.style.width = (width) + "px";
-                        // set up class properties
-                        door.marker = door.marker || marker
-                        if(!door.marker.parentNode) {
-                            // push the sensor to the room container
-                                  var addition = ""
-                        if(room == "tutorial"){
-                            addition = "2"
-                        }
-                    
-                        document.getElementById("containerForRoom" + addition).appendChild(door.marker);
-                        } 
-                    }
-            }
-            
-            }
-
-    }
-
-    function deactivateDoors(room) {
-        // Just delete the sensor marker if it exists
-                       var sensorMarker = document.getElementById("door-Marker" + room+"-"+1);
-                if(sensorMarker !== null) {
-                    sensorMarker.remove();
-                }
-        if(room == 9 ||room == 14 || room == 15 || room == 21 || room == 22) { 
-
-              var sensorMarker = document.getElementById("door-Marker" + room+"-"+2);
-                if(sensorMarker !== null) {
-                    sensorMarker.remove();
-                }
-         }
-
-    }
-
-
-    function deactivateSensor(room) {
-        // Just delete the sensor marker if it exists
-        var sensorMarker = document.getElementById("sensor-Marker" + room);
-        if(sensorMarker !== null) {
-            sensorMarker.remove();
-        }
-    }
-
-        function deactivateDirection(room) {
-        // Just delete the direction marker if it exists
-        var directionMarker = document.getElementById("direction-Marker" + room);
-        if(directionMarker !== null) {
-            directionMarker.remove();
-        }
-    }
-       function deactivateAlarms(room) {
-        // Just delete the sensor marker if it exists
-        var alarmMarker = document.getElementById("alarm-Marker" + room);
-        if(alarmMarker !== null) {
-            alarmMarker.remove();
-        }
-    }
-
-   function deactivateSprinkler(room) {
-        // Just delete the sensor marker if it exists
-        var sprinklerMarker = document.getElementById("sprinkler-Marker" + room);
-        if (sprinklerMarker !== null) {
-            sprinklerMarker.remove();
-        }
-    }
-    function activateOrDeactivateOrDeactivateSensors(area) {
-        // Turns on the on color of a sensor if it is currently detecting a fire or chemical leak
-        const coords = area.coords.split(',').map(Number);
-        const [x, y, r] = coords;
-        const overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        overlay.style.width = (r * 2) + 'px';
-        overlay.style.height = (r * 2) + 'px';
-        overlay.style.left = (x - r) + 'px';
-        overlay.style.top = (y - r) + 'px';
-        area.overlay = area.overlay || overlay;
-        area.overlay.classList.toggle('active');
-        if (!area.overlay.parentNode) {
-            document.getElementById('containerForRoom').appendChild(area.overlay);
-        }
-    }
-
- 
-    
-    function removeWhiteOverSensor(room) {
-        // Just delete the sensor marker if it exists
-      
-        var sensorMarker = document.getElementById("sensor-Marker-white" + room);
-        if (sensorMarker !== null) {
-         
-            sensorMarker.remove();
-        }
-    }
-    function activateOrDeactivateAlarm(area) {
-        // draws alarm state over alarms 
-    }
-    function activateOrDeactivateSprinkler(area) {
-        // draws sprinker state
-    }
-    function  activateOrDeactivateDirectionIndicators(area) {
-        // draws direction indicators state
-    }
-    function addOrRemoveSensor(){
-        //
-    }
-    function addOrRemoveAlarm() {
-        //
-    }
-    function addOrRemoveSprinkler() {
-        //
-    }
-    function addOrRemoveDirectionIndicator() {
-        //
-    }
-
-</script>
-
-<style>
-    .whiteBackground {
-        position:absolute;
-        height: 25px;
-        width: 25px;
-        opacity: 0.9;
-        border-radius: 60%;
-        background-color: white;
-   
-    }
-
-
-    /*alarm css*/
-    .alarm {
-        position:absolute;
-        height: 40px;
-        width: 25px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: alarmKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .alarm.active {
-        opacity: 0.5;
-    }
-    @@keyframes alarmKeyFrame {
-        0% {
-                height: 40px;
-                width: 25px;
-                background-color: red;
-        }
-        25% {
-                height: 20px;
-                width: 25px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 25px;
-                background-color: red;
-        }
-        75% {
-                height: 20px;
-                width: 25px;
-                background-color: green;
-        }
-        100% {
-                height: 40px;
-                width: 25px;
-                background-color: red;
-        }
-    }
-    /*sprinkler css */
-     .sprinkler {
-        position:absolute;
-        height: 40px;
-        width: 35px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: sprinklerKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .sprinkler.active {
-        opacity: 0.5;
-    }
-    @@keyframes sprinklerKeyFrame {
-        0% {
-                height: 40px;
-                width: 45px;
-                background-color: red;
-        }
-        25% {
-                height: 20px;
-                width: 45px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 45px;
-                background-color: red;
-        }
-        75% {
-                height: 20px;
-                width: 45px;
-                background-color: green;
-        }
-        100% {
-                height: 40px;
-                width: 45px;
-                background-color: red;
-        }
-    }
-
-
-        /*direction css */
-     .direction {
-        position:absolute;
-        height: 20px;
-        width: 50px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: directionKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .direction.active {
-        opacity: 0.5;
-    }
-    @@keyframes directionKeyFrame {
-        0% {
-                height: 20px;
-                width: 50px;
-                background-color: red;
-        }
-        25% {
-                height: 20px;
-                width: 25px;
-                background-color: blue;
-        }
-        50% {
-                height: 20px;
-                width: 0px;
-                background-color: red;
-        }
-        75% {
-                height: 20px;
-                width: 25px;
-                background-color: green;
-        }
-        100% {
-                height: 20px;
-                width: 50px;
-                background-color: red;
-        }
-    }
-
-
-           /*direction css */
-     .doorLeft {
-        position:absolute;
-        height: 40px;
-        width: 50px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: doorLeftKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .doorLeft.active {
-        opacity: 0.5;
-    }
-    @@keyframes doorLeftKeyFrame {
-        0% {
-                height: 10px;
-                width: 50px;
-                background-color: red;
-        }
-        25% {
-                height: 10px;
-                width: 25px;
-                background-color: blue;
-        }
-        50% {
-                height: 10px;
-                width: 0px;
-                background-color: red;
-        }
-        75% {
-                height: 10px;
-                width: 25px;
-                background-color: green;
-        }
-        100% {
-                height: 10px;
-                width: 50px;
-                background-color: red;
-        }
-    }
-
-
-               /*direction css */
-     .doorUp {
-        position:absolute;
-        height: 50px;
-        width: 10px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: doorUpKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .doorUp.active {
-        opacity: 0.5;
-    }
-    @@keyframes doorUpKeyFrame {
-        0% {
-                height: 50px;
-                width: 10px;
-                background-color: red;
-        }
-        25% {
-                height: 25px;
-                width: 10px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 10px;
-                background-color: red;
-        }
-        75% {
-                height: 25px;
-                width: 10px;
-                background-color: green;
-        }
-        100% {
-                height: 50px;
-                width: 10px;
-                background-color: red;
-        }
-    }
-
-
-
-
-
-
-    /*sensor css*/
-    .sensor {
-        position:absolute;
-        height: 25px;
-        width: 25px;
-        opacity: 0;
-        border-radius: 60%;
-        background-color: red;
-        animation-name: sensorKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .sensor.active {
-        opacity: 0.5;
-    }
-    @@keyframes sensorKeyFrame {
-        0% {
-                height: 25px;
-                width: 25px;
-                background-color: red;
-        }
-        25% {
-                height: 20px;
-                width: 20px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 1px;
-                background-color: red;
-        }
-        75% {
-                height: 20px;
-                width: 20px;
-                background-color: green;
-        }
-        100% {
-                height: 25px;
-                width: 25px;
-                background-color: red;
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    /*alarmLarge css*/
-    .alarmLarge {
-        position:absolute;
-        height: 70px;
-        width: 55px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: alarmLargeKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .alarmLarge.active {
-        opacity: 0.5;
-    }
-    @@keyframes alarmLargeKeyFrame {
-        0% {
-                height: 70px;
-                width: 55px;
-                background-color: red;
-        }
-        25% {
-                height: 30px;
-                width: 55px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 55px;
-                background-color: red;
-        }
-        75% {
-                height: 30px;
-                width: 55px;
-                background-color: green;
-        }
-        100% {
-                height: 70px;
-                width: 55px;
-                background-color: red;
-        }
-    }
-    /*sprinkler css */
-     .sprinklerLarge {
-        position:absolute;
-        height: 80px;
-        width: 50px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: sprinklerLargeKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .sprinklerLarge.active {
-        opacity: 0.5;
-    }
-    @@keyframes sprinklerLargeKeyFrame {
-        0% {
-                height: 80px;
-                width: 100px;
-                background-color: red;
-        }
-        25% {
-                height: 40px;
-                width: 100px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 100px;
-                background-color: red;
-        }
-        75% {
-                height: 40px;
-                width: 100px;
-                background-color: green;
-        }
-        100% {
-                height: 80px;
-            width: 100px;
-                background-color: red;
-        }
-    }
-
-
-        /*directionLarge css */
-     .directionLarge {
-        position:absolute;
-        height: 50px;
-        width: 100px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: directionLargeKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .directionLarge.active {
-        opacity: 0.5;
-    }
-    @@keyframes directionLargeKeyFrame {
-        0% {
-                height: 50px;
-                width: 100px;
-                background-color: red;
-        }
-        25% {
-                height: 50px;
-                width: 50px;
-                background-color: blue;
-        }
-        50% {
-                height: 50px;
-                width: 0px;
-                background-color: red;
-        }
-        75% {
-                height: 50px;
-                width: 50px;
-                background-color: green;
-        }
-        100% {
-                height: 50px;
-                width: 100px;
-                background-color: red;
-        }
-    }
-
-
-           /*direction css */
-     .doorLeftLarge {
-        position:absolute;
-        height: 40px;
-        width: 100px;
-        opacity: 0;
-
-        background-color: red;
-        animation-name: doorLeftLargeKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .doorLeftLarge.active {
-        opacity: 0.5;
-    }
-    @@keyframes doorLeftLargeKeyFrame {
-        0% {
-                height: 40px;
-                width: 100px;
-                background-color: red;
-        }
-        25% {
-                height: 40px;
-                width: 50px;
-                background-color: blue;
-        }
-        50% {
-                height: 40px;
-                width: 0px;
-                background-color: red;
-        }
-        75% {
-                height: 40px;
-                width: 50px;
-                background-color: green;
-        }
-        100% {
-                height: 40px;
-                width: 100px;
-                background-color: red;
-        }
-    }
-
-
-
-
-
-
-
-
-
-    /*sensor css*/
-    .sensorLarge {
-        position:absolute;
-        height: 55px;
-        width: 55px;
-        opacity: 0;
-        border-radius: 60%;
-        background-color: red;
-        animation-name: sensorLargeKeyFrame;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-    }
-    .sensorLarge.active {
-        opacity: 0.5;
-    }
-    @@keyframes sensorLargeKeyFrame {
-        0% {
-                height: 55px;
-                width: 55px;
-                background-color: red;
-        }
-        25% {
-                height: 20px;
-                width: 20px;
-                background-color: blue;
-        }
-        50% {
-                height: 0px;
-                width: 1px;
-                background-color: red;
-        }
-        75% {
-                height: 20px;
-                width: 20px;
-                background-color: green;
-        }
-        100% {
-                height: 55px;
-                width: 55px;
-                background-color: red;
-        }
-    }
-        .containerForRoom {
-            position: relative;
-
-        }
-</style>
-
+</head>
