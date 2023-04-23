@@ -238,6 +238,7 @@ public class CameraViewControler : Controller
     [HttpGet("OnAlarmReportedProcedureAJAX")]
     public IActionResult OnAlarmReportedProcedureAJAX([FromQuery] bool Gas)
     {
+        getControlCenterState();
         getBuildingState();
         /* Returned from this should be in this form 
          {
@@ -259,11 +260,7 @@ public class CameraViewControler : Controller
         // activate sprinkler
         // Success needs to be true or false
         // var success = _controlCenter.testGetEmployeePassword();
-        if (_controlCenter.isManned)
-        {
-            // Control center is manned process
-        }
-        else {
+ 
             // Control center is not manned process
 
             //
@@ -312,14 +309,16 @@ public class CameraViewControler : Controller
             // "doors": [6,22],
             AlarmReportedProcedure[4] = new object[] { doors };
 
-            var peopleCalled = _buldingControl.requestToMakeCallsAutomated(Gas);
-            // "peopleCalled":["FireDepartment","OnCall"]
-            AlarmReportedProcedure[5] = new object[] { peopleCalled };
-
+            if(_controlCenter.isManned == true) {
+                AlarmReportedProcedure[5] = new object[] { false };
+            } else {
+                var peopleCalled = _buldingControl.requestToMakeCallsAutomated(Gas);
+                // "peopleCalled":["FireDepartment","OnCall"]
+                AlarmReportedProcedure[5] = new object[] { peopleCalled };
+            }
+            Debug.WriteLine(AlarmReportedProcedure[0]);
             updateBuildingState();
             return Json(AlarmReportedProcedure);
-        }
-        return (Json(false));
     }
 
 }

@@ -138,11 +138,43 @@ public class Index : Controller
         return Json(success);
     }
 
-    [HttpGet("OnAttemptGetOnCall")]
-    public IActionResult OnAttemptGetOnCall(int roomNumber)
+    // [HttpGet("OnClockIn")]
+    // public IActionResult OnClockIn()
+    // { 
+    //     // Success needs to be true or false
+    //     getControlCenterState();
+    //     var success = _controlCenter.isManned = true;
+    //     updateControlCenterState();
+    //     return Json(true);
+    // }
+    [HttpGet("OnAttemptGetOnCall1")]
+    public IActionResult OnAttemptGetOnCall1(int roomNumber)
     {
         // Success needs to be true or false
         var success = _controlCenter.getOnCallOperator();
         return Json(success);
+    }
+
+    [HttpGet("OnAttemptGetOnCall")]
+    public IActionResult OnAttemptGetOnCall([FromQuery] int man=0)
+    {
+        // Success needs to be true or false
+        if(man==0) {
+            getControlCenterState();
+            var success = _controlCenter.getOnCallOperator();
+            return Json(success);
+        } else {
+            getControlCenterState();
+            if(man == 1) {
+                var test = _controlCenter.isManned = true;
+            } else {
+                var test = _controlCenter.isManned = false;
+            }
+            
+            updateControlCenterState();
+            return Json(true);
+        }
+
+        
     }
 }

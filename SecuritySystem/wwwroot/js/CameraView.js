@@ -362,6 +362,7 @@ function alarmReportedProcedureAJAX(Gas = false) {
         async: true,
         success: function (data) {
             // Should the alarm be on
+       
             if (data[0][0] == true) {
                 // Alarm was confirmed play alarm
                 // UNCOMMENT during presentation
@@ -421,7 +422,12 @@ function alarmReportedProcedureAJAX(Gas = false) {
             }
             if (data[5][0].length > 0) {
                 // show people to call
-                alert("The following have been called: " + data[5][0])
+                console.log(data[5][0])
+                if(data[5][0] == true) {
+
+                } else {
+                    alert("The following have been called: " + data[5][0])
+                }
             }
         },
         error: function (errorThrown) {

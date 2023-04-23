@@ -46,9 +46,40 @@ function roomClick(roomNumber) { // Retrieves
     AttemptGetRoomStateOnClick(roomNumber);
 }
 
-function clockInClick() {
-    alert("User clocked in.");
-    document.getElementById("clockedInText").innerHTML = "Congrats on clocking in!";
+// function clockInClick() {
+//     console.log("in")
+//     $.ajax({
+//         url: '/Index/OnAttemptGetOnCall',
+//         type: 'POST',
+//         dataType: 'json',
+//         success: function (data) {
+//             document.getElementById("clockedInText").innerHTML = "testCongrats on clocking in!";
+//         },
+//         error: function (xhr, status, error) {
+//             console.log(error);
+//         },
+//         async: true
+//     });
+  
+// }
+function clockInClick(type) {
+        $.ajax({
+            url: "/Index/OnAttemptGetOnCall",
+            dataType: "json",
+            data: { man: type },
+            success: function (data) {
+                console.log(data)
+                // Update the on-call operator <p> element with the response dat
+                if(type == 1) {
+                    document.getElementById("clockedInText").innerHTML = "Congrats on clocking in!";
+                } else {
+                    document.getElementById("clockedInText").innerHTML = "You have clocked out!";
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
+            }
+        });
 }
 
 ///////////////////////////////
@@ -74,7 +105,6 @@ function loopJSON(obj, prefix = '', room) {
     }
     var pElement = $('<p>').attr('id', 'roomDetails').html(result);
     $('.modal-body').html(pElement);
-
 }
 
 
