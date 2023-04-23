@@ -46,12 +46,72 @@ function roomClick(roomNumber) { // Retrieves
     AttemptGetRoomStateOnClick(roomNumber);
 }
 
+function clockInClick() {
+    alert("User clocked in.");
+    document.getElementById("clockedInText").innerHTML = "Congrats on clocking in!";
+}
+
 ///////////////////////////////
 /*
 Ajax Functions
 */
 ///////////////////////////////
 
+function loopJSON(data) {
+    const parsedData = $.parseJSON(data);
+    $.each(parsedData.building.roomList, function (index, room) {
+
+        let sensorActive = false;
+        let alarmActive = false;
+        let sprinklerActive = false;
+        let directionIndicatorActive = false;
+        $.each(room, function (key, value) {
+            if (key === "sprinkler" && (value.isActive)) {
+                sprinklerActive = true;
+            }
+
+            if (key === "directionIndecator") {
+                if (value.isActive == true) {
+                    directionIndicatorActive = true;
+                }
+
+            }
+            if (key === "alarm") { // check if the key is "alarm" and value is a gas/smoke alarm
+
+                if ((value.isActive === true) || (value.isActive === true)) {
+                    alarmActive = true;
+                }
+            }
+            if (key === "sensor") { // check if the key is "sensor" and value is a gas/smoke sensor
+
+                if ((value.isActive === true) || (value.isActive === true)) {
+                    sensorActive = true;
+                }
+            }
+            if (typeof value === "object") {
+                $.each(value, function (k, v) {
+
+                });
+            } else {
+
+            }
+        });
+
+        if (alarmActive || sensorActive) {
+            // Change the color of the room button to red
+            $(`a:contains("Room ${room.roomName}")`).css("background-color", "red");
+            $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid red");
+        } else {
+            // Change the color of the room button to green
+            $(`a:contains("Room ${room.roomName}")`).css("background-color", "green");
+            $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid green");
+        }
+
+        setNotifications(alarmActive, sensorActive, directionIndicatorActive, sprinklerActive, room.roomName);
+    });
+}
+
+/*
 function loopJSON(obj, prefix = '') {
     let result = '';
 
@@ -60,19 +120,26 @@ function loopJSON(obj, prefix = '') {
         if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
             loopJSON(value, newKey);
         } else {
-
+            console.log(`Key and value: ${key}, ${value}`);
             if ((newKey === `isElectricityActive`) ||
                 (newKey === `peoplePresent`) ||
                 (newKey === `doorArray`)) {
 
-                result += `${newKey}: ${value}<br>`;
+
+                newKey = JSON.stringify(newKey);
+                newValue = JSON.stringify(value);
+                console.log(`New Key and value: ${newKey}, ${newValue}`);
+                
+                result += `${newKey}: ${newValue}<br>`;
             }
         }
     });
 
     var pElement = $('<p>').attr('id', 'roomDetails').html(result);
     $('.modal-body').html(pElement);
+
 }
+*/
 
 function AttemptGetRoomStateOnClick(roomNumber) {
     $.ajax({
@@ -91,29 +158,13 @@ function AttemptGetRoomStateOnClick(roomNumber) {
     });
 }
 
-function OnAttemptGetSpecificRoomState() {
-    $(document).ready(function () {
-        $.ajax({
-            url: "/Index/OnAttemptGetSpecificRoomState",
-            dataType: "json",
-            success: function (data) {
-                // process the response
-
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
-        });
-    });
-}
-
 function AttemptGetSupervisor() {
     $(document).ready(function () {
         $.ajax({
             url: "/Index/OnAttemptGetSupervisor",
             dataType: "json",
             success: function (data) {
-
+                console.log(`Supervisor: ${data}`);
                 // Update the supervisor <p> element with the response data
                 $("#supervisor").append(data);
             },
@@ -131,7 +182,7 @@ function AttemptGetOnCall() {
             url: "/Index/OnAttemptGetOnCall",
             dataType: "json",
             success: function (data) {
-
+                console.log(`OpCall: ${data}`);
                 // Update the on-call operator <p> element with the response data
                 $("#onCallOp").append(data);
             },

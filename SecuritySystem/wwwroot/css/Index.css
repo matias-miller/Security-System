@@ -1,6 +1,11 @@
 ﻿.room-column {
     padding: .6em .6em 0em .6em;
 }
+
+#clockInText {
+    margin-top: 3.75em;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
