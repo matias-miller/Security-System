@@ -80,6 +80,7 @@ namespace buildingSystem{
                 sprinkler = this.sprinkler,
                 sensor = this.sensor,
                 alarm = this.alarm,
+                directionActive = this.directionIndecator
             };
 
             // Serialize the anonymous object to JSON

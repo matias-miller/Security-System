@@ -57,89 +57,26 @@ Ajax Functions
 */
 ///////////////////////////////
 
-function loopJSON(data) {
-    const parsedData = $.parseJSON(data);
-    $.each(parsedData.building.roomList, function (index, room) {
 
-        let sensorActive = false;
-        let alarmActive = false;
-        let sprinklerActive = false;
-        let directionIndicatorActive = false;
-        $.each(room, function (key, value) {
-            if (key === "sprinkler" && (value.isActive)) {
-                sprinklerActive = true;
-            }
 
-            if (key === "directionIndecator") {
-                if (value.isActive == true) {
-                    directionIndicatorActive = true;
-                }
-
-            }
-            if (key === "alarm") { // check if the key is "alarm" and value is a gas/smoke alarm
-
-                if ((value.isActive === true) || (value.isActive === true)) {
-                    alarmActive = true;
-                }
-            }
-            if (key === "sensor") { // check if the key is "sensor" and value is a gas/smoke sensor
-
-                if ((value.isActive === true) || (value.isActive === true)) {
-                    sensorActive = true;
-                }
-            }
-            if (typeof value === "object") {
-                $.each(value, function (k, v) {
-
-                });
-            } else {
-
-            }
-        });
-
-        if (alarmActive || sensorActive) {
-            // Change the color of the room button to red
-            $(`a:contains("Room ${room.roomName}")`).css("background-color", "red");
-            $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid red");
-        } else {
-            // Change the color of the room button to green
-            $(`a:contains("Room ${room.roomName}")`).css("background-color", "green");
-            $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid green");
-        }
-
-        setNotifications(alarmActive, sensorActive, directionIndicatorActive, sprinklerActive, room.roomName);
-    });
-}
-
-/*
-function loopJSON(obj, prefix = '') {
+function loopJSON(obj, prefix = '', room) {
     let result = '';
-
-    $.each(obj, function (key, value) {
-        var newKey = prefix ? `${prefix}.${key}` : key;
-        if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-            loopJSON(value, newKey);
-        } else {
-            console.log(`Key and value: ${key}, ${value}`);
-            if ((newKey === `isElectricityActive`) ||
-                (newKey === `peoplePresent`) ||
-                (newKey === `doorArray`)) {
-
-
-                newKey = JSON.stringify(newKey);
-                newValue = JSON.stringify(value);
-                console.log(`New Key and value: ${newKey}, ${newValue}`);
-                
-                result += `${newKey}: ${newValue}<br>`;
-            }
-        }
-    });
-
+    // This displays the details of the room inside the room
+    result += "Alarm active: "+ obj.building.roomList[room -1].alarm.isActive + "<br>"
+    result += "Direction indicators on: "+ obj.building.roomList[room -1].directionIndecator.isActive+ "<br>"
+    result += "Electricity active: "+ obj.building.roomList[room -1].isElectricityActive+ "<br>"
+    result += "Doors locked: "+ obj.building.roomList[room -1].doorArray[0].isLocked+ "<br>"
+    result += "People detected: "+ obj.building.roomList[room -1].peoplePresent+ "<br>"
+    result += "Sprinkler on: "+ obj.building.roomList[room -1].sensor.isActive+ "<br>"
+    result += "Sensor detecting issue: "+ obj.building.roomList[room -1].sensor.isActive+ "<br>"
+    if(obj.building.roomList[room -1].sensor.isActive) {
+        result += "Sensor detecting issue: "+ obj.building.roomList[room -1].sensor.alarmType+ "<br>"
+    }
     var pElement = $('<p>').attr('id', 'roomDetails').html(result);
     $('.modal-body').html(pElement);
 
 }
-*/
+
 
 function AttemptGetRoomStateOnClick(roomNumber) {
     $.ajax({
@@ -149,7 +86,7 @@ function AttemptGetRoomStateOnClick(roomNumber) {
         dataType: 'json',
         success: function (data) {
             var json = JSON.parse(data); // Parse the JSON string into a JSON object
-            loopJSON(json);
+            loopJSON(json,"",roomNumber);
         },
         error: function (xhr, status, error) {
             console.log(error);

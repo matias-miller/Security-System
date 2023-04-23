@@ -115,12 +115,12 @@ public class Index : Controller
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
 
-    [HttpGet("OnAttemptGetRoomStateOnClick")]
     [HttpPost("OnAttemptGetRoomStateOnClick")]
     public IActionResult OnAttemptGetRoomStateOnClick(int roomNumber)
     {
+        getBuildingState();
         updateBuildingState();
-        return Json(_buldingControl.getRoomStateJson(roomNumber));
+        return Json(HttpContext.Session.GetString("BuildingControl"));
     }
 
     [HttpGet("OnAttemptGetBuildingJson")]
