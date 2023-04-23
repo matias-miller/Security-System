@@ -1,3 +1,8 @@
+/* This class handles turning locking and unlocking the doors
+ * 
+ * 
+ */
+
 
 using System;
 using System.Collections.Generic;
@@ -12,32 +17,15 @@ namespace buildingSystem.roomComponents{
 
         public bool isLocked = false;
 
-        public int doorID = 0;
-
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool lockDoor() {
-            // TODO implement here
+            // This function locks the door
             this.isLocked = true;
             return this.isLocked;
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool unlockDoor() {
-            // TODO implement here
+            // This function unlocks the door
             this.isLocked = false;
-            return this.isLocked;
-        }
-
-        /// <summary>
-        /// returns the door attributes
-        /// @return
-        /// </summary>
-        public bool sendState() {
-            // TODO implement here
             return this.isLocked;
         }
 

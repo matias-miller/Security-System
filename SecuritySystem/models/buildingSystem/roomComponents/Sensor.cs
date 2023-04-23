@@ -1,3 +1,8 @@
+/* This class handles turning on and off the alarm.
+ * 
+ * 
+ */
+
 
 using System;
 using System.Collections.Generic;
@@ -13,16 +18,7 @@ namespace buildingSystem.roomComponents{
 
         public bool isActive;
 
-        public bool isGasSensor = false;
-
-        public bool isSmokeSensor = true;
-
-        public int sensorID = 0;
-
-
         public bool isInRoom = false;
-
-
         public bool addSensorToRoom() {
             this.isInRoom = true;
             Debug.WriteLine(this.isInRoom);
@@ -31,40 +27,27 @@ namespace buildingSystem.roomComponents{
 
         public bool RemoveSensorFromRoom()
         {
+            // Removes sensor from a room
             this.isInRoom = false;
             return this.isInRoom;
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool activateSensor() {
-            // TODO implement here
+            // Actives sensor in a room
             if (this.isInRoom != false) {
                 this.isActive = true;
                 return this.isActive;
             } else { return false; }
-               
-            
-           
-            
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool deactivateSensor() {
-            // TODO implement here
+            // Deactives alarm sensor
             this.isActive = false;
             return this.isActive;
         }
 
-        /// <summary>
-        /// returns the Sensor variables
-        /// @return
-        /// </summary>
         public bool sendState() {
-            // TODO implement here
+            // Sends state of alarm sensor
             return this.isActive;
         }
 

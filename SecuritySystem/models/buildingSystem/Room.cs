@@ -53,7 +53,6 @@ namespace buildingSystem{
 
         public roomComponents.Alarm alarm = new roomComponents.Alarm();
 
-
         public bool addPersonToRoom() {
             // This adds people to the room
             this.peoplePresent = true;

@@ -21,7 +21,6 @@ namespace buildingSystem{
         /// </summary>
         [JsonProperty]
         public static Building building = new Building();
-
         public object RequestToAddSensorToRoom(int room) {
             // This is how the building view gets a sensor added to the room
              building.roomList[room].sensor.addSensorToRoom();

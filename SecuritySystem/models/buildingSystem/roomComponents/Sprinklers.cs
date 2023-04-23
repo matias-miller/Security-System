@@ -1,3 +1,8 @@
+/*
+ * This class handles turning on and off the spinkler.
+ *
+ */
+
 
 using System;
 using System.Collections.Generic;
@@ -12,32 +17,15 @@ namespace buildingSystem.roomComponents{
 
         public bool isActive = false;
 
-        public int sprinklerID = 0;
-
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool activateSprinkler() {
-            // TODO implement here
+            // Activates the spinkler system
             this.isActive = true;
             return this.isActive;
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool turnOffSprinkler() {
-            // TODO implement here
+            // Turn off the spinkler system
             this.isActive = false;
-            return this.isActive;
-        }
-
-        /// <summary>
-        /// Returns the sprinkler attribute variables
-        /// @return
-        /// </summary>
-        public bool sendState() {
-            // TODO implement here
             return this.isActive;
         }
 
