@@ -113,12 +113,11 @@ function placeSensorsInRoomOnPageLoad(type) {
             for (i = 1; i <= 41; i++) {
                 if (i != 2 && i != 38) {
                     if (!data.includes(i)) {
-                        // Sensor not active
-
-                        drawWhiteOverSensor(i);
+                        // sensor is not active so we will draw a empty white circle over it
+                        addItemToGUI(i, "sensor",true,true)
                     } else {
                         // delete the white space over the sensor essentially making it in the room
-                        removeItemFromGUI(i, "sensor",removeWhiteOnSensor=true)
+                        removeItemFromGUI(i, "sensor",true)
                     }
                 }
 
@@ -217,7 +216,8 @@ function ActivateSensorAjax(specific = true, room = 0, returnFunction = false, f
         success: function (data) {
 
             if (data == true) {
-                activateSesor(room)
+                // add the sensor to the building view
+                addItemToGUI(room,"sensor",false,true)
             }
 
             if (returnFunction != false) {
@@ -335,7 +335,8 @@ async function setBackActiveSensorsOnRefreshAJAX() {
         aync: true,
         success: function (data) {
             if (data == true) {
-                activateSesor(cnt + 1)
+                // Add the sensors back into the room
+                addItemToGUI(cnt+1,"sensor",false,true)
                 // performing a call back like this will make this run more sequentially.
             }
             cnt++;
@@ -456,110 +457,27 @@ function alarmReportedProcedureAJAX(Gas = false) {
     });
 }
 
-
-
-///////////////////////////////
-/*
-Drawing Functions
- 
-*/
-///////////////////////////////
-
-function activateSesor(room) {
-
-    //This is used to deactivate a single sensor
-    var checkMarker = document.getElementById("sensor-Marker" + room);
-
-    // there needs to be no marker made for that sensor
-    if (checkMarker === null) {
-        var sensor = document.getElementById("sensor-" + room);
-
-        if (sensor !== null) {
-            //Get the sensor location
-            var sensorLocation = sensor.coords.split(",")
-            var x = sensorLocation[0];
-            var y = sensorLocation[1];
-            var radius = sensorLocation[2];
-
-            // create marker for the flashing icon
-            var marker = document.createElement("div");
-            marker.id = "sensor-Marker" + room;
-
-            if (room != "tutorial") {
-                marker.className = "sensor active";
-            } else {
-                marker.className = "sensorLarge active";
-            }
-
-            // Set the top location of the marker
-            marker.style.top = (y - radius) + "px";
-            // Set the left position of the marker
-            marker.style.left = (x - radius) + "px";
-            // Set the marker width and height
-            marker.style.height = (radius * 2) + "px";
-            marker.style.width = marker.style.height;
-
-            // set up class properties 
-
-            sensor.marker = marker
-
-            if (!sensor.marker.parentNode) {
-                // push the sensor to the room container
-                var addition = ""
-                if (room == "tutorial") {
-                    addition = "2"
-                }
-                document.getElementById("containerForRoom" + addition).appendChild(sensor.marker);
-            }
-        }
-    }
-}
-
-function drawWhiteOverSensor(room) {
-
-    //This is used to deactivate a single sensor
-    var checkMarker = document.getElementById("sensor-Marker-white" + room);
-    // there needs to be no marker made for that sensor
-    if (checkMarker === null) {
-        var sensor = document.getElementById("sensor-" + room);
-        if (sensor !== null) {
-            //Get the sensor location
-            var sensorLocation = sensor.coords.split(",")
-            var x = sensorLocation[0];
-            var y = sensorLocation[1];
-            var radius = sensorLocation[2];
-
-            // create marker for the flashing icon
-            var marker = document.createElement("div");
-            marker.id = "sensor-Marker-white" + room;
-            marker.className = "whiteBackground";
-            // Set the top location of the marker
-            marker.style.top = (y - radius) + "px";
-            // Set the left position of the marker
-            marker.style.left = (x - radius) + "px";
-            // Set the marker width and height
-            marker.style.height = (radius * 2) + "px";
-            marker.style.width = marker.style.height;
-
-            // set up class properties
-            sensor.marker = marker
-            if (!sensor.marker.parentNode) {
-                // push the sensor to the room container
-                var addition = ""
-                if (room == "tutorial") {
-                    addition = "2"
-                }
-                document.getElementById("containerForRoom" + addition).appendChild(sensor.marker);
-            }
-        }
-    }
-}
-
-function addItemToGUI(room,type) {
+////////////
+///////////
+// Drawing Functions
+///////////
+///////////
+function addItemToGUI(room,type, removeSensor=false,sensor=false) {
+    // Drawing function
     // This is used to add a element to the building layout
-    var checkMarker = document.getElementById(type+"-Marker" + room);
+    
+    if(removeSensor == true) {
+        // This means we are going to be putting a white section over the sensor, to show that it is no longer in the room
+        var checkMarker = document.getElementById("sensor-Marker-white" + room);
+        
+    } else {
+        // just add the normal type
+        var checkMarker = document.getElementById(type+"-Marker" + room);
+    }
+    
     // there needs to be no marker made the specific element to be added
     if (checkMarker === null) {
+        
         // get the room element
         var roomElement = document.getElementById(type+"-" + room);
         if (roomElement !== null) {
@@ -569,27 +487,64 @@ function addItemToGUI(room,type) {
             var elementLocation = roomElement.coords.split(",")
             var x = elementLocation[0];
             var y = elementLocation[1];
-            var height = elementLocation[2];
-            var width = elementLocation[3];
+            var height = 0;
+            var width = 0;
+            var radius = 0;
 
-            // create marker for the flashing icon
+            if(sensor == false) {
+                height = elementLocation[2];
+                 width = elementLocation[3];
+            } else {
+                radius = elementLocation[2];
+            }
+ 
+            // handel marker attributes
             var marker = document.createElement("div");
-            marker.id = type+"-Marker" + room;
+            if(removeSensor== true) {
+                // Add the white marker id
+                marker.id = "sensor-Marker-white" + room;
+            } else {
+                // just the normal ID
+                marker.id = type+"-Marker" + room;
+            }
+            
             if (room != "tutorial") {
                 // normal building view class
-                marker.className = type+" active";
+                if(removeSensor == true) {
+                    // white for clearing sensor
+                    marker.className = "whiteBackground";
+                } else {
+                    // normal classname
+                    marker.className = type+" active";
+                }
             } else {
                 // coming from tutorial so it needs to be large
-                marker.className = type+"Large active";
+                if(removeSensor == true) {
+                    // this will be sensor-Marker-white-tutorial
+                    marker.className = "whiteBackground";
+                } else {
+                    marker.className = type+"Large active";
+                }
             }
 
-            // Set the top location of the marker
-            marker.style.top = (y) + "px";
-            // Set the left position of the marker
-            marker.style.left = (x) + "px";
-            // Set the marker width and height
-            marker.style.height = (height) + "px";
-            marker.style.width = (width) + "px";
+      
+            // set the elements size and position
+            if(sensor == false) {
+                // everything else is rectangular
+                // Set the top location of the marker
+                marker.style.top = (y) + "px";
+                // Set the left position of the marker
+                marker.style.left = (x) + "px";
+                marker.style.height = (height) + "px";
+                marker.style.width = (width) + "px";
+            } else {
+                //Sensors are circular
+                marker.style.top = (y - radius) + "px";
+                // Set the left position of the marker
+                marker.style.left = (x - radius) + "px";
+                marker.style.height = (radius * 2) + "px";
+                marker.style.width = marker.style.height;
+            }
 
             // set up class properties
             roomElement.marker =  marker
@@ -671,6 +626,7 @@ function activateDoors(room, doorNumber = 0, direction = 0) {
 }
 
 function removeItemFromGUI(room,type,removeWhiteOnSensor=false, deactivateDoors=false) {
+    // Drawing function
     // This gets one of the elements that were added to the room map and removes it from the dom
     if(removeWhiteOnSensor == true) {
         var marker = document.getElementById(type+"-Marker-white" + room);
