@@ -65,6 +65,7 @@ namespace SecuritySystem.Pages.Shared
             {
                 try
                 {
+                    // Convert the temp data to the control center object
                     _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(temp);
                 }
                 catch (JsonException exeption)
@@ -84,6 +85,7 @@ namespace SecuritySystem.Pages.Shared
             {
                 try
                 {
+                    //  makes a building control object out of the temp data
                     _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(temp);
                 }
                 catch (JsonException exeption)
@@ -102,6 +104,7 @@ namespace SecuritySystem.Pages.Shared
         [HttpGet("OnLogoutAJAX")]
         public IActionResult OnLogoutAJAX()
         {
+            // gets the backend to log the user out
             // Success needs to be true or false
             var success = _controlCenter.attemptEmployeeLogout();
             return Json(success);
