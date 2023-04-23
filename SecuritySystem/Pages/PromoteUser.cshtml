@@ -1,4 +1,5 @@
-﻿@page
+﻿@* This is the promote user admin page *@
+@page
 @model PromoteUser
 @{
     ViewData["Title"] = "Promote User Page";
@@ -15,82 +16,52 @@
     </form>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        AttemptAddUsersToDropdownAJAX()
-    })
-    function AttemptPromoteUserAJAX() {
-        // This is the function that should happen on page submit
-        // I wonder if this should allow a user to be demoted
-        $.ajax({
-            url: '/PromoteUser/OnAttemptPromoteUserAJAX',
-            dataType: 'json',
-            data: {
-                user: document.getElementById("users").value,
-            },
-            success: function (data) {
-                console.log(data);
-                
-                if (data == true) {
-                    document.getElementById("promoteUserWorked").style.display = "block"
-                } else {
-                    document.getElementById("promoteUserError").style.display = "block"
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for AttemptPromoteUserAJAX:", errorThrown);
+@* Attempt to add users to dropdown is called on page load to fill in the dropdown *@
+document.addEventListener("DOMContentLoaded", function () {
+    AttemptAddUsersToDropdownAJAX()
+})
+
+function AttemptPromoteUserAJAX() {
+    // This is the function that should happen on page submit
+    @* this allows the user to become promoted and sends a backend request *@
+    $.ajax({
+        url: '/PromoteUser/OnAttemptPromoteUserAJAX',
+        dataType: 'json',
+        @* Send the user to the backend *@
+        data: {
+            user: document.getElementById("users").value,
+        },
+        success: function (data) {
+            if (data == true) {
+                document.getElementById("promoteUserWorked").style.display = "block"
+            } else {
+                document.getElementById("promoteUserError").style.display = "block"
             }
-        });
-    }
-    function AttemptAddUsersToDropdownAJAX(){
-        
-        $.ajax({
-            url: '/PromoteUser/OnAttemptAddUsersToDropdownAJAX',
-            dataType: 'json',
-            success: function (data) {
-                var userSelector = document.getElementById("users");
-                //Push the users to the selector
-                data.forEach(function(USER){
-                    var user = document.createElement("option")
-                    user.value = USER;
-                    user.text = USER;
-                    userSelector.appendChild(user);
-                })
-                if (data == true) {
+        },
+        error: function (errorThrown) {
+            console.log("An Error occured in the ajax request for AttemptPromoteUserAJAX:", errorThrown);
+        }
+    });
+}
 
-                } else {
-
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for AttemptAddUsersToDropdownAJAX:", errorThrown);
-            }
-        });
-    }
-
-      function AttemptGetPasswordAJAX() {
-        // This is the function that should happen on page submit
-        $.ajax({
-            url: '/PromoteUser/OnAttemptGetPassword',
-            dataType: 'json',
-
-            success: function (data) {
-                console.log(data);
-                // if data is true return change page to index else remain on current page
-                document.getElementById("test1").innerHTML = data;
-                if (data == true) {
-                    // navigate to the home page on success
-                    //console.log(document.getElementById("link").getAttribute('href'));
-                    //window.location.href = document.getElementById("link").getAttribute('href');
-                } else {
-
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
-
-        });
-    }
-    document.addEventListener("DOMContentLoaded",AttemptGetPasswordAJAX);
-
+function AttemptAddUsersToDropdownAJAX(){
+    @* This signals the backend the get all users from the backend for the dropdown *@
+    $.ajax({
+        url: '/PromoteUser/OnAttemptAddUsersToDropdownAJAX',
+        dataType: 'json',
+        success: function (data) {
+            var userSelector = document.getElementById("users");
+            //Push the users to the selector
+            data.forEach(function(USER){
+                var user = document.createElement("option")
+                user.value = USER;
+                user.text = USER;
+                userSelector.appendChild(user);
+            })
+        },
+        error: function (errorThrown) {
+            console.log("An Error occured in the ajax request for AttemptAddUsersToDropdownAJAX:", errorThrown);
+        }
+    });
+}
 </script>

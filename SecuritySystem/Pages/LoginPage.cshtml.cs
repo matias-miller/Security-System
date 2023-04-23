@@ -1,4 +1,5 @@
-﻿using buildingSystem;
+﻿// This handles the ajax calls from the loginPage
+using buildingSystem;
 using controlSystem;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using EmployeeNamespace = controlSystem.Employee;
 
 namespace SecuritySystem.Pages;
+// Needs to use controller so get lines up
 [Route("[controller]")]
 public class Login : Controller
 {
@@ -23,7 +25,7 @@ public class Login : Controller
     public override void OnActionExecuting(ActionExecutingContext context)
 
     {
-
+        // This happens on page load, to store the state of the control center and building control center
         // Fetch or get the building state on load depending if it is already set
         if (!HttpContext.Session.Keys.Contains("BuildingControl"))
         {
@@ -48,35 +50,29 @@ public class Login : Controller
 
     private void updateControlCenterState()
     {
+        // Updates the session variable that stores the control center
         if (_controlCenter != null)
         {
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
             try
             {
-                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
-                //    new JsonSerializerSettings() { 
-                //        NullValueHandling = NullValueHandling.Ignore
-                //    }
-                //    );
                 HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption) {
                 Debug.WriteLine(exeption);
             }
-            
         }
-
     }
 
     private void getControlCenterState()
     {
-        // This returnes the current shared building object
+        // Gets the control center session variable and converts it into the control center object
         var temp = HttpContext.Session.GetString("ControlCenter");
-        Debug.WriteLine(temp);
         if (temp != null)
         {
             try
             {
+                // Convert the Session string into an control center object and store it
                 _controlCenter = JsonConvert.DeserializeObject<ControlCenter>(temp);
             }
             catch (JsonException exeption)
@@ -84,19 +80,18 @@ public class Login : Controller
                 Debug.WriteLine(exeption);
             }
         }
-
     }
 
     private void getBuildingState()
     {
-        // This returnes the current shared building object
+        // Gets the current session string that holds the building control 
         var temp = HttpContext.Session.GetString("BuildingControl");
-        Debug.WriteLine(temp);
         // We need to check if the value is null and also put it in a try catch just in case
         if (temp != null)
         {
             try
             {
+                // convert the session into an control center object and save it
                 _buldingControl = JsonConvert.DeserializeObject<BuildingControlSystem>(temp);
             }
             catch (JsonException exeption)
@@ -111,26 +106,15 @@ public class Login : Controller
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
-    public void OnGet()
-    {
-    }
+
 
     [HttpGet("OnAttemptLoginAJAX")]
     public IActionResult OnAttemptLoginAJAX([FromQuery] string email, string password)
     {
-        // Success needs to be true or false
+        // trys to login and changes the control center attriutes as a result
         var success = _controlCenter.validateEmployeeLogin(email, password);
         updateBuildingState();
         updateControlCenterState();
-        return Json(success);
-    }
- 
-
-    [HttpGet("OnAttemptGetPassword")]
-    public IActionResult OnAttemptGetPassword()
-    {
-        // Success needs to be true or false
-        var success = _controlCenter.testGetEmployeePassword();
         return Json(success);
     }
 }

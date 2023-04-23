@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@* This page handles all login processes *@
+@page "/"
 @model Login
 @{
     ViewData["Title"] = "Login Page";
@@ -19,58 +20,29 @@
 </div>
 
 <script>
-    ///////////////////////////////
-    /*
-    Ajax Functions
-
-    */
-    ///////////////////////////////
-
-    function ExampleFunctionForAJAX() {
-        // Get the current sensor number
-
-        $.ajax({
-            url: '/Index/OnGetSpecificRoomState2',
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+function AttemptLoginAJAX() {
+    // When the sign is clicked an ajax call to the backend is performed comparing the user passwords
+    $.ajax({
+        url: '/Login/OnAttemptLoginAJAX',
+        dataType: 'json',
+        @* Send in the user password and email *@
+        data: {
+            email: document.getElementById("inputEmail").value,
+            password: document.getElementById("inputPassword").value,
+        },
+        success: function (data) {
+            // if data is true return change page to index else remain on current page
+            if(data == true) {
+                // navigate to the home page on success
+                window.location.href = document.getElementById("link").getAttribute('href');
+            } else {
+                @* display the login error *@
+                document.getElementById("loginError").style.display = "block";
             }
-        });
-    }
-
-
-
-    function AttemptLoginAJAX() {
-        // This is the function that should happen on page submit
-        $.ajax({
-            url: '/Login/OnAttemptLoginAJAX',
-            dataType: 'json',
-            data: {
-                email: document.getElementById("inputEmail").value,
-                password: document.getElementById("inputPassword").value,
-            },
-            success: function (data) {
-                console.log(data);
-                // if data is true return change page to index else remain on current page
-            
-                if(data == true) {
-                    // navigate to the home page on success
-                    //console.log(document.getElementById("link").getAttribute('href'));
-                    window.location.href = document.getElementById("link").getAttribute('href');
-                } else {
-                    document.getElementById("loginError").style.display = "block";
-                }
-            },
-            error: function (errorThrown) {
-                console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
-            }
-        });
-    }
-
-
-  
-
+        },
+        error: function (errorThrown) {
+            console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
+        }
+    });
+}
 </script>
