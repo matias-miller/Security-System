@@ -423,8 +423,8 @@ function alarmReportedProcedureAJAX(Gas = false) {
                 // activate directions
                 for (i = 1; i <= 41; i++) {
                     if (data[3][0].indexOf(i) !== -1) {
-                        // directions needs to be activated
-                        activateDirection(i);
+                        // this will add a direction indicator flasher to the room
+                        addItemToGUI(i, "direction")
                     } else {
                         // remove the direction indicator from the building view
                         removeItemFromGUI(i, "direction")
@@ -648,28 +648,33 @@ function activateSprinkler(room) {
     }
 }
 
-function activateDirection(room) {
-    //This is used to deactivate a direction alarm
-    var checkMarker = document.getElementById("direction-Marker" + room);
-    // there needs to be no marker made for that alarm
-    if (checkMarker === null) {
-        var direction = document.getElementById("direction-" + room);
-        if (direction !== null) {
-            //Get the alarm location
 
-            var directionLocation = direction.coords.split(",")
-            var x = directionLocation[0];
-            var y = directionLocation[1];
-            var height = directionLocation[2];
-            var width = directionLocation[3];
+function addItemToGUI(room,type) {
+    // This is used to add a element to the building layout
+    var checkMarker = document.getElementById(type+"-Marker" + room);
+    // there needs to be no marker made the specific element to be added
+    if (checkMarker === null) {
+        // get the room element
+        var roomElement = document.getElementById(type+"-" + room);
+        if (roomElement !== null) {
+            // Now we need to find the element location by splitting its coords
+            // These coords have x,y,height, and width.
+            // in the case of a circle there is no height and width just radious
+            var elementLocation = roomElement.coords.split(",")
+            var x = elementLocation[0];
+            var y = elementLocation[1];
+            var height = elementLocation[2];
+            var width = elementLocation[3];
 
             // create marker for the flashing icon
             var marker = document.createElement("div");
-            marker.id = "direction-Marker" + room;
+            marker.id = type+"-Marker" + room;
             if (room != "tutorial") {
-                marker.className = "direction active";
+                // normal building view class
+                marker.className = type+" active";
             } else {
-                marker.className = "directionLarge active";
+                // coming from tutorial so it needs to be large
+                marker.className = type+"Large active";
             }
 
             // Set the top location of the marker
@@ -681,19 +686,19 @@ function activateDirection(room) {
             marker.style.width = (width) + "px";
 
             // set up class properties
-            direction.marker = direction.marker || marker
-            if (!direction.marker.parentNode) {
-                // push the sensor to the room container
-                var addition = ""
-                if (room == "tutorial") {
-                    addition = "2"
-                }
-
-                document.getElementById("containerForRoom" + addition).appendChild(direction.marker);
+            roomElement.marker =  marker
+            // push the sensor to the room container
+            var addition = ""
+            if (room == "tutorial") {
+                // This means the element should be pushed to "containerForRoom2" instead of "containerForRoom"
+                addition = "2"
             }
+            // Finnaly push the marker to over the element
+            document.getElementById("containerForRoom" + addition).appendChild(roomElement.marker);
         }
     }
 }
+
 
 function activateDoors(room, doorNumber = 0, direction = 0) {
     var iterations = 1;
