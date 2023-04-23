@@ -52,11 +52,6 @@ public class AddUser: Controller
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
             try
             {
-                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
-                //    new JsonSerializerSettings() { 
-                //        NullValueHandling = NullValueHandling.Ignore
-                //    }
-                //    );
                 HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption)

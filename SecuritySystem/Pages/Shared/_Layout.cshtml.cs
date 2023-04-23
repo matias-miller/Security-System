@@ -1,4 +1,9 @@
-﻿using buildingSystem;
+﻿/* This is the main layout file .NET used - C# backend code
+ *
+ */
+
+
+using buildingSystem;
 using controlSystem;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
