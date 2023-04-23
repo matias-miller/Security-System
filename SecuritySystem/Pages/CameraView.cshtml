@@ -346,38 +346,39 @@ It provides the user with an easy way to tell what portion of the building have 
 
             @* Add remove sensors *@
             <div>
-                <button onclick="drawWhiteOverSensor('tutorial')">Remove Sensor</button>
-                <button onclick="removeWhiteOverSensor('tutorial')">Add Sensor</button>
+                
+                <button onclick="addItemToGUI('tutorial','sensor',true,true,false)">Remove Sensor</button>
+                <button onclick="removeItemFromGUI('tutorial','sensor',true, false)">Add Sensor</button>
             </div>
 
             @* Activate deactivate sensors *@
             <div>
-                <button onclick="activateSesor('tutorial')">Activate Sensor</button>
-                <button onclick="deactivateSensor('tutorial')">Deactivate Sensor</button>
+                <button onclick="addItemToGUI('tutorial','sensor',false,true,false)">Activate Sensor</button>
+                <button onclick="removeItemFromGUI('tutorial','sensor',false, false)">Deactivate Sensor</button>
             </div>
 
             @* Activate deactivate alarms *@
             <div>
-                <button onclick="activateAlarm('tutorial')">Activate Alarm</button>
-                <button onclick="deactivateAlarms('tutorial')">Deactivate Alarm</button>
+                <button onclick="addItemToGUI('tutorial','alarm', false,false,false)">Activate Alarm</button>
+                <button onclick="removeItemFromGUI('tutorial','alarm',false,false)">Deactivate Alarm</button>
             </div>
 
             @* Activate deactivate sprinkler *@
             <div>
-                <button onclick="activateSprinkler('tutorial')">Activate Sprinkler</button>
-                <button onclick="deactivateSprinkler('tutorial')">Deactivate Sprinkler</button>
+                <button onclick="addItemToGUI('tutorial','sprinkler', false,false,false)">Activate Sprinkler</button>
+                <button onclick="removeItemFromGUI('tutorial','sprinkler',false, false)">Deactivate Sprinkler</button>
             </div>
 
             @* Activate deactivate direction indicators *@
             <div>
-                <button onclick="activateDirection('tutorial')">Activate Direction Indicator</button>
-                <button onclick="deactivateDirection('tutorial')">Deactivate Direction Indicator</button>
+                <button onclick="addItemToGUI('tutorial','direction', false,false,false)">Activate Direction Indicator</button>
+                <button onclick="removeItemFromGUI('tutorial','direction',false,false)">Deactivate Direction Indicator</button>
             </div>
 
             @* Activate deactivate doors *@
             <div>
-                <button onclick="activateDoors('tutorial',1,'left')">Open Doors</button>
-                <button onclick="deactivateDoors('tutorial')">Close Doors</button>
+                <button onclick="addItemToGUI('tutorial','door', false,false,true)">Open Doors</button>
+                <button onclick="removeItemFromGUI('tutorial','door',false, true)">Close Doors</button>
             </div>
 
             @* This tutorial building layout works exactly like the real one but its just smaller *@
