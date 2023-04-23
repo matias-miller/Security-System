@@ -153,7 +153,7 @@
         alert("Fire Department Alerted");
     }
     function roomClick(roomNumber) {
-        console.log("Room clicked:", roomNumber);
+
         // Update the modal content with the room number
         document.getElementById("roomDetails").innerHTML = "Details for Room " + roomNumber;
         // Show the modal
@@ -197,7 +197,6 @@
             url: '/Index/OnGetSpecificRoomState2',
             dataType: 'json',
             success: function (data) {
-                console.log(data);
             },
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
@@ -251,7 +250,7 @@
                 dataType: "json",
                 success: function (data) {
                     // process the response
-                    console.log(data);
+                   
                 },
                 error: function (errorThrown) {
                     console.log("An Error occured in the ajax request for activateOrDeactivateSensorsAJAX:", errorThrown);
@@ -266,7 +265,7 @@
                 url: "/Index/OnAttemptGetSupervisor",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
+              
                     // Update the supervisor <p> element with the response data
                     $("#supervisor").append(data);
                 },
@@ -284,7 +283,7 @@
                 url: "/Index/OnAttemptGetOnCall",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
+              
                     // Update the on-call operator <p> element with the response data
                     $("#onCallOp").append(data);
                 },
@@ -307,7 +306,7 @@
         }
 
         if (directionIndicatorActive) {
-            console.log(`test`);
+        
             $("#direction-notification").append(` ${roomName}`);
         }
 
@@ -320,7 +319,7 @@
     function iterateOverDataOnLoad(data) {
         const parsedData = $.parseJSON(data);
         $.each(parsedData.building.roomList, function (index, room) {
-            console.log(`Room ${room.roomName} in zone ${room.zone}`);
+            
             let sensorActive = false;
             let alarmActive = false;
             let sprinklerActive = false;
@@ -329,33 +328,32 @@
                 if (key === "sprinkler" && (value.isActive)) {
                     sprinklerActive = true;
                 }
-                if (key === "directionIndicator" && (value.isActive)) {
-                    directionIndecatorActive = true;
+                
+                //if (key === "directionIndecator" && value.isActive == true) {
+              if (key === "directionIndecator") {
+                if(value.isActive == true) {
+                    directionIndicatorActive = true;
                 }
-                if (key === "alarm" && (value.isSmokeAlarm || value.isGasAlarm)) { // check if the key is "alarm" and value is a gas/smoke alarm
-                    console.log(`${key}.isSmokeAlarm: ${value.isSmokeAlarm}`);
-                    console.log(`${key}.isGasAlarm: ${value.isGasAlarm}`);
-                    console.log(`${key}.alarmID: ${value.alarmID}`);
-                    console.log(`${key}.isActive: ${value.isActive}`);
+        
+                }
+                if (key === "alarm" ) { // check if the key is "alarm" and value is a gas/smoke alarm
+       
                     if ((value.isActive === true) || (value.isActive === true)) {
                         alarmActive = true;
                     }
                 }
-                if (key === "sensor" && (value.isSmokeSensor || value.isGasSensor)) { // check if the key is "sensor" and value is a gas/smoke sensor
-                    console.log(`${key}.isSmokeSensor: ${value.isSmokeSensor}`);
-                    console.log(`${key}.isGasSensor: ${value.isGasSensor}`);
-                    console.log(`${key}.sensorID: ${value.sensorID}`);
-                    console.log(`${key}.isActive: ${value.isActive}`);
+                if (key === "sensor" ) { // check if the key is "sensor" and value is a gas/smoke sensor
+                  
                     if ((value.isActive === true) || (value.isActive === true)) {
                         sensorActive = true;
                     }
                 }
                 if (typeof value === "object") {
                     $.each(value, function (k, v) {
-                        console.log(`${key}.${k}: ${v}`);
+              
                     });
                 } else {
-                    console.log(`${key}: ${value}`);
+                   
                 }
             });
 
@@ -382,7 +380,7 @@
                     iterateOverDataOnLoad(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("Error: " + textStatus + " - " + errorThrown);
+               
                 }
             });
         });
@@ -395,7 +393,7 @@
             url: '/Index/OnAttemptGetPassword',
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                
                 // if data is true return change page to index else remain on current page
                 if (data == true) {
                     // navigate to the home page on success
