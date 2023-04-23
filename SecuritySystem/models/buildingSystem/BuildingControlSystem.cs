@@ -97,7 +97,12 @@ namespace buildingSystem{
             }
     
         }
-     
+
+        public string getRoomStateJson(int room)
+        {
+            //function used to get all of the states in a room from building classsss
+            return building.requestRoomStateJson(room);
+        }
 
         public bool getSpecificRoomState(int room)
         {

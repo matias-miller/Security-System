@@ -1,5 +1,6 @@
 
 using buildingSystem.roomComponents;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -78,6 +79,32 @@ namespace buildingSystem{
             this.peoplePresent = false;
             Debug.WriteLine("remove" + this.peoplePresent);
             return this.peoplePresent;
+        }
+
+        // Method to return the room state as a JSON object
+        public string GetRoomStateAsJson()
+        {
+            // Create an anonymous object to represent the room state
+            var roomState = new
+            {
+                zone = this.zone,
+                roomName = this.roomName,
+                numberOfDoors = this.numberOfDoors,
+                isElectricityActive = this.isElectricityActive,
+                peoplePresent = this.peoplePresent,
+                doorArray = this.doorArray,
+                sprinkler = this.sprinkler,
+                sensor = this.sensor,
+                alarm = this.alarm,
+                camera = this.camera
+            };
+
+            // Serialize the anonymous object to JSON
+            var json = JsonConvert.SerializeObject(roomState);
+            Debug.WriteLine("room");
+            Debug.WriteLine(json);
+
+            return json;
         }
 
         public void requestTurnOnOffAlarm() {

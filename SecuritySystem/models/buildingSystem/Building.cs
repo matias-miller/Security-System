@@ -106,6 +106,12 @@ namespace buildingSystem{
             return count;
         }
 
+        public string requestRoomStateJson(int roomNumber)
+        {
+            // Returns Json room state from room class
+            return this.roomList[roomNumber].GetRoomStateAsJson();
+        }
+
         public object activateSprinklersAutomated()
         {
             int[] sprinklers =  { };

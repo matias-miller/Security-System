@@ -115,20 +115,12 @@ public class Index : Controller
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
 
-    [HttpGet("OnAttemptGetRoomStateOnClick")] // probably need later - still trying to get it working
-    public IActionResult OnAttemptGetRoomStateOnClick()
+    [HttpGet("OnAttemptGetRoomStateOnClick")]
+    [HttpPost("OnAttemptGetRoomStateOnClick")]
+    public IActionResult OnAttemptGetRoomStateOnClick(int roomNumber)
     {
-        // returns building data on click
-        getBuildingState();
-        return Json(HttpContext.Session.GetString("BuildingControl"));
-    }
-
-    [HttpGet("OnGetSpecificRoomState")]
-    public IActionResult OnGetSpecificRoomState()
-    {
-        // This is just a example function to show how to use a specific method from the building control
-        //updateBuildingState();
-        return Json(_buldingControl.getSpecificRoomState(3));
+        updateBuildingState();
+        return Json(_buldingControl.getRoomStateJson(roomNumber));
     }
 
     [HttpGet("OnAttemptGetBuildingJson")]
@@ -147,13 +139,12 @@ public class Index : Controller
     }
 
     [HttpGet("OnAttemptGetOnCall")]
-    public IActionResult OnAttemptGetOnCall()
+    public IActionResult OnAttemptGetOnCall(int roomNumber)
     {
         // Success needs to be true or false
         var success = _controlCenter.getOnCallOperator();
         return Json(success);
     }
-
 
     [HttpGet("OnAttemptGetPassword")]
     public IActionResult OnAttemptGetPassword()

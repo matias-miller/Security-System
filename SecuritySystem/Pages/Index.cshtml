@@ -56,6 +56,12 @@
         text-align: center;
     }
 
+        .room-button:hover {
+            font-weight: bold;
+            text-decoration: none;
+            outline: none;
+        }
+
     .zone {
         margin-top: 4.5em;
     }
@@ -71,10 +77,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="roomDetails">Room details will be displayed here.</p>
+                <p id="roomDetails"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -165,6 +170,7 @@
                 modal.style.display = "none";
             }
         };
+        AttemptGetRoomStateOnClick(roomNumber);
     }
     ///////////////////////////////
     /*
@@ -198,10 +204,50 @@
             }
         });
     }
-    function AttemptGetRoomState() {
+
+    function loopJSON(obj, prefix = '') {
+        let result = '';
+
+        $.each(obj, function (key, value) {
+            var newKey = prefix ? `${prefix}.${key}` : key;
+            if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+                loopJSON(value, newKey);
+            } else {
+
+                if ((newKey === `isElectricityActive`) ||
+                    (newKey === `peoplePresent`) ||
+                    (newKey === `doorArray`)) {
+
+                    result += `${newKey}: ${value}<br>`;
+                }
+            }
+        });
+
+        var pElement = $('<p>').attr('id', 'roomDetails').html(result);
+        $('.modal-body').html(pElement);
+    }
+
+    function AttemptGetRoomStateOnClick(roomNumber) {
+        $.ajax({
+            url: '/Index/OnAttemptGetRoomStateOnClick',
+            type: 'POST',
+            data: { arg1: roomNumber },
+            dataType: 'json',
+            success: function (data) {
+                var json = JSON.parse(data); // Parse the JSON string into a JSON object
+                loopJSON(json);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            },
+            async: true
+        });
+    }
+
+    function OnAttemptGetSpecificRoomState() {
         $(document).ready(function () {
             $.ajax({
-                url: "/Index/AttemptGetRoomState",
+                url: "/Index/OnAttemptGetSpecificRoomState",
                 dataType: "json",
                 success: function (data) {
                     // process the response
@@ -267,7 +313,6 @@
 
         if (sprinklerActive) {
             $("#sprinkler-notification").append(` ${roomName}`);
-            $("#sprinkler-notification").append(`.`);
         }
 
     }
@@ -288,38 +333,40 @@
                     directionIndecatorActive = true;
                 }
                 if (key === "alarm" && (value.isSmokeAlarm || value.isGasAlarm)) { // check if the key is "alarm" and value is a gas/smoke alarm
-                    //console.log(`${key}.isSmokeAlarm: ${value.isSmokeAlarm}`);
-                    //console.log(`${key}.isGasAlarm: ${value.isGasAlarm}`);
-                    //console.log(`${key}.alarmID: ${value.alarmID}`);
-                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    console.log(`${key}.isSmokeAlarm: ${value.isSmokeAlarm}`);
+                    console.log(`${key}.isGasAlarm: ${value.isGasAlarm}`);
+                    console.log(`${key}.alarmID: ${value.alarmID}`);
+                    console.log(`${key}.isActive: ${value.isActive}`);
                     if ((value.isActive === true) || (value.isActive === true)) {
                         alarmActive = true;
                     }
                 }
                 if (key === "sensor" && (value.isSmokeSensor || value.isGasSensor)) { // check if the key is "sensor" and value is a gas/smoke sensor
-                    //console.log(`${key}.isSmokeSensor: ${value.isSmokeSensor}`);
-                    //console.log(`${key}.isGasSensor: ${value.isGasSensor}`);
-                    //console.log(`${key}.sensorID: ${value.sensorID}`);
-                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    console.log(`${key}.isSmokeSensor: ${value.isSmokeSensor}`);
+                    console.log(`${key}.isGasSensor: ${value.isGasSensor}`);
+                    console.log(`${key}.sensorID: ${value.sensorID}`);
+                    console.log(`${key}.isActive: ${value.isActive}`);
                     if ((value.isActive === true) || (value.isActive === true)) {
                         sensorActive = true;
                     }
                 }
                 if (typeof value === "object") {
                     $.each(value, function (k, v) {
-                        //console.log(`${key}.${k}: ${v}`);
+                        console.log(`${key}.${k}: ${v}`);
                     });
                 } else {
-                    //console.log(`${key}: ${value}`);
+                    console.log(`${key}: ${value}`);
                 }
             });
 
             if (alarmActive || sensorActive) {
                 // Change the color of the room button to red
                 $(`a:contains("Room ${room.roomName}")`).css("background-color", "red");
+                $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid red");
             } else {
                 // Change the color of the room button to green
                 $(`a:contains("Room ${room.roomName}")`).css("background-color", "green");
+                $(`a:contains("Room ${room.roomName}")`).css("border", "1px solid green");
             }
 
             setNotifications(alarmActive, sensorActive, directionIndicatorActive, sprinklerActive, room.roomName);
@@ -341,6 +388,7 @@
         });
     }
     document.addEventListener("DOMContentLoaded", AttemptGetBuildingJson);
+
     function AttemptGetPasswordAJAX() {
         // This is the function that should happen on page submit
         $.ajax({

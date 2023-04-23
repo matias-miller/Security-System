@@ -132,10 +132,10 @@ public class CameraViewControler : Controller
 
     // You need to route the functon name  
     [HttpGet("OnGetSpecificRoomState")]
-    public IActionResult OnGetSpecificRoomState()
+    public IActionResult OnGetSpecificRoomState(int roomNumber)
     {
         // This is more of an example function
-        var data = _buldingControl.getSpecificRoomState(1);
+        var data = _buldingControl.getSpecificRoomState(roomNumber);
         return Json(data);
     }
 
