@@ -1,3 +1,8 @@
+/* This class handles turning on and off direction indicators and getting 
+ * 
+ * 
+ */
+
 
 using System;
 using System.Collections.Generic;
@@ -11,33 +16,15 @@ namespace buildingSystem.roomComponents{
         }
 
         public bool isActive = false;
-
-        public int directionIndicatorID = 0;
-
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool turnOnIndicators() {
-            // TODO implement here
+            // Turns on the direction indicators
             this.isActive = true;
             return this.isActive;
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool turnOffIndicators() {
-            // TODO implement here
+            // Turns  the direction indicators
             this.isActive = false;
-            return this.isActive;
-        }
-
-        /// <summary>
-        /// returns DirectionIndicators attributes
-        /// @return
-        /// </summary>
-        public bool sendState() {
-            // TODO implement here
             return this.isActive;
         }
 

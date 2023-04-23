@@ -1,3 +1,7 @@
+/* This class handles turning on and off the alarm.
+ * 
+ * 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -5,50 +9,24 @@ using System.Linq;
 using System.Text;
 
 namespace buildingSystem.roomComponents{
-    /// <summary>
-    /// Test documentation
-    /// </summary>
+
     public class Alarm {
 
-        /// <summary>
-        /// Test documentation
-        /// </summary>
         public Alarm() {
         }
 
-        public bool isSmokeAlarm = false;
+        public bool isActive = false; // Default alarm is off
 
-        public bool isGasAlarm = false;
-
-        public int alarmID = 0;
-
-        public bool isActive = false;
-
-        /// <summary>
-        /// testsets
-        /// @return
-        /// </summary>
+        
         public bool activateAlarm() {
-            // TODO implement here
+            // Active alarm signals the alarm to turn on
             this.isActive = true;
             return this.isActive;
         }
 
-        /// <summary>
-        /// @return
-        /// </summary>
         public bool deactivateAlarm() {
-            // TODO implement here
+            // Disable the alarm signals the alarm to turn off
             this.isActive = false;
-            return this.isActive;
-        }
-
-        /// <summary>
-        /// Returns alarm variables
-        /// @return
-        /// </summary>
-        public bool sendState() {
-            // TODO implement here
             return this.isActive;
         }
 

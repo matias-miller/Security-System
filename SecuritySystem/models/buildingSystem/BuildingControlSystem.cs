@@ -31,11 +31,6 @@ namespace buildingSystem{
         public static Building building = new Building();
 
         /// <summary>
-        /// Holds a camera system object of CameraSystem to be used in below functions
-        /// </summary>
-        public cameraSystem.CameraSystem cameraSystem = new cameraSystem.CameraSystem();
-
-        /// <summary>
         /// When the buildingControlCenter object in control center wants the buildingState it will be returned via this.
         /// NEEDS TO STAY THE SAME
         /// @return

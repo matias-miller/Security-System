@@ -29,8 +29,6 @@ namespace buildingSystem{
             this.sprinkler = new roomComponents.Sprinklers();
             this.sensor = new roomComponents.Sensor();
             this.alarm = new roomComponents.Alarm();
-            // camera is kinda pointless
-            this.camera = new cameraSystem.Camera();
         }
 
         public bool isElectricityActive = false;
@@ -53,8 +51,6 @@ namespace buildingSystem{
         public roomComponents.Sensor sensor = new roomComponents.Sensor();
 
         public roomComponents.Alarm alarm = new roomComponents.Alarm();
-
-        public cameraSystem.Camera camera = new cameraSystem.Camera();
 
         //public static int test;
 
@@ -96,7 +92,6 @@ namespace buildingSystem{
                 sprinkler = this.sprinkler,
                 sensor = this.sensor,
                 alarm = this.alarm,
-                camera = this.camera
             };
 
             // Serialize the anonymous object to JSON
