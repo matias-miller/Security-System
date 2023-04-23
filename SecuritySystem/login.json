@@ -53,5 +53,16 @@
     "isOnCall": false,
     "isSupervisor": true,
     "employeeID": 5
+  },
+  {
+    "salary": 0,
+    "firstName": "dsa",
+    "lastName": "dsadsa",
+    "address": "",
+    "userName": "321321",
+    "password": "321321321",
+    "isOnCall": false,
+    "isSupervisor": true,
+    "employeeID": 6
   }
 ]

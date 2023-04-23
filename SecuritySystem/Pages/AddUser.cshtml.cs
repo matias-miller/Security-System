@@ -112,6 +112,7 @@ public class AddUser: Controller
         // This should only be used when a building control variable is changed. and it should be insured that the current version building is used
         HttpContext.Session.SetString("BuildingControl", JsonConvert.SerializeObject(_buldingControl));
     }
+
     [HttpGet("OnAttemptAddUserAJAX")]
     public IActionResult OnAttemptAddUserAJAX([FromQuery] string first, string last, string email, string password)
     {
