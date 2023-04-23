@@ -47,6 +47,7 @@ namespace SecuritySystem.Pages.Shared
 
         private void updateControlCenterState()
         {
+            // This sets the control center into temp data
             if (_controlCenter != null)
             {
                 /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used

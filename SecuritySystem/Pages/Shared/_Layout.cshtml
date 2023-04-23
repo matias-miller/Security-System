@@ -1,6 +1,6 @@
-﻿@model _Layout
+﻿@* This is for the header *@
+@model _Layout
 @{
-    //public bool showNav { get; set; } = true;
     var showNav = ViewData["showNav"] as bool? ?? true;
     var isAdmin = _Layout._controlCenter.attemptCheckIfAdmin();
 }
@@ -58,7 +58,7 @@
         </nav>
         <script>
             function AttemptLogoutAJAX() {
-                // This is the function that should happen on page submit
+                // This is what happens when the user selects logout
                 $.ajax({
                     url: '/_Layout/OnLogoutAJAX',
                     dataType: 'json',
@@ -99,7 +99,4 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
-
 </html>
-

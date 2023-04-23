@@ -1,4 +1,4 @@
-/* This class handles turning on and off direction indicators and getting 
+/* This class handles turning on and off direction indicators and getting its state
  * 
  * 
  */
@@ -27,6 +27,5 @@ namespace buildingSystem.roomComponents{
             this.isActive = false;
             return this.isActive;
         }
-
     }
 }

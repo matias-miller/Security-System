@@ -42,6 +42,7 @@ namespace controlSystem.Employee{
         /// </summary>
         public bool login(string userName, string password)
         {
+            // Checks if user login information matches there input
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -66,7 +67,7 @@ namespace controlSystem.Employee{
         }
 
         public bool logout() {
-            // TODO implement here
+            // Just a logout function
             return true;
         }
 
@@ -76,17 +77,13 @@ namespace controlSystem.Employee{
         
         }
 
-        public int getSalary() {
-            // TODO implement here
-            return this.salary;
-        }
-
         public string getPassword() {
             return this.password;
         }
 
         public bool addUser(string first, string last, string email, string password)
         {
+            // This function adds a user to the json file
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -132,6 +129,7 @@ namespace controlSystem.Employee{
         }
 
         public string findOnCall() {
+            // this returns the current oncall
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -148,11 +146,12 @@ namespace controlSystem.Employee{
             }
 
             // No one is on call
-            return "test";
+            return "false";
         }
 
         public string findSupervisor()
         {
+            // This uses the json to find who is the supervisor
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -174,6 +173,7 @@ namespace controlSystem.Employee{
 
         public bool promoteUser()
         {
+            // This modifies the json to promote a user to supervisor
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -200,10 +200,8 @@ namespace controlSystem.Employee{
                     return true;
                 }
             }
-
             // User not found
             return false;
         }
-        
     }
 }

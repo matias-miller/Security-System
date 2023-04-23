@@ -121,6 +121,5 @@ namespace buildingSystem{
             // This function gets the current state of a specific sensor
             return sensor.sendState();
         }
-
     }
 }

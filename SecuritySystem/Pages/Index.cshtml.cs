@@ -145,12 +145,4 @@ public class Index : Controller
         var success = _controlCenter.getOnCallOperator();
         return Json(success);
     }
-
-    [HttpGet("OnAttemptGetPassword")]
-    public IActionResult OnAttemptGetPassword()
-    {
-        // Success needs to be true or false
-        var success = _controlCenter.testGetEmployeePassword();
-        return Json(success);
-    }
 }

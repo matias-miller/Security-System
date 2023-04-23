@@ -19,6 +19,7 @@ namespace buildingSystem.roomComponents{
         public bool isActive;
 
         public bool isInRoom = false;
+        public string alarmType = "Fire";
         public bool addSensorToRoom() {
             this.isInRoom = true;
             Debug.WriteLine(this.isInRoom);
@@ -50,6 +51,5 @@ namespace buildingSystem.roomComponents{
             // Sends state of alarm sensor
             return this.isActive;
         }
-
     }
 }

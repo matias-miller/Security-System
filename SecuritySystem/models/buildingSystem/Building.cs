@@ -67,7 +67,6 @@ namespace buildingSystem{
             this.roomList[40] = new Room(1, "nine", 41);
         }
 
-
         public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
             // This function is how the building requests to modify the state of the sensor
             var data = this.roomList[roomNumber].performAction(requestType, action);
@@ -191,8 +190,8 @@ namespace buildingSystem{
                 }
             }
             return doors;
-
         }
+
         public object makeCallsAutomated(bool Gas)
         {
             // If the rooms sensor is active then we should push who to call to an array
@@ -204,6 +203,7 @@ namespace buildingSystem{
                 { // Sensor is on
                     if (Gas == false)
                     {
+                        this.roomList[i].sensor.alarmType = "Fire";
                         // only push once
                         if (Array.IndexOf(calls, "Fire Department") == -1)
                         {
@@ -218,6 +218,7 @@ namespace buildingSystem{
                     }
                     else if(Gas == true) {
                         // only push once
+                        this.roomList[i].sensor.alarmType = "Gas";
                         if (Array.IndexOf(calls, "Gas Department") == -1) {
                             Array.Resize(ref calls, calls.Length + 1);
                             calls[calls.Length - 1] = "On Call Operator";
@@ -226,7 +227,6 @@ namespace buildingSystem{
                             Array.Resize(ref calls, calls.Length + 1);
                             calls[calls.Length - 1] = "Police";
                         }
-
                     }
                 }
             }

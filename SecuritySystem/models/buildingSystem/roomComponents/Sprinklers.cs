@@ -28,6 +28,5 @@ namespace buildingSystem.roomComponents{
             this.isActive = false;
             return this.isActive;
         }
-
     }
 }

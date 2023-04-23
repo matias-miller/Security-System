@@ -1,4 +1,5 @@
-﻿using buildingSystem;
+﻿// This handles the server 
+using buildingSystem;
 using controlSystem;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

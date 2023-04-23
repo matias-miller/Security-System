@@ -1,4 +1,4 @@
-
+// This handles funneling employee use cases
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -34,30 +34,6 @@ namespace controlSystem
 
         public buildingSystem.BuildingControlSystem buldingControlCenter = new buildingSystem.BuildingControlSystem();
 
-        public PhoneSystem phoneSystem = new PhoneSystem();
-
-        public int test = 0;
-        /// <summary>
-        /// This will load an employee object then request that the employee function becomeOnCall is used
-        /// @param employeeID 
-        /// @return
-        /// </summary>
-        public bool requestEmployeeToBeOnCall(string employeeID)
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// used to to trigger phoneSystem to make call
-        /// @param employeeOnCallID 
-        /// @return
-        /// </summary>
-        public bool requestToMakeCall(int employeeOnCallID)
-        {
-            // TODO implement here
-            return false;
-        }
 
         /// <summary>
         /// when employee used requestToManControl center or when just the controlCenter wants to set the onCall employee
@@ -82,78 +58,22 @@ namespace controlSystem
             return supervisor;
         }
 
-        /// <summary>
-        /// calls determinAlarmSeverity and getBuildingState
-        /// @return
-        /// </summary>
-        public bool alarmReportedProcedure()
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// This will call requestToModifyBuildingState from the buildingCenterObject
-        /// @return
-        /// </summary>
-        public bool useBuildingControlSystem()
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// used in alarmReportedProcedure, I assume this will just be a yes no toggle that will check say the employee manually checked the alarm
-        /// @return
-        /// </summary>
-        public bool confirmAlarmManually()
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// This will query sendBuildingStateToControlCenter to determine what state the building is in, will be called in alarmReportedProcedure
-        /// @return
-        /// </summary>
-        public bool checkIfBuildingControlCenterConfirmedAlarm()
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// @return
-        /// </summary>
-        public bool buildingStateListener()
-        {
-            // TODO implement here
-            return false;
-        }
-
-        /// <summary>
-        /// This will call the buildingControlCenter function displayBuilding
-        /// @return
-        /// </summary>
-        public bool requestThenDisplayBuildingView()
-        {
-            // TODO implement here
-            return false;
-        }
-
         public bool validateEmployeeLogin(string email, string password)
         {
+            // Checks if login was successful or not
             var success = employee.login(email, password);
             return success;
         }
         public bool attemptEmployeeLogout()
         {
+            // Logs the empoyee out
             var success = employee.logout();
             return success;
         }
 
         public bool attemptToPromoteUser(string user)
         {
+            // Modifies the user status in the login.json to become a supervisor
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -185,6 +105,7 @@ namespace controlSystem
 
         public string[] returnAllNonAdmins()
         {
+            // this gets all of the non admin users from the json
             // Read JSON file
             string relativePath = "login.json";
             // Combine the relative path with the current directory to get the full path
@@ -205,25 +126,19 @@ namespace controlSystem
                     nonAdminUsers.Add(employee.userName);
                 }
             } 
-
             return nonAdminUsers.ToArray();
         }
 
         public bool attemptAddUser(string first, string last, string email, string password) {
-
+            // This add a new user on the backend
             var success = employee.addUser(first, last, email, password);
             return success;
-
         }
 
         public bool attemptCheckIfAdmin() {
+            // checks if the user is admin on the backend
             var success = employee.checkIfAdmin();
             return success;
-        }
-
-        public string testGetEmployeePassword() {
-            Debug.WriteLine(employee.getPassword());
-           return employee.getPassword();
         }
     }
 }

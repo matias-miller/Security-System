@@ -182,14 +182,6 @@ public class CameraViewControler : Controller
         return Json(data);
     }
 
-    [HttpGet("OnAttemptGetPassword")]
-    public IActionResult OnAttemptGetPassword()
-    {
-        // Success needs to be true or false
-        var success = _controlCenter.testGetEmployeePassword();
-        return Json(success);
-    }
-
     [HttpGet("OnAttemptAddPersonToRoom")]
     public IActionResult OnAttemptAddPersonToRoom([FromQuery] int roomNumber)
     {

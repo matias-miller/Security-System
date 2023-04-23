@@ -45,7 +45,6 @@ namespace buildingSystem{
                     if (i != 1 || i != 38) {
                         roomsWithSensors.Add(i + 1);
                     }
-                 
                 }
             }
             return roomsWithSensors;
@@ -103,29 +102,25 @@ namespace buildingSystem{
             // how to building automatically activates alarms
             var alarms = building.activateAlarmsAutomated();
             return alarms;
-
         }
         public object requestToActivateDirectionsAutomated()
         {
             // How the building requests that directions be automatically activated
             var directions = building.activateDirectionsAutomated();
             return directions;
-
         }
         public object requestToActivateDoorsAutomated()
         {
             // how the building control requests doors be automatically closed
             var doors = building.activateDoorsAutomated();
             return doors;
-
         }
         public object requestToMakeCallsAutomated(bool Gas)
         {
             // how calls are automatically requested to be made
+             
             var calls = building.makeCallsAutomated(Gas);
             return calls;
-
         }
-
     }
 }

@@ -2,8 +2,6 @@
  * 
  * 
  */
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +26,5 @@ namespace buildingSystem.roomComponents{
             this.isLocked = false;
             return this.isLocked;
         }
-
     }
 }

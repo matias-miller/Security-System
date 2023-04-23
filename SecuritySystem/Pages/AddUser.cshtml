@@ -1,4 +1,5 @@
-﻿@page
+﻿@* This is where admin only users will add users to the system *@
+@page
 @model AddUser
 @{
     ViewData["Title"] = "Add User Page";
@@ -27,6 +28,7 @@
         $.ajax({
             url: '/AddUser/OnAttemptAddUserAJAX',
             dataType: 'json',
+            @* This is where the user data is passed to the ajax call *@
             data: {
                 first: document.getElementById("inputFirstName").value,
                 last: document.getElementById("inputLastName").value,
@@ -34,8 +36,6 @@
                 password: document.getElementById("inputPassword").value,
             },
             success: function (data) {
-                console.log(data);
-               
                 if (data == true) {
                     document.getElementById("addUserWorked").style.display = "block";
                 } else {
@@ -47,5 +47,4 @@
             }
         });
     }
-
 </script>
