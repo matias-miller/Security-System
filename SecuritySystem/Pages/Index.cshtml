@@ -8,7 +8,6 @@
     .room-column {
         padding: .6em .6em 0em .6em;
     }
-
     /* The Modal (background) */
     .modal {
         display: none; /* Hidden by default */
@@ -60,7 +59,6 @@
     .zone {
         margin-top: 4.5em;
     }
-
 </style>
 
 <div class="modal" tabindex="-1" role="dialog" id="roomModal">
@@ -97,15 +95,18 @@
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Notification</h3>
                     <br>
-                    <p>This is a notification.</p>
+                    <p id="alarm-notification">Alarms active in rooms:</p>
+                    <p id="sensor-notification">Sensors active in rooms:</p>
+                    <p id="direction-notification">Direction Indicator active in rooms:</p>
+                    <p id="sprinkler-notification">Sprinklers active in rooms:</p>
                 </div>
             </div>
             <div class="col-md-4 d-flex flex-column justify-content-between">
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Other Information</h3>
                     <br>
-                    <p>On-duty Supervisor:</p>
-                    <p>On-call Operator:</p>
+                    <p id="supervisor">On-duty Supervisor: </p>
+                    <p id="onCallOp">On-call Operator: </p>
                 </div>
                 <div class="col-12 flex-grow-1 text-center">
                     <h3>Building Control System</h3>
@@ -120,14 +121,11 @@
     </div>
 </div>
 
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
+<script>document.addEventListener("DOMContentLoaded", function () {
         const totalRooms = 40;
         const zones = 4;
         const roomsPerZone = Math.ceil(totalRooms / zones);
         let roomStatusesHtml = '';
-
         for (let z = 1; z <= zones; z++) {
             roomStatusesHtml += `<div class="col-md-3 zone"><h4>Zone ${z}</h4>`;
             for (let i = 1; i <= roomsPerZone; i++) {
@@ -138,40 +136,29 @@
             }
             roomStatusesHtml += '</div>';
         }
-
         document.getElementById("roomStatuses").innerHTML = roomStatusesHtml;
     });
-
-
     function soundAlarmClick() {
-        alert("Evaccuate the site");
+        alert("Evacuate the site");
     }
-
     function policeClick() {
-       alert("Police Department Alerted");
+        alert("Police Department Alerted");
     }
-
     function fireDepartmentClick() {
         alert("Fire Department Alerted");
     }
-
     function roomClick(roomNumber) {
-        // Your logic to handle the click event for each room
         console.log("Room clicked:", roomNumber);
-
         // Update the modal content with the room number
         document.getElementById("roomDetails").innerHTML = "Details for Room " + roomNumber;
-
         // Show the modal
         var modal = document.getElementById("roomModal");
         modal.style.display = "block";
-
         // Set the close button functionality
         var closeButton = document.getElementsByClassName("close")[0];
         closeButton.onclick = function () {
             modal.style.display = "none";
         };
-
         // Close the modal when clicking outside of it
         window.onclick = function (event) {
             if (event.target == modal) {
@@ -179,18 +166,13 @@
             }
         };
     }
-
     ///////////////////////////////
     /*
     Ajax Functions
-
     */
     ///////////////////////////////
-
-
     //function setExampleInputAJAX() {
     //    // Get the current sensor number
-
     //    $.ajax({
     //        url: '/Index/OnGetSpecificRoomState2',
     //        data: { exampleinput: document.getElementById("exampleInput").value },
@@ -203,10 +185,8 @@
     //        }
     //    });
     //}
-
     function ExampleFunctionForAJAX() {
         // Get the current sensor number
-
         $.ajax({
             url: '/Index/OnGetSpecificRoomState2',
             dataType: 'json',
@@ -218,7 +198,6 @@
             }
         });
     }
-
     function AttemptGetRoomState() {
         $(document).ready(function () {
             $.ajax({
@@ -234,16 +213,16 @@
             });
         });
     }
-    
+
     function AttemptGetSupervisor() {
         $(document).ready(function () {
             $.ajax({
                 url: "/Index/OnAttemptGetSupervisor",
                 dataType: "json",
                 success: function (data) {
-                    // process the response
-                    
-                    console.log(data);
+                    console.log(data)
+                    // Update the supervisor <p> element with the response data
+                    $("#supervisor").append(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
@@ -252,14 +231,16 @@
         });
     }
     document.addEventListener("DOMContentLoaded", AttemptGetSupervisor);
+
     function AttemptGetOnCall() {
         $(document).ready(function () {
             $.ajax({
-                url: "/Index/AttemptGetOnCall",
+                url: "/Index/OnAttemptGetOnCall",
                 dataType: "json",
                 success: function (data) {
-                    // process the response
-                    console.log(data);
+                    console.log(data)
+                    // Update the on-call operator <p> element with the response data
+                    $("#onCallOp").append(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("An error occurred while making the request: " + textStatus + " - " + errorThrown);
@@ -267,13 +248,104 @@
             });
         });
     }
+    document.addEventListener("DOMContentLoaded", AttemptGetOnCall);
 
+    function setNotifications(alarmActive, sensorActive, directionIndicatorActive, sprinklerActive, roomName) {
+
+        if (alarmActive) {
+            $("#alarm-notification").append(` ${roomName}`);
+        }
+
+        if (sensorActive) {
+            $("#sensor-notification").append(` ${roomName}`);
+        }
+
+        if (directionIndicatorActive) {
+            console.log(`test`);
+            $("#direction-notification").append(` ${roomName}`);
+        }
+
+        if (sprinklerActive) {
+            $("#sprinkler-notification").append(` ${roomName}`);
+            $("#sprinkler-notification").append(`.`);
+        }
+
+    }
+
+    function iterateOverDataOnLoad(data) {
+        const parsedData = $.parseJSON(data);
+        $.each(parsedData.building.roomList, function (index, room) {
+            console.log(`Room ${room.roomName} in zone ${room.zone}`);
+            let sensorActive = false;
+            let alarmActive = false;
+            let sprinklerActive = false;
+            let directionIndicatorActive = false;
+            $.each(room, function (key, value) {
+                if (key === "sprinkler" && (value.isActive)) {
+                    sprinklerActive = true;
+                }
+                if (key === "directionIndicator" && (value.isActive)) {
+                    directionIndecatorActive = true;
+                }
+                if (key === "alarm" && (value.isSmokeAlarm || value.isGasAlarm)) { // check if the key is "alarm" and value is a gas/smoke alarm
+                    //console.log(`${key}.isSmokeAlarm: ${value.isSmokeAlarm}`);
+                    //console.log(`${key}.isGasAlarm: ${value.isGasAlarm}`);
+                    //console.log(`${key}.alarmID: ${value.alarmID}`);
+                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    if ((value.isActive === true) || (value.isActive === true)) {
+                        alarmActive = true;
+                    }
+                }
+                if (key === "sensor" && (value.isSmokeSensor || value.isGasSensor)) { // check if the key is "sensor" and value is a gas/smoke sensor
+                    //console.log(`${key}.isSmokeSensor: ${value.isSmokeSensor}`);
+                    //console.log(`${key}.isGasSensor: ${value.isGasSensor}`);
+                    //console.log(`${key}.sensorID: ${value.sensorID}`);
+                    //console.log(`${key}.isActive: ${value.isActive}`);
+                    if ((value.isActive === true) || (value.isActive === true)) {
+                        sensorActive = true;
+                    }
+                }
+                if (typeof value === "object") {
+                    $.each(value, function (k, v) {
+                        //console.log(`${key}.${k}: ${v}`);
+                    });
+                } else {
+                    //console.log(`${key}: ${value}`);
+                }
+            });
+
+            if (alarmActive || sensorActive) {
+                // Change the color of the room button to red
+                $(`a:contains("Room ${room.roomName}")`).css("background-color", "red");
+            } else {
+                // Change the color of the room button to green
+                $(`a:contains("Room ${room.roomName}")`).css("background-color", "green");
+            }
+
+            setNotifications(alarmActive, sensorActive, directionIndicatorActive, sprinklerActive, room.roomName);
+        });
+    }
+
+    function AttemptGetBuildingJson() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Index/OnAttemptGetBuildingJson",
+                dataType: "json",
+                success: function (data) {
+                    iterateOverDataOnLoad(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + " - " + errorThrown);
+                }
+            });
+        });
+    }
+    document.addEventListener("DOMContentLoaded", AttemptGetBuildingJson);
     function AttemptGetPasswordAJAX() {
         // This is the function that should happen on page submit
         $.ajax({
             url: '/Index/OnAttemptGetPassword',
             dataType: 'json',
-
             success: function (data) {
                 console.log(data);
                 // if data is true return change page to index else remain on current page
@@ -282,7 +354,6 @@
                     //console.log(document.getElementById("link").getAttribute('href'));
                     //window.location.href = document.getElementById("link").getAttribute('href');
                 } else {
-
                 }
             },
             error: function (errorThrown) {
