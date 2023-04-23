@@ -395,9 +395,9 @@ function alarmReportedProcedureAJAX(Gas = false) {
                 // activate sprinkler
                 for (i = 1; i <= 41; i++) {
                     if (data[1][0].indexOf(i) !== -1) {
-                        // sprinkler needs to be activated
 
-                        activateSprinkler(i);
+                        // Here we will add a sprinkler flashing to the building view
+                        addItemToGUI(i, "sprinkler");
                     } else {
                         // remove the sprinkler from the building view
                         removeItemFromGUI(i, "sprinkler")
@@ -409,9 +409,9 @@ function alarmReportedProcedureAJAX(Gas = false) {
                 // activate alarm
                 for (i = 1; i <= 41; i++) {
                     if (data[2][0].indexOf(i) !== -1) {
-                        // Sprinkler needs to be activated
 
-                        activateAlarm(i);
+                        // Add a flashing alarm to the building view 
+                        addItemToGUI(i, "alarm")
                     } else {
                         // Remove the alarm from the building view
                         removeItemFromGUI(i, "alarm")
@@ -554,100 +554,6 @@ function drawWhiteOverSensor(room) {
         }
     }
 }
-function activateAlarm(room) {
-    //This is used to deactivate a single alarm
-    var checkMarker = document.getElementById("alarm-Marker" + room);
-
-    // there needs to be no marker made for that alarm
-    if (checkMarker === null) {
-        var alarm = document.getElementById("alarm-" + room);
-        if (alarm !== null) {
-            //Get the alarm location
-
-            var alarmLocation = alarm.coords.split(",")
-            var x = alarmLocation[0];
-            var y = alarmLocation[1];
-            var height = alarmLocation[2];
-            var width = alarmLocation[3];
-
-            // create marker for the flashing icon
-            var marker = document.createElement("div");
-            marker.id = "alarm-Marker" + room;
-            if (room != "tutorial") {
-                marker.className = "alarm active";
-            } else {
-                marker.className = "alarmLarge active";
-            }
-
-            // Set the top location of the marker
-            marker.style.top = (y) + "px";
-            // Set the left position of the marker
-            marker.style.left = (x) + "px";
-            // Set the marker width and height
-            marker.style.height = (height) + "px";
-            marker.style.width = (width) + "px";
-
-            // set up class properties
-            alarm.marker = alarm.marker || marker
-            if (!alarm.marker.parentNode) {
-                // push the sensor to the room container
-                var addition = ""
-                if (room == "tutorial") {
-                    addition = "2"
-                }
-                document.getElementById("containerForRoom" + addition).appendChild(alarm.marker);
-            }
-        }
-    }
-}
-
-function activateSprinkler(room) {
-    //This is used to deactivate a single alarm
-    var checkMarker = document.getElementById("sprinkler-Marker" + room);
-
-    // there needs to be no marker made for that alarm
-    if (checkMarker === null) {
-        var sprinkler = document.getElementById("sprinkler-" + room);
-        if (sprinkler !== null) {
-            //Get the alarm location
-
-            var sprinklerLocation = sprinkler.coords.split(",")
-            var x = sprinklerLocation[0];
-            var y = sprinklerLocation[1];
-            var height = sprinklerLocation[2];
-            var width = sprinklerLocation[3];
-
-            // create marker for the flashing icon
-            var marker = document.createElement("div");
-            marker.id = "sprinkler-Marker" + room;
-            if (room != "tutorial") {
-                marker.className = "sprinkler active";
-            } else {
-                marker.className = "sprinklerLarge active";
-            }
-
-            // Set the top location of the marker
-            marker.style.top = (y) + "px";
-            // Set the left position of the marker
-            marker.style.left = (x) + "px";
-            // Set the marker width and height
-            marker.style.height = (height) + "px";
-            marker.style.width = (width) + "px";
-
-            // set up class properties
-            sprinkler.marker = sprinkler.marker || marker
-            if (!sprinkler.marker.parentNode) {
-                // push the sensor to the room container
-                var addition = ""
-                if (room == "tutorial") {
-                    addition = "2"
-                }
-                document.getElementById("containerForRoom" + addition).appendChild(sprinkler.marker);
-            }
-        }
-    }
-}
-
 
 function addItemToGUI(room,type) {
     // This is used to add a element to the building layout
