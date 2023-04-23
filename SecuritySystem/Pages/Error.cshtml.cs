@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿// This is the prebuild error page
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
