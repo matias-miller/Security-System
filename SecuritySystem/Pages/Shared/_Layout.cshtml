@@ -20,7 +20,7 @@
     <a id="link2" asp-page="/asdf"></a>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-         @if(showNav) {
+         @if(showNav) { // Does not show nav on homescreen startup views
             <div class="container">
                     
                     <a class="navbar-brand" asp-area="" asp-page="/">SecuritySystem</a>
@@ -33,12 +33,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                            @if (isAdmin) {
+                            @if (isAdmin) { //hides view if user is not an admin
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/AddUser">Add User</a>
                                 </li>
                             }
-                            @if (isAdmin) {
+                            @if (isAdmin) { //hides view if user is not an admin
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/PromoteUser">Promote User</a>
                                 </li>
@@ -78,7 +78,6 @@
                     }
                 });
             }
-
 
         </script>
     </header>
