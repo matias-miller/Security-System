@@ -32,8 +32,6 @@ function addSensors(single, room2 = 0) {
     else {
         room = room2;
     }
-
-
     $.ajax({
         url: '/CameraViewControler/OnAttemptAddSensorToRoom',
         // Room array index starts at 0 so we subract 1
@@ -119,8 +117,8 @@ function placeSensorsInRoomOnPageLoad(type) {
 
                         drawWhiteOverSensor(i);
                     } else {
-                        // deactivate
-                        removeWhiteOverSensor(i);
+                        // delete the white space over the sensor essentially making it in the room
+                        removeItemFromGUI(i, "sensor",removeWhiteOnSensor=true)
                     }
                 }
 
@@ -256,7 +254,8 @@ function DeactivateSensorAjax(specific = true, room = 0) {
             dataType: 'json',
             success: function (data) {
 
-                deactivateSensor(room);
+                // remove the sensor from the building view
+                removeItemFromGUI(room, "sensor")
 
                 resolve();
             },
@@ -400,10 +399,9 @@ function alarmReportedProcedureAJAX(Gas = false) {
 
                         activateSprinkler(i);
                     } else {
-                        // make sure alarm is off
-                        deactivateSprinkler(i)
+                        // remove the sprinkler from the building view
+                        removeItemFromGUI(i, "sprinkler")
                     }
-
                 }
 
             }
@@ -415,8 +413,8 @@ function alarmReportedProcedureAJAX(Gas = false) {
 
                         activateAlarm(i);
                     } else {
-                        // make sure sprinkler is off
-                        deactivateAlarms(i)
+                        // Remove the alarm from the building view
+                        removeItemFromGUI(i, "alarm")
                     }
 
                 }
@@ -428,8 +426,8 @@ function alarmReportedProcedureAJAX(Gas = false) {
                         // directions needs to be activated
                         activateDirection(i);
                     } else {
-                        // make sure sprinkler is off
-                        deactivateDirection(i)
+                        // remove the direction indicator from the building view
+                        removeItemFromGUI(i, "direction")
                     }
 
                 }
@@ -441,8 +439,8 @@ function alarmReportedProcedureAJAX(Gas = false) {
                         // directions needs to be activated
                         activateDoors(i);
                     } else {
-                        // make sure sprinkler is off
-                        deactivateDoors(i)
+                        // open the door for the room
+                        removeItemFromGUI(i, "door",false,true)
                     }
                 }
             }
@@ -456,30 +454,6 @@ function alarmReportedProcedureAJAX(Gas = false) {
             console.log("An Error occured in the ajax request for alarmReportedProcedureAJAX:", errorThrown);
         }
     });
-}
-
-
-
-function activateOrDeactivateAlarmAJAX(area) {
-
-}
-function activateOrDeactivateSprinklerAJAX(area) {
-
-}
-function activateOrDeactivateDirectionIndicatorAJAX(area) {
-
-}
-function addOrRemoveSensorAJAX() {
-    //
-}
-function addOrRemoveAlarmAJAX() {
-    //
-}
-function addOrRemoveSprinklerAJAX() {
-    //
-}
-function addOrRemoveDirectionIndicatorAJAX() {
-    //
 }
 
 
@@ -785,99 +759,31 @@ function activateDoors(room, doorNumber = 0, direction = 0) {
 
 }
 
-function deactivateDoors(room) {
-    // Just delete the sensor marker if it exists
-    var sensorMarker = document.getElementById("door-Marker" + room + "-" + 1);
-    if (sensorMarker !== null) {
-        sensorMarker.remove();
+function removeItemFromGUI(room,type,removeWhiteOnSensor=false, deactivateDoors=false) {
+    // This gets one of the elements that were added to the room map and removes it from the dom
+    if(removeWhiteOnSensor == true) {
+        var marker = document.getElementById(type+"-Marker-white" + room);
+    } else {
+        var marker = document.getElementById(type+"-Marker" + room);
     }
-    if (room == 9 || room == 14 || room == 15 || room == 21 || room == 22) {
-
-        var sensorMarker = document.getElementById("door-Marker" + room + "-" + 2);
+    if(deactivateDoors == true) {
+        // Comming to deactivate a door
+        var sensorMarker = document.getElementById("door-Marker" + room + "-" + 1);
         if (sensorMarker !== null) {
+            // delete the room 1 if it exists
             sensorMarker.remove();
         }
+        if (room == 9 || room == 14 || room == 15 || room == 21 || room == 22) {
+            // these are the rooms that have a second door so we need to delete the second door
+            var sensorMarker = document.getElementById("door-Marker" + room + "-" + 2);
+            if (sensorMarker !== null) {
+                sensorMarker.remove();
+            }
+        }
+    } else {
+        // not a door just remove it if it exists
+        if (marker !== null) {
+            marker.remove();
+        }
     }
-
-}
-
-
-function deactivateSensor(room) {
-    // Just delete the sensor marker if it exists
-    var sensorMarker = document.getElementById("sensor-Marker" + room);
-    if (sensorMarker !== null) {
-        sensorMarker.remove();
-    }
-}
-
-function deactivateDirection(room) {
-    // Just delete the direction marker if it exists
-    var directionMarker = document.getElementById("direction-Marker" + room);
-    if (directionMarker !== null) {
-        directionMarker.remove();
-    }
-}
-function deactivateAlarms(room) {
-    // Just delete the sensor marker if it exists
-    var alarmMarker = document.getElementById("alarm-Marker" + room);
-    if (alarmMarker !== null) {
-        alarmMarker.remove();
-    }
-}
-
-function deactivateSprinkler(room) {
-    // Just delete the sensor marker if it exists
-    var sprinklerMarker = document.getElementById("sprinkler-Marker" + room);
-    if (sprinklerMarker !== null) {
-        sprinklerMarker.remove();
-    }
-}
-function activateOrDeactivateOrDeactivateSensors(area) {
-    // Turns on the on color of a sensor if it is currently detecting a fire or chemical leak
-    const coords = area.coords.split(',').map(Number);
-    const [x, y, r] = coords;
-    const overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    overlay.style.width = (r * 2) + 'px';
-    overlay.style.height = (r * 2) + 'px';
-    overlay.style.left = (x - r) + 'px';
-    overlay.style.top = (y - r) + 'px';
-    area.overlay = area.overlay || overlay;
-    area.overlay.classList.toggle('active');
-    if (!area.overlay.parentNode) {
-        document.getElementById('containerForRoom').appendChild(area.overlay);
-    }
-}
-
-
-
-function removeWhiteOverSensor(room) {
-    // Just delete the sensor marker if it exists
-
-    var sensorMarker = document.getElementById("sensor-Marker-white" + room);
-    if (sensorMarker !== null) {
-
-        sensorMarker.remove();
-    }
-}
-function activateOrDeactivateAlarm(area) {
-    // draws alarm state over alarms 
-}
-function activateOrDeactivateSprinkler(area) {
-    // draws sprinker state
-}
-function activateOrDeactivateDirectionIndicators(area) {
-    // draws direction indicators state
-}
-function addOrRemoveSensor() {
-    //
-}
-function addOrRemoveAlarm() {
-    //
-}
-function addOrRemoveSprinkler() {
-    //
-}
-function addOrRemoveDirectionIndicator() {
-    //
 }
