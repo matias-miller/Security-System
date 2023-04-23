@@ -130,29 +130,6 @@ function placeSensorsInRoomOnPageLoad(type) {
 
 }
     //document.addEventListener("DOMContentLoaded", placeSensorsInRoomOnPageLoad);
-
-
-///////////////////////////////
-/*
-Ajax Functions
- 
-*/
-///////////////////////////////
-function ExampleFunctionForAJAX() {
-    // The purpouse of this function is show how to use AJAX to call the Controller for this page
-    var URL = '/CameraViewControler/OnGetSpecificRoomState';
-    $.ajax({
-        url: URL,
-        dataType: 'json',
-        success: function (data) {
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('Error:', textStatus, errorThrown);
-        }
-    });
-}
-
 var cnt3 = 0;
 async function DeactivateRandomSensorsCallForActivateRandomSensors() {
 
