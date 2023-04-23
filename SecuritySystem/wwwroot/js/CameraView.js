@@ -1,9 +1,13 @@
+// The purpouse of this file is handling the frontend requests of cameraview.cshtml
+
 function displaySenarios() {
-    // This just shows or hids the senarios page
+    // This just shows or hids the senarios page to pop it open and close it
     var senarioBlock = document.getElementById("testSenarios");
     if (senarioBlock.style.display == "none") {
+        // open
         senarioBlock.style.display = "block";
     } else {
+        // close
         senarioBlock.style.display = "none";
     }
 }
@@ -12,13 +16,19 @@ function muteOrUnmute() {
     //This toggles the <p> soundOn to soundOff or visa versa, which will allow adible alarm to play
     var sound = document.getElementById("soundStatus");
     if (sound.innerHTML == "SoundOn") {
+        // turn off sound
         sound.innerHTML = "SoundOff";
     }
-    else { sound.innerHTML = "SoundOn"; }
+    else {
+        // turn on sound
+        sound.innerHTML = "SoundOn"; 
+    }
 }
+
 function playAlarm() {
     // play sound if system is not muted
     if (document.getElementById("soundStatus").innerHTML == "SoundOn") {
+        // This is how the sound is turned on
         var alarm = new Audio();
         alarm.src = document.querySelector('source').src;
         alarm.play();
@@ -26,92 +36,95 @@ function playAlarm() {
 }
 
 function addSensors(single, room2 = 0) {
+    // This is how sensors are requested to be added for the backend
     if (single == true) {
+        // This is where the user types in a number
         var room = document.getElementById("addSensorToRoom").value;
     }
     else {
+        // programically entered in
         room = room2;
     }
     $.ajax({
+        // Perform a backend ajax call to add sensor
         url: '/CameraViewControler/OnAttemptAddSensorToRoom',
         // Room array index starts at 0 so we subract 1
         data: { roomNumber: room - 1 },
         dataType: 'json',
         async: false,
         success: function (data) {
-
             if (single != false) {
+                // if its programically entered the whole page needs to be refreshed
                 placeSensorsInRoomOnPageLoad(1);
             }
-
         },
         error: function (errorThrown) {
-            console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+            console.log("An Error occured in the ajax request for addSensors:", errorThrown);
         }
     });
-
 }
 
 function removeSensors(single, room2 = 0) {
+    // How sensors are added to the room programmically and statically
     if (single == true) {
+        // Entered physically by the user the user
         var room = document.getElementById("removeSensorInRoom").value;
     }
     else {
+        // Entered programmically
         room = room2;
     }
-
-
     $.ajax({
+        // Add a sensor ajax call
         url: '/CameraViewControler/OnAttemptRemoveSensorFromRoom',
         // Room array index starts at 0 so we subract 1
         data: { roomNumber: room - 1 },
         dataType: 'json',
         async: false,
         success: function (data) {
-
             if (single != false) {
+                // If it is entered programmically the page needs to be refreshed
                 placeSensorsInRoomOnPageLoad(1);
             }
-
         },
         error: function (errorThrown) {
-            console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
+            console.log("An Error occured in the ajax request for removeSensors", errorThrown);
         }
     });
 }
 
 async function addAllSensors() {
+    // This loops through all of the sensors as asyncronous function
     for (i = 1; i <= 41; i++) {
+        // Add a sensor and wait for its ajax to finish
         await addSensors(false, i);
-
     }
+    // Finnally refresh the page
     placeSensorsInRoomOnPageLoad(1);
-
 }
 
 async function removeAllSensors() {
-    //await DeactivateAllSensors();
+    // This works like addAllSensors its asyncronous exept it removes them
     for (i = 1; i <= 41; i++) {
+        // Remove a sensor and wait for its ajax to return
         await removeSensors(false, i);
-
     }
+    // refresh the page then complete the alarm reported procedure
     placeSensorsInRoomOnPageLoad(1);
     alarmReportedProcedureAJAX();
-
-
 }
 
 function placeSensorsInRoomOnPageLoad(type) {
-
-
+    // This goes to the backend, and checks what sensors are active and adds it to the page
     $.ajax({
         url: '/CameraViewControler/onPlaceSensorsInRoomOnPageLoad',
         dataType: 'json',
         async: false,
         success: function (data) {
-
+            // Loop through all room
             for (i = 1; i <= 41; i++) {
                 if (i != 2 && i != 38) {
+                    // If the sensor is in the room add it to the gui else remove it
                     if (!data.includes(i)) {
                         // sensor is not active so we will draw a empty white circle over it
                         addItemToGUI(i, "sensor",true,true)
@@ -120,42 +133,38 @@ function placeSensorsInRoomOnPageLoad(type) {
                         removeItemFromGUI(i, "sensor",true)
                     }
                 }
-
             }
         },
         error: function (errorThrown) {
             console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
         }
     });
-
 }
-    //document.addEventListener("DOMContentLoaded", placeSensorsInRoomOnPageLoad);
+
 var cnt3 = 0;
 async function DeactivateRandomSensorsCallForActivateRandomSensors() {
-
-
+    // This callback if for deactivating random sensors, it is meant to call deactivate sensor wait then call itself
     if (cnt3 == 41) {
         cnt3 = 0;
         return;
     }
+    // deactivate sensor and wait
     await DeactivateSensorAjax(false, cnt3);
     cnt3 = cnt3 + 1;
+    // recursively call itself
     await DeactivateRandomSensorsCallForActivateRandomSensors();
-
 }
 
 var cnt2 = 0;
 async function ActivateRandomSensors(Gas = false) {
     // Need to perform a callback loop so it will activate them randomly but sequentially random
-
     if (cnt2 == 0) {
+        // at first deactivate all sensors and wait for it to finish
         await DeactivateRandomSensorsCallForActivateRandomSensors()
-
     }
-
     if (cnt2 == 40) {
+        // The last thing we want to do is perform a alarm reported procedure
         cnt2 = 0;
-
         alarmReportedProcedureAJAX(Gas);
         return;
     }
@@ -164,6 +173,7 @@ async function ActivateRandomSensors(Gas = false) {
         // perform another callback
         var test = ActivateSensorAjax(false, cnt2 + 1, function () {
             cnt2++;
+            // call itself recursively in the passed in function
             ActivateRandomSensors(Gas);
         });
 
@@ -178,12 +188,15 @@ async function ActivateRandomSensors(Gas = false) {
 function ActivateSensorAjax(specific = true, room = 0, returnFunction = false, fromPageLoad = false) {
     // called to activate a specific sensor based on the room it is in
     if (specific == true) {
+        // called by user input, get the room number
         var room = document.getElementById("ActivateSensor").value;
     }
     else {
+        // Called programically
         var room = room
     }
 
+    // Ajax call to have the backend activate the sensor be activated
     $.ajax({
         url: '/CameraViewControler/OnActivateSensorAjax',
         // Room array index starts at 0 so we subract 1
@@ -191,13 +204,12 @@ function ActivateSensorAjax(specific = true, room = 0, returnFunction = false, f
         dataType: 'json',
         async: true,
         success: function (data) {
-
             if (data == true) {
                 // add the sensor to the building view
                 addItemToGUI(room,"sensor",false,true)
             }
-
             if (returnFunction != false) {
+                // This means a function callback was passed in to be completed
                 returnFunction();
                 // alarm reported feature will get called in calling function
             } else if (fromPageLoad) {
@@ -217,34 +229,36 @@ function ActivateSensorAjax(specific = true, room = 0, returnFunction = false, f
 function DeactivateSensorAjax(specific = true, room = 0) {
     // called to Deactivate a specific sensor based on the room it is in
     if (specific == true) {
-
+        // Called by user input
         room = document.getElementById("DeactivateSensor").value;
-
     } else {
+        // called programically
         var room = room
     }
 
+    // this ajax call returns a promise that will let the calling function know that the ajax call finished, so it doesnt get bad data
     return new Promise((resolve, reject) => {
         $.ajax({
             url: '/CameraViewControler/OnDeactivateSensorAjax',
             data: { roomNumber: room },
             dataType: 'json',
             success: function (data) {
-
                 // remove the sensor from the building view
                 removeItemFromGUI(room, "sensor")
-
+                // resolve tells the promise to continue
                 resolve();
             },
             error: function (errorThrown) {
                 console.log("An Error occured in the ajax request for DeactivateSensorAjax:", errorThrown);
+                // tells the promis to reject
                 reject();
             }
         });
     });
 }
-function addPersonToRoomAJAX() {
 
+function addPersonToRoomAJAX() {
+    // performs an ajax call to add a person to a specific room
     var room = document.getElementById("AddPersonToRoom").value;
     $.ajax({
         url: '/CameraViewControler/OnAttemptAddPersonToRoom',
@@ -253,7 +267,7 @@ function addPersonToRoomAJAX() {
         dataType: 'json',
         async: true,
         success: function (data) {
-
+            // Do nothing
         },
         error: function (errorThrown) {
             console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
@@ -262,7 +276,7 @@ function addPersonToRoomAJAX() {
 }
 
 function removePersonToRoomAJAX() {
-
+    // This requests that a person is to be removed to a room via ajax 
     var room = document.getElementById("RemovePersonToRoom").value;
     $.ajax({
         url: '/CameraViewControler/OnAttemptRemovePersonToRoom',
@@ -271,7 +285,7 @@ function removePersonToRoomAJAX() {
         dataType: 'json',
         async: true,
         success: function (data) {
-
+            // do nothing on success
         },
         error: function (errorThrown) {
             console.log("An Error occured in the ajax request for addPersonToRoomAJAX:", errorThrown);
@@ -280,10 +294,9 @@ function removePersonToRoomAJAX() {
 }
 
 async function DeactivateAllSensors(calledFromAnotherFunction = false) {
-
-
+    // Deactivates all sensors
     for (var i = 0; i < 41; i++) {
-
+        // deactivate a sensor and wait for it to finish
         await DeactivateSensorAjax(false, i);
     }
     if (calledFromAnotherFunction == false) {
@@ -291,20 +304,20 @@ async function DeactivateAllSensors(calledFromAnotherFunction = false) {
         alarmReportedProcedureAJAX();
     }
 }
+
 // this will determin if the function setBackActiveSensorsOnRefreshAJAX should continue running 
 var cnt = 0;
-
 async function setBackActiveSensorsOnRefreshAJAX() {
     // After the page has been reloaded we need to check if the sensors were previously loaded
-    if (cnt == 0) {
-        //await placeSensorsInRoomOnPageLoad(1)
-    }
+
     if (cnt == 41) {
         cnt = 0;
+        // upon finishing we need to wait until all the sensors have been refreshed then perform an alarm reported procedure
         await placeSensorsInRoomOnPageLoad(1)
         alarmReportedProcedureAJAX();
         return;
     }
+    // Perform the ajax call to get specific sensor statuses. this will loop through all 41 sensors
     $.ajax({
         url: '/CameraViewControler/OnGetSpecificSensorStatus',
         data: { roomNumber: cnt },
@@ -314,28 +327,24 @@ async function setBackActiveSensorsOnRefreshAJAX() {
             if (data == true) {
                 // Add the sensors back into the room
                 addItemToGUI(cnt+1,"sensor",false,true)
-                // performing a call back like this will make this run more sequentially.
             }
             cnt++;
+            // Call the function recursively
             setBackActiveSensorsOnRefreshAJAX();
         },
         error: function (errorThrown) {
             console.log("An Error occured in the ajax request for setBackActiveSensorsOnRefreshAJAX:", errorThrown);
         }
     });
-
 }
+// This function gets called on page load
 document.addEventListener("DOMContentLoaded", setBackActiveSensorsOnRefreshAJAX);
 
 
-
-
 function alarmReportedProcedureAJAX(Gas = false) {
-    // On UI first
-    // Should be called after sensors have been activated
-
+    // This loops through all of the page elements turning them on and off depending on what sensors are active
     /*
-    I could send a fetch to the backend, sends nothing, returns 2d array with things that need to be activated 
+    This is the data structure that gets returned from the ajax call
     {
      "confirmed": true,
      "sprinklers": [6,20,22],
@@ -344,36 +353,25 @@ function alarmReportedProcedureAJAX(Gas = false) {
      "doors": [6,22],
      "peopleCalled":["FireDepartment","OnCall"]
     }
-
-    By the time the json is returned all logic should be handled
-
-    // First version will be for unmanned control center
-    // Confirm alarm
-    // if confirmed by multiple confirmed sensors
-    // Call emergency department - call oncall person - display symbol
-    // play audible alarm that can be muted activate direction indicators
-    // if person is not in the room lock doors and display them as locked
-    // activate sprinkler
-
     */
-
+    // This ajax Returns what sensors are active
     $.ajax({
         url: '/CameraViewControler/OnAlarmReportedProcedureAJAX',
         data: { Gas: Gas },
         dataType: 'json',
         async: true,
         success: function (data) {
-
+            // Should the alarm be on
             if (data[0][0] == true) {
                 // Alarm was confirmed play alarm
                 // UNCOMMENT during presentation
                 //playAlarm()
             }
+            // WHat sprinklers need to be activated
             if (data[1].length > 0) {
                 // activate sprinkler
                 for (i = 1; i <= 41; i++) {
                     if (data[1][0].indexOf(i) !== -1) {
-
                         // Here we will add a sprinkler flashing to the building view
                         addItemToGUI(i, "sprinkler");
                     } else {
@@ -381,22 +379,21 @@ function alarmReportedProcedureAJAX(Gas = false) {
                         removeItemFromGUI(i, "sprinkler")
                     }
                 }
-
             }
+            // what alarms need to be activated
             if (data[2].length > 0) {
                 // activate alarm
                 for (i = 1; i <= 41; i++) {
                     if (data[2][0].indexOf(i) !== -1) {
-
                         // Add a flashing alarm to the building view 
                         addItemToGUI(i, "alarm")
                     } else {
                         // Remove the alarm from the building view
                         removeItemFromGUI(i, "alarm")
                     }
-
                 }
             }
+            // what directions need to be activated
             if (data[3].length > 0) {
                 // activate directions
                 for (i = 1; i <= 41; i++) {
@@ -407,9 +404,9 @@ function alarmReportedProcedureAJAX(Gas = false) {
                         // remove the direction indicator from the building view
                         removeItemFromGUI(i, "direction")
                     }
-
                 }
             }
+            // what doors need to be activated
             if (data[4].length > 0) {
                 // activate doors
                 for (i = 1; i <= 41; i++) {
@@ -425,7 +422,6 @@ function alarmReportedProcedureAJAX(Gas = false) {
             if (data[5][0].length > 0) {
                 // show people to call
                 alert("The following have been called: " + data[5][0])
-
             }
         },
         error: function (errorThrown) {
