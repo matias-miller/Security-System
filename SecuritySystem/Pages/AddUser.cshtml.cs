@@ -119,15 +119,6 @@ public class AddUser: Controller
         var success = _controlCenter.attemptAddUser(first,last,email,password);
         return Json(success);
     }
-
-
-    [HttpGet("OnAttemptGetPassword")]
-    public IActionResult OnAttemptGetPassword()
-    {
-        // Success needs to be true or false
-        var success = _controlCenter.testGetEmployeePassword();
-        return Json(success);
-    }
 }
 
 

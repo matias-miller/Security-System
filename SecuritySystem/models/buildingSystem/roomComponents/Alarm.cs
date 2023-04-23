@@ -51,6 +51,5 @@ namespace buildingSystem.roomComponents{
             // TODO implement here
             return this.isActive;
         }
-
     }
 }

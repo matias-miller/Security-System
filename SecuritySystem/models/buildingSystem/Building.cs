@@ -1,3 +1,4 @@
+// Building controls creating the rooms, and requesting things about the room change
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,6 @@ namespace buildingSystem{
 
             // Set up the individual rooms
             createRooms();
-    
         }
 
         /// <summary>
@@ -22,16 +22,8 @@ namespace buildingSystem{
         /// </summary>
         public Room[] roomList;
 
-        /// <summary>
-        /// Sends the building control system the building state when its been changed. Sending the buildingState determined in roomlist to the BuildingControlSystem function updateBuildingStateOnChange, that will update the buildingState variable. Likely will be in the form of a button
-        /// @return
-        /// </summary>
-        public bool sendBuildingState() {
-            // TODO implement here
-            return false;
-        }
-
         public void createRooms() {
+            // This initializes the rooms
             this.roomList[0] = new Room(1, "one", 1);
             this.roomList[1] = new Room(1, "one", 2);
             this.roomList[2] = new Room(1, "one", 3);
@@ -75,33 +67,26 @@ namespace buildingSystem{
             this.roomList[40] = new Room(1, "nine", 41);
         }
 
-        /// <summary>
-        /// Called after requestToModifyBuildingState has been called. This will call performAction in Room
-        /// @param requestType 
-        /// @param room 
-        /// @return
-        /// </summary>
+
         public bool requestToModifyRoomState(string requestType, int roomNumber, bool action) {
-            // TODO implement here
-            Debug.WriteLine("sensor off" + roomNumber);
+            // This function is how the building requests to modify the state of the sensor
             var data = this.roomList[roomNumber].performAction(requestType, action);
             return data;
         }
 
         public bool requestSpecificSensorState(int roomName) {
-            // test function, can be removed
-  
+            // Gets the state of a specific sensor
             return this.roomList[roomName].requestSpecificSensorState();
         }
+        
         public int getNumberOfActiveSensors() {
+            // This function is used to get the number of currently active sensors, to determine if the alarm reported procedure is needed
             var count = 0;
             for (int i = 0; i <= 40; i++) {
                 if (this.roomList[i].sensor.sendState()) {
                     var room = i + 1;
-                    Debug.WriteLine("Roomfirs: " + room);
                     count = count + 1;
                 }
-                
             }
             return count;
         }
@@ -114,18 +99,16 @@ namespace buildingSystem{
 
         public object activateSprinklersAutomated()
         {
+            // This loops through all of the ssensors checking if they are active, if they are the sprinkler in the room should turn on
             int[] sprinklers =  { };
-            var count = 0;
             for (int i = 0; i <= 40; i++)
             {
                 var room = i + 1;
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
                     // Push the on sprinkler to an array
-                    
                     Array.Resize(ref sprinklers, sprinklers.Length + 1);
                     sprinklers[sprinklers.Length - 1] = i + 1;
-                    Debug.WriteLine("was activated:  " + sprinklers[sprinklers.Length - 1]);
                     this.roomList[i].sprinkler.activateSprinkler();
                 }
                 else {
@@ -137,13 +120,13 @@ namespace buildingSystem{
         }
         public object activateAlarmsAutomated()
         {
+            // This loops through all of the ssensors checking if they are active, if they are the alarm in the room should turn on
             int[] alarms = { };
-            var count = 0;
             for (int i = 0; i <= 40; i++)
             {
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
-                    // Push the on sprinkler to an array
+                    // Push the on alarm to an array
                     Array.Resize(ref alarms, alarms.Length + 1);
                     alarms[alarms.Length - 1] = i + 1;
                     this.roomList[i].alarm.activateAlarm();
@@ -158,13 +141,13 @@ namespace buildingSystem{
         }
         public object activateDirectionsAutomated()
         {
+            // This loops through all of the sensor checking if they are active, if they are the direction in the room should turn on
             int[] direction = { };
-            var count = 0;
             for (int i = 0; i <= 40; i++)
             {
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
-                    // Push the on sprinkler to an array
+                    // Push the on direction indicator to an array
                     Array.Resize(ref direction, direction.Length + 1);
                     direction[direction.Length - 1] = i + 1;
                     this.roomList[i].directionIndecator.turnOnIndicators();
@@ -180,15 +163,13 @@ namespace buildingSystem{
         }
         public object activateDoorsAutomated()
         {
-            // need some logic here for people
+            // This loops through all of the sensors checking if they are active, if they are the door in the room should turn on
             int[] doors = { };
-            var count = 0;
             for (int i = 0; i <= 40; i++)
             {
                 if (this.roomList[i].sensor.sendState())
                 { // Sensor is on
-                    // Push the on sprinkler to an array
-                    Debug.WriteLine("door" + this.roomList[i].peoplePresent);
+                    // Push the on door to an array if people are not in the room
                     if (!this.roomList[i].peoplePresent) {
                         Array.Resize(ref doors, doors.Length + 1);
                         doors[doors.Length - 1] = i + 1;
@@ -198,7 +179,6 @@ namespace buildingSystem{
                             this.roomList[i].doorArray[j].lockDoor();
                         }
                     }
-  
                 }
                 else
                 {
@@ -215,9 +195,9 @@ namespace buildingSystem{
         }
         public object makeCallsAutomated(bool Gas)
         {
-            // need to set up sensor type 
+            // If the rooms sensor is active then we should push who to call to an array
+            // If the type is gas it will be different than if its fire
             string[] calls = { };
-            var count = 0;
             for (int i = 0; i <= 40; i++)
             {
                 if (this.roomList[i].sensor.sendState())
@@ -248,17 +228,9 @@ namespace buildingSystem{
                         }
 
                     }
-                    // Push the on sprinkler to an array
- 
-                }
-                else
-                {
-                    // Sensor is off
                 }
             }
             return calls;
-
         }
-
     }
 }
