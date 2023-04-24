@@ -54,11 +54,6 @@ public class Index : Controller
             /// This should only be used when a building control variable is changed. and it should be insured that the current version building is used
             try
             {
-                //TempData["ControlCenter"] = JsonConvert.SerializeObject(_controlCenter,
-                //    new JsonSerializerSettings() { 
-                //        NullValueHandling = NullValueHandling.Ignore
-                //    }
-                //    );
                 HttpContext.Session.SetString("ControlCenter", JsonConvert.SerializeObject(_controlCenter));
             }
             catch (JsonException exeption)
@@ -138,15 +133,7 @@ public class Index : Controller
         return Json(success);
     }
 
-    // [HttpGet("OnClockIn")]
-    // public IActionResult OnClockIn()
-    // { 
-    //     // Success needs to be true or false
-    //     getControlCenterState();
-    //     var success = _controlCenter.isManned = true;
-    //     updateControlCenterState();
-    //     return Json(true);
-    // }
+
     [HttpGet("OnAttemptGetOnCall1")]
     public IActionResult OnAttemptGetOnCall1(int roomNumber)
     {
@@ -174,7 +161,5 @@ public class Index : Controller
             updateControlCenterState();
             return Json(true);
         }
-
-        
     }
 }

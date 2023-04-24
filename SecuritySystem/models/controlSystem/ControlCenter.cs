@@ -35,12 +35,12 @@ namespace controlSystem
         public buildingSystem.BuildingControlSystem buldingControlCenter = new buildingSystem.BuildingControlSystem();
 
 
-        /// <summary>
-        /// when employee used requestToManControl center or when just the controlCenter wants to set the onCall employee
-        /// @param employeeID 
-        /// @return
-        /// </summary>
-        public bool manControlCenter(int employeeID)
+        public bool clockIn(int employeeID)
+        {
+            // TODO implement here
+            return false;
+        }
+            public bool clockOut(int employeeID)
         {
             // TODO implement here
             return false;

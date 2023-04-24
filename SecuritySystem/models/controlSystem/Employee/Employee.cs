@@ -77,9 +77,6 @@ namespace controlSystem.Employee{
         
         }
 
-        public string getPassword() {
-            return this.password;
-        }
 
         public bool addUser(string first, string last, string email, string password)
         {
